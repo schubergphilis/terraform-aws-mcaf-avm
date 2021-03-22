@@ -13,6 +13,7 @@ variable "account_settings" {
 
 variable "additional_tfe_workspaces" {
   type = list(object({
+    agent_pool_id                  = string
     auto_apply                     = bool
     branch                         = string
     clear_text_env_variables       = map(string)
@@ -51,6 +52,12 @@ variable "region" {
 variable "tags" {
   type        = map(string)
   description = "A mapping of tags to assign to resource"
+}
+
+variable "tfe_workspace_agent_pool_id" {
+  type        = string
+  default     = null
+  description = "Agent pool ID. Requires \"execution_mode\" to be set to agent"
 }
 
 variable "tfe_workspace_auto_apply" {
