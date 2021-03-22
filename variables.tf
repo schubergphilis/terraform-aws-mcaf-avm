@@ -17,6 +17,7 @@ variable "additional_tfe_workspaces" {
     branch                         = string
     clear_text_env_variables       = map(string)
     clear_text_terraform_variables = map(string)
+    create_backend_config          = bool
     create_repository              = bool
     github_organization            = string
     github_repository              = string
@@ -74,6 +75,12 @@ variable "tfe_workspace_clear_text_terraform_variables" {
   type        = map(string)
   default     = {}
   description = "An optional map with clear text Terraform variables"
+}
+
+variable "tfe_workspace_create_backend_config" {
+  type        = bool
+  default     = true
+  description = "Whether to create a backend.tf containing the remote backend config"
 }
 
 variable "tfe_workspace_create_repository" {

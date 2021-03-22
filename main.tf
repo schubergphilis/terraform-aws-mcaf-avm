@@ -27,6 +27,7 @@ module "tfe_workspace" {
   branch                         = var.tfe_workspace_branch
   clear_text_env_variables       = var.tfe_workspace_clear_text_env_variables
   clear_text_terraform_variables = var.tfe_workspace_clear_text_terraform_variables
+  create_backend_config          = var.tfe_workspace_create_backend_config
   create_repository              = var.tfe_workspace_create_repository
   github_organization            = var.tfe_workspace_settings.github_organization
   github_repository              = var.tfe_workspace_settings.github_repository
@@ -55,6 +56,7 @@ module "additional_tfe_workspaces" {
   branch                         = each.value.branch
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_terraform_variables = each.value.clear_text_terraform_variables
+  create_backend_config          = each.value.create_backend_config
   create_repository              = each.value.create_repository
   github_organization            = each.value.github_organization
   github_repository              = each.value.github_repository
