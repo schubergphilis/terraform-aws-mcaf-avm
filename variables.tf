@@ -13,10 +13,12 @@ variable "account_settings" {
 
 variable "additional_tfe_workspaces" {
   type = list(object({
+    agent_pool_id                  = string
     auto_apply                     = bool
     branch                         = string
     clear_text_env_variables       = map(string)
     clear_text_terraform_variables = map(string)
+    create_backend_config          = bool
     create_repository              = bool
     github_organization            = string
     github_repository              = string
@@ -52,6 +54,12 @@ variable "tags" {
   description = "A mapping of tags to assign to resource"
 }
 
+variable "tfe_workspace_agent_pool_id" {
+  type        = string
+  default     = null
+  description = "Agent pool ID"
+}
+
 variable "tfe_workspace_auto_apply" {
   type        = bool
   default     = false
@@ -74,6 +82,12 @@ variable "tfe_workspace_clear_text_terraform_variables" {
   type        = map(string)
   default     = {}
   description = "An optional map with clear text Terraform variables"
+}
+
+variable "tfe_workspace_create_backend_config" {
+  type        = bool
+  default     = true
+  description = "Whether to create a backend.tf containing the remote backend config"
 }
 
 variable "tfe_workspace_create_repository" {
