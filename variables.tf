@@ -57,7 +57,7 @@ variable "tags" {
 variable "tfe_workspace_agent_pool_id" {
   type        = string
   default     = null
-  description = "Agent pool ID. Requires \"execution_mode\" to be set to agent"
+  description = "Agent pool ID"
 }
 
 variable "tfe_workspace_auto_apply" {
