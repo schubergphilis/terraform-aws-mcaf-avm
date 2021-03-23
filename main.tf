@@ -50,31 +50,35 @@ module "tfe_workspace" {
 module "additional_tfe_workspaces" {
   for_each = { for workspace in var.additional_tfe_workspaces : workspace.name => workspace }
 
-  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.3.1"
-  providers                      = { aws = aws.account }
-  name                           = each.value.name
-  auto_apply                     = each.value.auto_apply
-  branch                         = each.value.branch
-  clear_text_env_variables       = each.value.clear_text_env_variables
-  clear_text_terraform_variables = each.value.clear_text_terraform_variables
-  create_backend_config          = each.value.create_backend_config
-  create_repository              = each.value.create_repository
-  github_organization            = each.value.github_organization
-  github_repository              = each.value.github_repository
-  kms_key_id                     = each.value.kms_key_id
-  oauth_token_id                 = each.value.oauth_token_id
-  policy_arns                    = each.value.policy_arns
-  region                         = var.region
-  sensitive_env_variables        = each.value.sensitive_env_variables
-  sensitive_terraform_variables  = each.value.sensitive_terraform_variables
-  ssh_key_id                     = each.value.ssh_key_id
-  terraform_organization         = each.value.terraform_organization
-  terraform_version              = each.value.terraform_version
-  trigger_prefixes               = each.value.trigger_prefixes
-  tfe_agent_pool_id              = each.value.agent_pool_id
-  username                       = "TFEPipeline-${each.key}"
-  working_directory              = each.value.working_directory
-  tags                           = var.tags
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.3.1"
+  providers                     = { aws = aws.account }
+  name                          = each.value.name
+  auto_apply                    = each.value.auto_apply
+  branch                        = each.value.branch
+  clear_text_env_variables      = each.value.clear_text_env_variables
+  create_backend_config         = each.value.create_backend_config
+  create_repository             = each.value.create_repository
+  github_organization           = each.value.github_organization
+  github_repository             = each.value.github_repository
+  kms_key_id                    = each.value.kms_key_id
+  oauth_token_id                = each.value.oauth_token_id
+  policy_arns                   = each.value.policy_arns
+  region                        = var.region
+  sensitive_env_variables       = each.value.sensitive_env_variables
+  sensitive_terraform_variables = each.value.sensitive_terraform_variables
+  ssh_key_id                    = each.value.ssh_key_id
+  terraform_organization        = each.value.terraform_organization
+  terraform_version             = each.value.terraform_version
+  trigger_prefixes              = each.value.trigger_prefixes
+  tfe_agent_pool_id             = each.value.agent_pool_id
+  username                      = "TFEPipeline-${each.key}"
+  working_directory             = each.value.working_directory
+  tags                          = var.tags
+
+  clear_text_terraform_variables = merge({
+    account     = var.name
+    environment = var.account_settings.environment
+  }, each.value.clear_text_terraform_variables)
 }
 
 resource "aws_iam_account_alias" "alias" {
