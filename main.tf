@@ -26,6 +26,7 @@ module "tfe_workspace" {
   auto_apply                     = var.tfe_workspace_auto_apply
   branch                         = var.tfe_workspace_branch
   clear_text_env_variables       = var.tfe_workspace_clear_text_env_variables
+  clear_text_hcl_variables       = var.tfe_workspace_clear_text_hcl_variables
   clear_text_terraform_variables = var.tfe_workspace_clear_text_terraform_variables
   create_backend_config          = var.tfe_workspace_create_backend_config
   create_repository              = var.tfe_workspace_create_repository
@@ -36,6 +37,7 @@ module "tfe_workspace" {
   policy_arns                    = var.tfe_workspace_policy_arns
   region                         = var.region
   sensitive_env_variables        = var.tfe_workspace_sensitive_env_variables
+  sensitive_hcl_variables        = var.tfe_workspace_sensitive_hcl_variables
   sensitive_terraform_variables  = var.tfe_workspace_sensitive_terraform_variables
   ssh_key_id                     = var.tfe_workspace_ssh_key_id
   terraform_organization         = var.tfe_workspace_settings.terraform_organization
@@ -48,14 +50,15 @@ module "tfe_workspace" {
 }
 
 module "additional_tfe_workspaces" {
-  for_each = { for workspace in var.additional_tfe_workspaces : workspace.name => workspace }
+  for_each = var.additional_tfe_workspaces
 
   source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.3.1"
   providers                     = { aws = aws.account }
-  name                          = each.value.name
+  name                          = each.key
   auto_apply                    = each.value.auto_apply
   branch                        = each.value.branch
   clear_text_env_variables      = each.value.clear_text_env_variables
+  clear_text_hcl_variables      = each.value.clear_text_hcl_variables
   create_backend_config         = each.value.create_backend_config
   create_repository             = each.value.create_repository
   github_organization           = each.value.github_organization
@@ -65,6 +68,7 @@ module "additional_tfe_workspaces" {
   policy_arns                   = each.value.policy_arns
   region                        = var.region
   sensitive_env_variables       = each.value.sensitive_env_variables
+  sensitive_hcl_variables       = each.value.sensitive_hcl_variables
   sensitive_terraform_variables = each.value.sensitive_terraform_variables
   ssh_key_id                    = each.value.ssh_key_id
   terraform_organization        = each.value.terraform_organization

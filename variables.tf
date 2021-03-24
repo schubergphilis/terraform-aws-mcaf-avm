@@ -12,21 +12,22 @@ variable "account_settings" {
 }
 
 variable "additional_tfe_workspaces" {
-  type = list(object({
+  type = map(object({
     agent_pool_id                  = string
     auto_apply                     = bool
     branch                         = string
     clear_text_env_variables       = map(string)
+    clear_text_hcl_variables       = map(string)
     clear_text_terraform_variables = map(string)
     create_backend_config          = bool
     create_repository              = bool
     github_organization            = string
     github_repository              = string
     kms_key_id                     = string
-    name                           = string
     oauth_token_id                 = string
     policy_arns                    = list(string)
     sensitive_env_variables        = map(string)
+    sensitive_hcl_variables        = map(object({ sensitive = string }))
     sensitive_terraform_variables  = map(string)
     ssh_key_id                     = string
     terraform_organization         = string
@@ -34,7 +35,7 @@ variable "additional_tfe_workspaces" {
     trigger_prefixes               = list(string)
     working_directory              = string
   }))
-  default     = []
+  default     = {}
   description = "Additional TFE Workspaces"
 }
 
@@ -78,6 +79,12 @@ variable "tfe_workspace_clear_text_env_variables" {
   description = "An optional map with clear text environment variables"
 }
 
+variable "tfe_workspace_clear_text_hcl_variables" {
+  type        = map(string)
+  default     = {}
+  description = "An optional map with clear text HCL Terraform variables"
+}
+
 variable "tfe_workspace_clear_text_terraform_variables" {
   type        = map(string)
   default     = {}
@@ -112,6 +119,14 @@ variable "tfe_workspace_sensitive_env_variables" {
   type        = map(string)
   default     = {}
   description = "An optional map with sensitive environment variables"
+}
+
+variable "tfe_workspace_sensitive_hcl_variables" {
+  type = map(object({
+    sensitive = string
+  }))
+  default     = {}
+  description = "An optional map with sensitive HCL Terraform variables"
 }
 
 variable "tfe_workspace_sensitive_terraform_variables" {
