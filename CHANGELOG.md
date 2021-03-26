@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 BUG FIX
 
-* Fix bug in `additional_tfe_workspace` output, remove environment variable since this data is already contained in the account variable ([#5](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/5))
+* Fix bug in `additional_tfe_workspace` output ([#5](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/5)) ([#6](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/6))
 
 ## 0.2.2 (2021-03-24)
 
