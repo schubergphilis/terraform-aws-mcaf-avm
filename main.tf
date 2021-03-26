@@ -80,8 +80,7 @@ module "additional_tfe_workspaces" {
   tags                          = var.tags
 
   clear_text_terraform_variables = merge({
-    account     = var.name
-    environment = var.account_settings.environment
+    account = var.name
   }, each.value.clear_text_terraform_variables)
 }
 

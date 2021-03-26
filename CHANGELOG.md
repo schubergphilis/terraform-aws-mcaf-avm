@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.3 (2021-03-26)
+
+BUG FIX
+
+* Fix bug in `additional_tfe_workspace` output, remove environment variable since this data is already contained in the account variable ([#5](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/5))
+
 ## 0.2.2 (2021-03-24)
 
 ENHANCEMENTS
