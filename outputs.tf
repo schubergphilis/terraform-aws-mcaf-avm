@@ -9,6 +9,6 @@ output "tfe_workspace_id" {
 }
 
 output "additional_tfe_workspace" {
-  value       = { for workspace in var.additional_tfe_workspaces : workspace.name => module.additional_tfe_workspaces[workspace.name].workspace_id }
+  value       = { for name, workspace in var.additional_tfe_workspaces : name => module.additional_tfe_workspaces[name].workspace_id }
   description = "Map of additional TFE workspaces containing name and workspace ID"
 }
