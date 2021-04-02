@@ -123,6 +123,7 @@ module "aws_account" {
 | tfe\_workspace\_github\_readers | A list of Github teams that should have read access | `list(string)` | `[]` | no |
 | tfe\_workspace\_github\_writers | A list of Github teams that should have write access | `list(string)` | `[]` | no |
 | tfe\_workspace\_kms\_key\_id | The KMS key ID used to encrypt the SSM parameters | `string` | `null` | no |
+| tfe\_workspace\_name | Custom workspace name (overrides var.name) | `string` | `null` | no |
 | tfe\_workspace\_policy | The policy to attach to the pipeline user | `string` | `null` | no |
 | tfe\_workspace\_policy\_arns | A set of policy ARNs to attach to the pipeline user | `list(string)` | <pre>[<br>  "arn:aws:iam::aws:policy/AdministratorAccess"<br>]</pre> | no |
 | tfe\_workspace\_repository\_description | A description for the Github repository | `string` | `null` | no |
