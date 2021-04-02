@@ -195,6 +195,12 @@ variable "tfe_workspace_kms_key_id" {
   description = "The KMS key ID used to encrypt the SSM parameters"
 }
 
+variable "tfe_workspace_name" {
+  type        = string
+  default     = null
+  description = "Custom workspace name (overrides var.name)"
+}
+
 variable "tfe_workspace_policy" {
   type        = string
   default     = null
