@@ -99,7 +99,7 @@ module "additional_tfe_workspaces" {
   terraform_version             = each.value.terraform_version
   trigger_prefixes              = each.value.trigger_prefixes
   tfe_agent_pool_id             = each.value.agent_pool_id
-  username                      = "TFEPipeline-${each.key}"
+  username                      = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory             = each.value.working_directory
   tags                          = var.tags
 
