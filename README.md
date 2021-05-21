@@ -91,6 +91,7 @@ module "aws_account" {
 | Name | Version |
 |------|---------|
 | terraform | >= 0.13 |
+| tfe | >= 0.25.0 |
 
 ## Providers
 
