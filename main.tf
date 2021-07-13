@@ -20,7 +20,7 @@ module "account" {
 
 module "tfe_workspace" {
   count                          = var.tfe_workspace_settings != null ? 1 : 0
-  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.0"
+  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
   providers                      = { aws = aws.account }
   name                           = coalesce(var.tfe_workspace_name, var.name)
   auto_apply                     = var.tfe_workspace_auto_apply
@@ -64,7 +64,7 @@ module "tfe_workspace" {
 module "additional_tfe_workspaces" {
   for_each = var.additional_tfe_workspaces
 
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.3.1"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
   providers                     = { aws = aws.account }
   name                          = each.key
   auto_apply                    = each.value.auto_apply
