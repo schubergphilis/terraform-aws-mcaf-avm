@@ -4,7 +4,7 @@ terraform {
       source = "hashicorp/aws"
     }
     github = {
-      source = "hashicorp/github"
+      source = "integrations/github"
     }
     mcaf = {
       source = "schubergphilis/mcaf"
