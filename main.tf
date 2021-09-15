@@ -20,9 +20,10 @@ module "account" {
 
 module "tfe_workspace" {
   count                          = var.tfe_workspace_settings != null ? 1 : 0
-  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
+  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
   providers                      = { aws = aws.account }
   name                           = coalesce(var.tfe_workspace_name, var.name)
+  agent_pool_id                  = var.tfe_workspace_agent_pool_id
   auto_apply                     = var.tfe_workspace_auto_apply
   branch                         = var.tfe_workspace_branch
   clear_text_env_variables       = var.tfe_workspace_clear_text_env_variables
@@ -44,7 +45,6 @@ module "tfe_workspace" {
   ssh_key_id                     = var.tfe_workspace_ssh_key_id
   terraform_organization         = var.tfe_workspace_settings.terraform_organization
   terraform_version              = var.tfe_workspace_settings.terraform_version
-  tfe_agent_pool_id              = var.tfe_workspace_agent_pool_id
   trigger_prefixes               = var.tfe_workspace_trigger_prefixes
   username                       = "TFEPipeline"
   working_directory              = var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
@@ -54,9 +54,10 @@ module "tfe_workspace" {
 module "additional_tfe_workspaces" {
   for_each = var.additional_tfe_workspaces
 
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
   providers                     = { aws = aws.account }
   name                          = each.key
+  agent_pool_id                 = each.value.agent_pool_id
   auto_apply                    = each.value.auto_apply
   branch                        = each.value.branch
   clear_text_env_variables      = each.value.clear_text_env_variables
@@ -77,7 +78,6 @@ module "additional_tfe_workspaces" {
   ssh_key_id                    = each.value.ssh_key_id
   terraform_organization        = each.value.terraform_organization
   terraform_version             = each.value.terraform_version
-  tfe_agent_pool_id             = each.value.agent_pool_id
   trigger_prefixes              = each.value.trigger_prefixes
   username                      = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory             = each.value.working_directory
