@@ -20,7 +20,6 @@ variable "additional_tfe_workspaces" {
     clear_text_hcl_variables       = map(string)
     clear_text_terraform_variables = map(string)
     file_triggers_enabled          = bool
-    kms_key_id                     = string
     oauth_token_id                 = string
     policy                         = string
     policy_arns                    = list(string)
@@ -98,12 +97,6 @@ variable "tfe_workspace_file_triggers_enabled" {
   type        = bool
   default     = true
   description = "Whether to filter runs based on the changed files in a VCS push"
-}
-
-variable "tfe_workspace_kms_key_id" {
-  type        = string
-  default     = null
-  description = "The KMS key ID used to encrypt the SSM parameters"
 }
 
 variable "tfe_workspace_name" {

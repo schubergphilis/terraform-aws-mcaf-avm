@@ -30,7 +30,6 @@ module "tfe_workspace" {
   clear_text_hcl_variables       = var.tfe_workspace_clear_text_hcl_variables
   clear_text_terraform_variables = var.tfe_workspace_clear_text_terraform_variables
   file_triggers_enabled          = var.tfe_workspace_file_triggers_enabled
-  kms_key_id                     = var.tfe_workspace_kms_key_id
   oauth_token_id                 = var.tfe_workspace_settings.oauth_token_id
   policy                         = var.tfe_workspace_policy
   policy_arns                    = var.tfe_workspace_policy_arns
@@ -63,7 +62,6 @@ module "additional_tfe_workspaces" {
   clear_text_env_variables      = each.value.clear_text_env_variables
   clear_text_hcl_variables      = each.value.clear_text_hcl_variables
   file_triggers_enabled         = each.value.file_triggers_enabled
-  kms_key_id                    = each.value.kms_key_id
   oauth_token_id                = each.value.oauth_token_id
   policy                        = each.value.policy
   policy_arns                   = each.value.policy_arns
