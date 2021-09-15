@@ -19,6 +19,7 @@ variable "additional_tfe_workspaces" {
     clear_text_env_variables       = map(string)
     clear_text_hcl_variables       = map(string)
     clear_text_terraform_variables = map(string)
+    execution_mode                 = string
     file_triggers_enabled          = bool
     oauth_token_id                 = string
     policy                         = string
@@ -91,6 +92,12 @@ variable "tfe_workspace_clear_text_terraform_variables" {
   type        = map(string)
   default     = {}
   description = "An optional map with clear text Terraform variables"
+}
+
+variable "tfe_workspace_execution_mode" {
+  type        = string
+  default     = "remote"
+  description = "Which TFE workspace execution mode to use"
 }
 
 variable "tfe_workspace_file_triggers_enabled" {
