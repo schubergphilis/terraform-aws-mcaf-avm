@@ -8,10 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ENHANCEMENTS
 
-## 0.3.4 (2021-09-16)
+## 0.4.0 (2021-09-16)
 * Adds account_settings.create_email_address variable ([#15](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/15))
-
-## 0.3.3 (2021-09-16)
 * Removes vars that should've been updated when bumping workspace module from 0.3.x to 0.5.x ([#13](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/13))
 * GH provider has been moved to intergations/ ([#12](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/12))
 * Bumps mcaf workspace to mitigate warning: does not declare a provider ([#11](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/11))
