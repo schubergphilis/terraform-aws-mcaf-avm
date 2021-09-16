@@ -26,11 +26,11 @@ module "aws_account" {
   }
 
   tfe_workspace_settings = {
-    github_organization    = "schubergphilis"
-    github_repository      = "terraform-aws-mcaf-avm"
     oauth_token_id         = var.oauth_token_id
+    repository_name        = "terraform-aws-mcaf-avm"
+    repository_owner       = "schubergphilis"
     terraform_organization = "schubergphilis"
-    terraform_version      = "0.14.6"
+    terraform_version      = "1.0.6"
   }
 }
 ```
@@ -53,32 +53,39 @@ module "aws_account" {
   }
 
   tfe_workspace_settings = {
-    github_organization    = "schubergphilis"
-    github_repository      = "terraform-aws-mcaf-avm"
     oauth_token_id         = var.oauth_token_id
+    repository_name        = "terraform-aws-mcaf-avm"
+    repository_owner       = "schubergphilis"
     terraform_organization = "schubergphilis"
-    terraform_version      = "0.14.6"
+    terraform_version      = "1.0.6"
   }
 
   additional_tfe_workspaces = [
     {
+      agent_pool_id                  = null
       auto_apply                     = true
       branch                         = "master"
       clear_text_env_variables       = {}
+      clear_text_hcl_variables       = {}
       clear_text_terraform_variables = {}
       create_repository              = false
-      github_organization            = "schubergphilis"
-      github_repository              = "terraform-aws-mcaf-account-baseline"
-      kms_key_id                     = null
+      file_triggers_enabled          = true
       name                           = "my-aws-account-baseline"
       oauth_token_id                 = var.oauth_token_id
+      policy                         = null
       policy_arns                    = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+      repository_name                = "terraform-aws-mcaf-avm"
+      repository_owner               = "schubergphilis"
       sensitive_env_variables        = {}
+      sensitive_hcl_variables        = {}
       sensitive_terraform_variables  = {}
+      slack_notification_triggers    = []
+      slack_notification_url         = null
       ssh_key_id                     = null
       terraform_organization         = "schubergphilis"
-      terraform_version              = "0.14.6"
+      terraform_version              = "1.0.6"
       trigger_prefixes               = null
+      username                       = null
       working_directory              = "terraform"
     }
   ]

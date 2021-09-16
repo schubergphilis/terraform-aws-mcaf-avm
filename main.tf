@@ -8,8 +8,7 @@ provider "aws" {
 }
 
 module "account" {
-  source = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=v0.3.0"
-
+  source              = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=v0.3.0"
   account             = var.name
   email               = var.account_settings.email
   organizational_unit = var.account_settings.organizational_unit
@@ -52,8 +51,7 @@ module "tfe_workspace" {
 }
 
 module "additional_tfe_workspaces" {
-  for_each = var.additional_tfe_workspaces
-
+  for_each                      = var.additional_tfe_workspaces
   source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
   providers                     = { aws = aws.account }
   name                          = each.key
