@@ -17,12 +17,13 @@ module "aws_account" {
   name = "my-aws-account"
 
   account_settings = {
-    email               = "my-aws-account@email.com"
-    environment         = "prod"
-    organizational_unit = "Production"
-    sso_email           = "control-tower-admin@schubergphilis.com"
-    sso_firstname       = "AWS Control Tower"
-    sso_lastname        = "Admin"
+    create_email_address = true
+    email                = "my-aws-account@email.com"
+    environment          = "prod"
+    organizational_unit  = "Production"
+    sso_email            = "control-tower-admin@schubergphilis.com"
+    sso_firstname        = "AWS Control Tower"
+    sso_lastname         = "Admin"
   }
 
   tfe_workspace_settings = {
@@ -44,12 +45,13 @@ module "aws_account" {
   name = "my-aws-account"
 
   account_settings = {
-    email               = "my-aws-account@email.com"
-    environment         = "prod"
-    organizational_unit = "Production"
-    sso_email           = "control-tower-admin@schubergphilis.com"
-    sso_firstname       = "AWS Control Tower"
-    sso_lastname        = "Admin"
+    create_email_address = true
+    email                = "my-aws-account@email.com"
+    environment          = "prod"
+    organizational_unit  = "Production"
+    sso_email            = "control-tower-admin@schubergphilis.com"
+    sso_firstname        = "AWS Control Tower"
+    sso_lastname         = "Admin"
   }
 
   tfe_workspace_settings = {

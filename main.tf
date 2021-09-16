@@ -8,13 +8,14 @@ provider "aws" {
 }
 
 module "account" {
-  source              = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=v0.3.0"
-  account             = var.name
-  email               = var.account_settings.email
-  organizational_unit = var.account_settings.organizational_unit
-  sso_email           = var.account_settings.sso_email
-  sso_firstname       = var.account_settings.sso_firstname
-  sso_lastname        = var.account_settings.sso_lastname
+  source               = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=v0.3.1"
+  account              = var.name
+  create_email_address = var.account_settings.create_email_address
+  email                = var.account_settings.email
+  organizational_unit  = var.account_settings.organizational_unit
+  sso_email            = var.account_settings.sso_email
+  sso_firstname        = var.account_settings.sso_firstname
+  sso_lastname         = var.account_settings.sso_lastname
 }
 
 module "tfe_workspace" {
