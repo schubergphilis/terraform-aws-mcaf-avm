@@ -13,45 +13,19 @@ variable "account_settings" {
 
 variable "additional_tfe_workspaces" {
   type = map(object({
-    agent_pool_id = string
-    auto_apply    = bool
-    branch        = string
-    branch_protection = list(object({
-      branches          = list(string)
-      enforce_admins    = bool
-      push_restrictions = list(string)
-
-      required_reviews = object({
-        dismiss_stale_reviews           = bool
-        dismissal_restrictions          = list(string)
-        required_approving_review_count = number
-        require_code_owner_reviews      = bool
-      })
-
-      required_checks = object({
-        strict   = bool
-        contexts = list(string)
-      })
-    }))
+    agent_pool_id                  = string
+    auto_apply                     = bool
+    branch                         = string
     clear_text_env_variables       = map(string)
     clear_text_hcl_variables       = map(string)
     clear_text_terraform_variables = map(string)
-    create_backend_config          = bool
-    create_repository              = bool
-    connect_vcs_repo               = bool
-    delete_branch_on_merge         = bool
+    execution_mode                 = string
     file_triggers_enabled          = bool
-    github_admins                  = list(string)
-    github_organization            = string
-    github_readers                 = list(string)
-    github_repository              = string
-    github_writers                 = list(string)
-    kms_key_id                     = string
     oauth_token_id                 = string
     policy                         = string
     policy_arns                    = list(string)
-    repository_description         = string
-    repository_visibility          = string
+    repository_name                = string
+    repository_owner               = string
     sensitive_env_variables        = map(string)
     sensitive_hcl_variables        = map(object({ sensitive = string }))
     sensitive_terraform_variables  = map(string)
@@ -102,28 +76,6 @@ variable "tfe_workspace_branch" {
   description = "The Git branch to trigger the TFE workspace for"
 }
 
-variable "tfe_workspace_branch_protection" {
-  type = list(object({
-    branches          = list(string)
-    enforce_admins    = bool
-    push_restrictions = list(string)
-
-    required_reviews = object({
-      dismiss_stale_reviews           = bool
-      dismissal_restrictions          = list(string)
-      required_approving_review_count = number
-      require_code_owner_reviews      = bool
-    })
-
-    required_checks = object({
-      strict   = bool
-      contexts = list(string)
-    })
-  }))
-  default     = []
-  description = "The Github branches to protect from forced pushes and deletion"
-}
-
 variable "tfe_workspace_clear_text_env_variables" {
   type        = map(string)
   default     = {}
@@ -142,58 +94,16 @@ variable "tfe_workspace_clear_text_terraform_variables" {
   description = "An optional map with clear text Terraform variables"
 }
 
-variable "tfe_workspace_create_backend_config" {
-  type        = bool
-  default     = true
-  description = "Whether to create a backend.tf containing the remote backend config"
-}
-
-variable "tfe_workspace_create_repository" {
-  type        = bool
-  default     = false
-  description = "Whether of not to create a new repository"
-}
-
-variable "tfe_workspace_connect_vcs_repo" {
-  type        = bool
-  default     = true
-  description = "Whether or not to connect a VCS repo to the workspace"
-}
-
-variable "tfe_workspace_delete_branch_on_merge" {
-  type        = bool
-  default     = true
-  description = "Whether or not to delete the branch after a pull request is merged"
+variable "tfe_workspace_execution_mode" {
+  type        = string
+  default     = "remote"
+  description = "Which TFE workspace execution mode to use"
 }
 
 variable "tfe_workspace_file_triggers_enabled" {
   type        = bool
   default     = true
   description = "Whether to filter runs based on the changed files in a VCS push"
-}
-
-variable "tfe_workspace_github_admins" {
-  type        = list(string)
-  default     = []
-  description = "A list of Github teams that should have admins access"
-}
-
-variable "tfe_workspace_github_readers" {
-  type        = list(string)
-  default     = []
-  description = "A list of Github teams that should have read access"
-}
-
-variable "tfe_workspace_github_writers" {
-  type        = list(string)
-  default     = []
-  description = "A list of Github teams that should have write access"
-}
-
-variable "tfe_workspace_kms_key_id" {
-  type        = string
-  default     = null
-  description = "The KMS key ID used to encrypt the SSM parameters"
 }
 
 variable "tfe_workspace_name" {
@@ -212,18 +122,6 @@ variable "tfe_workspace_policy_arns" {
   type        = list(string)
   default     = ["arn:aws:iam::aws:policy/AdministratorAccess"]
   description = "A set of policy ARNs to attach to the pipeline user"
-}
-
-variable "tfe_workspace_repository_description" {
-  type        = string
-  default     = null
-  description = "A description for the Github repository"
-}
-
-variable "tfe_workspace_repository_visibility" {
-  type        = string
-  default     = "private"
-  description = "Make the Github repository visibility"
 }
 
 variable "tfe_workspace_sensitive_env_variables" {
@@ -248,9 +146,9 @@ variable "tfe_workspace_sensitive_terraform_variables" {
 
 variable "tfe_workspace_settings" {
   type = object({
-    github_organization    = string
-    github_repository      = string
     oauth_token_id         = string
+    repository_name        = string
+    repository_owner       = string
     terraform_organization = string
     terraform_version      = string
   })

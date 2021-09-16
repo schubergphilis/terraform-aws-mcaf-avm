@@ -20,32 +20,23 @@ module "account" {
 
 module "tfe_workspace" {
   count                          = var.tfe_workspace_settings != null ? 1 : 0
-  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
+  source                         = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
   providers                      = { aws = aws.account }
   name                           = coalesce(var.tfe_workspace_name, var.name)
+  agent_pool_id                  = var.tfe_workspace_agent_pool_id
   auto_apply                     = var.tfe_workspace_auto_apply
   branch                         = var.tfe_workspace_branch
-  branch_protection              = var.tfe_workspace_branch_protection
   clear_text_env_variables       = var.tfe_workspace_clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace_clear_text_hcl_variables
   clear_text_terraform_variables = var.tfe_workspace_clear_text_terraform_variables
-  create_backend_config          = var.tfe_workspace_create_backend_config
-  create_repository              = var.tfe_workspace_create_repository
-  connect_vcs_repo               = var.tfe_workspace_connect_vcs_repo
-  delete_branch_on_merge         = var.tfe_workspace_delete_branch_on_merge
+  execution_mode                 = var.tfe_workspace_execution_mode
   file_triggers_enabled          = var.tfe_workspace_file_triggers_enabled
-  github_admins                  = var.tfe_workspace_github_admins
-  github_organization            = var.tfe_workspace_settings.github_organization
-  github_readers                 = var.tfe_workspace_github_readers
-  github_repository              = var.tfe_workspace_settings.github_repository
-  github_writers                 = var.tfe_workspace_github_writers
-  kms_key_id                     = var.tfe_workspace_kms_key_id
   oauth_token_id                 = var.tfe_workspace_settings.oauth_token_id
   policy                         = var.tfe_workspace_policy
   policy_arns                    = var.tfe_workspace_policy_arns
   region                         = var.region
-  repository_description         = var.tfe_workspace_repository_description
-  repository_visibility          = var.tfe_workspace_repository_visibility
+  repository_name                = var.tfe_workspace_settings.repository_name
+  repository_owner               = var.tfe_workspace_settings.repository_owner
   sensitive_env_variables        = var.tfe_workspace_sensitive_env_variables
   sensitive_hcl_variables        = var.tfe_workspace_sensitive_hcl_variables
   sensitive_terraform_variables  = var.tfe_workspace_sensitive_terraform_variables
@@ -54,7 +45,6 @@ module "tfe_workspace" {
   ssh_key_id                     = var.tfe_workspace_ssh_key_id
   terraform_organization         = var.tfe_workspace_settings.terraform_organization
   terraform_version              = var.tfe_workspace_settings.terraform_version
-  tfe_agent_pool_id              = var.tfe_workspace_agent_pool_id
   trigger_prefixes               = var.tfe_workspace_trigger_prefixes
   username                       = "TFEPipeline"
   working_directory              = var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
@@ -64,31 +54,22 @@ module "tfe_workspace" {
 module "additional_tfe_workspaces" {
   for_each = var.additional_tfe_workspaces
 
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.2"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
   providers                     = { aws = aws.account }
   name                          = each.key
+  agent_pool_id                 = each.value.agent_pool_id
   auto_apply                    = each.value.auto_apply
   branch                        = each.value.branch
-  branch_protection             = each.value.branch_protection
   clear_text_env_variables      = each.value.clear_text_env_variables
   clear_text_hcl_variables      = each.value.clear_text_hcl_variables
-  create_backend_config         = each.value.create_backend_config
-  create_repository             = each.value.create_repository
-  connect_vcs_repo              = each.value.connect_vcs_repo
-  delete_branch_on_merge        = each.value.delete_branch_on_merge
+  execution_mode                = each.value.execution_mode
   file_triggers_enabled         = each.value.file_triggers_enabled
-  github_admins                 = each.value.github_admins
-  github_organization           = each.value.github_organization
-  github_readers                = each.value.github_readers
-  github_repository             = each.value.github_repository
-  github_writers                = each.value.github_writers
-  kms_key_id                    = each.value.kms_key_id
   oauth_token_id                = each.value.oauth_token_id
   policy                        = each.value.policy
   policy_arns                   = each.value.policy_arns
   region                        = var.region
-  repository_description        = each.value.repository_description
-  repository_visibility         = each.value.repository_visibility
+  repository_name               = each.value.repository_name
+  repository_owner              = each.value.repository_owner
   sensitive_env_variables       = each.value.sensitive_env_variables
   sensitive_hcl_variables       = each.value.sensitive_hcl_variables
   sensitive_terraform_variables = each.value.sensitive_terraform_variables
@@ -98,7 +79,6 @@ module "additional_tfe_workspaces" {
   terraform_organization        = each.value.terraform_organization
   terraform_version             = each.value.terraform_version
   trigger_prefixes              = each.value.trigger_prefixes
-  tfe_agent_pool_id             = each.value.agent_pool_id
   username                      = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory             = each.value.working_directory
   tags                          = var.tags
