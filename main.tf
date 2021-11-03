@@ -46,8 +46,13 @@ module "tfe_workspace" {
   terraform_version             = var.tfe_workspace_settings.terraform_version
   trigger_prefixes              = var.tfe_workspace_trigger_prefixes
   username                      = "TFEPipeline"
-  working_directory             = var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
   tags                          = var.tags
+
+  working_directory = (
+    var.tfe_workspace_working_directory != null ?
+    var.tfe_workspace_working_directory :
+    var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
+  )
 
   clear_text_terraform_variables = merge({
     account     = var.name
