@@ -35,6 +35,7 @@ module "tfe_workspace" {
   policy                        = var.tfe_workspace_policy
   policy_arns                   = var.tfe_workspace_policy_arns
   region                        = var.region
+  remote_state_consumer_ids     = var.tfe_workspace_settings.remote_state_consumer_ids
   repository_identifier         = var.tfe_workspace_settings.repository_identifier
   sensitive_env_variables       = var.tfe_workspace_sensitive_env_variables
   sensitive_hcl_variables       = var.tfe_workspace_sensitive_hcl_variables
@@ -77,6 +78,7 @@ module "additional_tfe_workspaces" {
   policy                        = each.value.policy
   policy_arns                   = each.value.policy_arns
   region                        = var.region
+  remote_state_consumer_ids     = each.value.remote_state_consumer_ids
   repository_identifier         = each.value.repository_identifier
   sensitive_env_variables       = each.value.sensitive_env_variables
   sensitive_hcl_variables       = each.value.sensitive_hcl_variables
