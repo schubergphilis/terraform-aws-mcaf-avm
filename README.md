@@ -27,11 +27,13 @@ module "aws_account" {
   }
 
   tfe_workspace_settings = {
-    oauth_token_id         = var.oauth_token_id
-    repository_name        = "terraform-aws-mcaf-avm"
-    repository_owner       = "schubergphilis"
-    terraform_organization = "schubergphilis"
-    terraform_version      = "1.0.6"
+    oauth_token_id            = var.oauth_token_id
+    repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
+    terraform_organization    = "schubergphilis"
+    terraform_version         = "1.0.6"
+    global_remote_state       = false
+    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
+    working_directory         = "terraform" # or null
   }
 }
 ```
@@ -56,8 +58,7 @@ module "aws_account" {
 
   tfe_workspace_settings = {
     oauth_token_id         = var.oauth_token_id
-    repository_name        = "terraform-aws-mcaf-avm"
-    repository_owner       = "schubergphilis"
+    repository_identifier  = "schubergphilis/terraform-aws-mcaf-avm"
     terraform_organization = "schubergphilis"
     terraform_version      = "1.0.6"
   }
@@ -72,12 +73,13 @@ module "aws_account" {
       clear_text_terraform_variables = {}
       create_repository              = false
       file_triggers_enabled          = true
+      global_remote_state            = false
       name                           = "my-aws-account-baseline"
       oauth_token_id                 = var.oauth_token_id
       policy                         = null
       policy_arns                    = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-      repository_name                = "terraform-aws-mcaf-avm"
-      repository_owner               = "schubergphilis"
+      remote_state_consumer_ids      = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
+      repository_identifier          = "schubergphilis/terraform-aws-mcaf-avm"
       sensitive_env_variables        = {}
       sensitive_hcl_variables        = {}
       sensitive_terraform_variables  = {}
@@ -88,7 +90,7 @@ module "aws_account" {
       terraform_version              = "1.0.6"
       trigger_prefixes               = null
       username                       = null
-      working_directory              = "terraform"
+      working_directory              = "terraform" # or null
     }
   ]
 }

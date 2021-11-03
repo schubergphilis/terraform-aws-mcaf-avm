@@ -50,8 +50,8 @@ module "tfe_workspace" {
   tags                          = var.tags
 
   working_directory = (
-    var.tfe_workspace_working_directory != null ?
-    var.tfe_workspace_working_directory :
+    var.tfe_workspace_settings.working_directory != null ?
+    var.tfe_workspace_settings.working_directory :
     var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
   )
 

@@ -114,12 +114,6 @@ variable "tfe_workspace_name" {
   description = "Custom workspace name (overrides var.name)"
 }
 
-variable "tfe_workspace_working_directory" {
-  type        = string
-  default     = null
-  description = "Which Terraform working directory to use"
-}
-
 variable "tfe_workspace_policy" {
   type        = string
   default     = null
@@ -160,6 +154,7 @@ variable "tfe_workspace_settings" {
     repository_identifier     = string
     terraform_organization    = string
     terraform_version         = string
+    working_directory         = string
   })
   default     = null
   description = "TFE Workspaces settings"
