@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
-## 0.4.2 (2021-11-03)
-### Enhancement
-* Updates tfe_workspace to support setting a Terraform working directory directly ([#16](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
+## 1.0.0 (2021-11-04)
+### Added
+* Update tfe_workspace to support setting a Terraform working directory directly ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
+
+### Changed
+* Bump mcaf workspace to v0.6.0 to add support for managing global remote state ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
 
 ## 0.4.1 (2021-10-13)
 ### Enhancement
