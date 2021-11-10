@@ -27,12 +27,12 @@ module "aws_account" {
   }
 
   tfe_workspace_settings = {
+    global_remote_state       = false
     oauth_token_id            = var.oauth_token_id
+    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
     repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
     terraform_organization    = "schubergphilis"
     terraform_version         = "1.0.6"
-    global_remote_state       = false
-    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
     working_directory         = "terraform" # or null
   }
 }
@@ -57,10 +57,13 @@ module "aws_account" {
   }
 
   tfe_workspace_settings = {
-    oauth_token_id         = var.oauth_token_id
-    repository_identifier  = "schubergphilis/terraform-aws-mcaf-avm"
-    terraform_organization = "schubergphilis"
-    terraform_version      = "1.0.6"
+    global_remote_state       = false
+    oauth_token_id            = var.oauth_token_id
+    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
+    repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
+    terraform_organization    = "schubergphilis"
+    terraform_version         = "1.0.6"
+    working_directory         = "terraform" # or null
   }
 
   additional_tfe_workspaces = [
