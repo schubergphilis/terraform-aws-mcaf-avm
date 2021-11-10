@@ -49,16 +49,16 @@ module "tfe_workspace" {
   username                      = "TFEPipeline"
   tags                          = var.tags
 
+  clear_text_terraform_variables = merge({
+    account     = var.name
+    environment = var.account_settings.environment
+  }, var.tfe_workspace_clear_text_terraform_variables)
+
   working_directory = (
     var.tfe_workspace_settings.working_directory != null ?
     var.tfe_workspace_settings.working_directory :
     var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
   )
-
-  clear_text_terraform_variables = merge({
-    account     = var.name
-    environment = var.account_settings.environment
-  }, var.tfe_workspace_clear_text_terraform_variables)
 }
 
 module "additional_tfe_workspaces" {
