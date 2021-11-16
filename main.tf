@@ -20,7 +20,7 @@ module "account" {
 
 module "tfe_workspace" {
   count                         = var.tfe_workspace_settings != null ? 1 : 0
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.6.0"
   providers                     = { aws = aws.account }
   name                          = coalesce(var.tfe_workspace_name, var.name)
   agent_pool_id                 = var.tfe_workspace_agent_pool_id
@@ -30,12 +30,13 @@ module "tfe_workspace" {
   clear_text_hcl_variables      = var.tfe_workspace_clear_text_hcl_variables
   execution_mode                = var.tfe_workspace_execution_mode
   file_triggers_enabled         = var.tfe_workspace_file_triggers_enabled
+  global_remote_state           = var.tfe_workspace_settings.global_remote_state
   oauth_token_id                = var.tfe_workspace_settings.oauth_token_id
   policy                        = var.tfe_workspace_policy
   policy_arns                   = var.tfe_workspace_policy_arns
   region                        = var.region
-  repository_name               = var.tfe_workspace_settings.repository_name
-  repository_owner              = var.tfe_workspace_settings.repository_owner
+  remote_state_consumer_ids     = var.tfe_workspace_settings.remote_state_consumer_ids
+  repository_identifier         = var.tfe_workspace_settings.repository_identifier
   sensitive_env_variables       = var.tfe_workspace_sensitive_env_variables
   sensitive_hcl_variables       = var.tfe_workspace_sensitive_hcl_variables
   sensitive_terraform_variables = var.tfe_workspace_sensitive_terraform_variables
@@ -46,18 +47,23 @@ module "tfe_workspace" {
   terraform_version             = var.tfe_workspace_settings.terraform_version
   trigger_prefixes              = var.tfe_workspace_trigger_prefixes
   username                      = "TFEPipeline"
-  working_directory             = var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
   tags                          = var.tags
 
   clear_text_terraform_variables = merge({
     account     = var.name
     environment = var.account_settings.environment
   }, var.tfe_workspace_clear_text_terraform_variables)
+
+  working_directory = (
+    var.tfe_workspace_settings.working_directory != null ?
+    var.tfe_workspace_settings.working_directory :
+    var.account_settings.environment != null ? "terraform/${var.account_settings.environment}" : "terraform"
+  )
 }
 
 module "additional_tfe_workspaces" {
   for_each                      = var.additional_tfe_workspaces
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.5.3"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.6.0"
   providers                     = { aws = aws.account }
   name                          = each.key
   agent_pool_id                 = each.value.agent_pool_id
@@ -67,12 +73,13 @@ module "additional_tfe_workspaces" {
   clear_text_hcl_variables      = each.value.clear_text_hcl_variables
   execution_mode                = each.value.execution_mode
   file_triggers_enabled         = each.value.file_triggers_enabled
+  global_remote_state           = each.value.global_remote_state
   oauth_token_id                = each.value.oauth_token_id
   policy                        = each.value.policy
   policy_arns                   = each.value.policy_arns
   region                        = var.region
-  repository_name               = each.value.repository_name
-  repository_owner              = each.value.repository_owner
+  remote_state_consumer_ids     = each.value.remote_state_consumer_ids
+  repository_identifier         = each.value.repository_identifier
   sensitive_env_variables       = each.value.sensitive_env_variables
   sensitive_hcl_variables       = each.value.sensitive_hcl_variables
   sensitive_terraform_variables = each.value.sensitive_terraform_variables
