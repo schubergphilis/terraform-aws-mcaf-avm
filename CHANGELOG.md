@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
-## 1.0.0 (2021-11-04)
+## 1.0.0 (2021-11-16)
 ### Added
 * Update tfe_workspace to support setting a Terraform working directory directly ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
 
