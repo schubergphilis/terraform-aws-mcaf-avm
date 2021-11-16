@@ -23,10 +23,10 @@ variable "additional_tfe_workspaces" {
     execution_mode                 = string
     file_triggers_enabled          = bool
     global_remote_state            = bool
-    remote_state_consumer_ids      = set(string)
     oauth_token_id                 = string
     policy                         = string
     policy_arns                    = list(string)
+    remote_state_consumer_ids      = set(string)
     repository_identifier          = string
     sensitive_env_variables        = map(string)
     sensitive_hcl_variables        = map(object({ sensitive = string }))
@@ -148,8 +148,8 @@ variable "tfe_workspace_sensitive_terraform_variables" {
 
 variable "tfe_workspace_settings" {
   type = object({
-    oauth_token_id            = string
     global_remote_state       = bool
+    oauth_token_id            = string
     remote_state_consumer_ids = set(string)
     repository_identifier     = string
     terraform_organization    = string
