@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+## 1.1.0 (2021-12-29)
+### Changed
+* Bumped mcaf account to v0.5.0 and removed "create_email_address" from account settings. 
+
 ## 1.0.0 (2021-11-16)
 ### Added
 * Update tfe_workspace to support setting a Terraform working directory directly ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))

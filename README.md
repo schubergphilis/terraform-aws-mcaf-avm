@@ -17,7 +17,6 @@ module "aws_account" {
   name = "my-aws-account"
 
   account_settings = {
-    create_email_address = true
     email                = "my-aws-account@email.com"
     environment          = "prod"
     organizational_unit  = "Production"
@@ -47,7 +46,6 @@ module "aws_account" {
   name = "my-aws-account"
 
   account_settings = {
-    create_email_address = true
     email                = "my-aws-account@email.com"
     environment          = "prod"
     organizational_unit  = "Production"
@@ -117,7 +115,7 @@ module "aws_account" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.4.0 |
+| <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.5.0 |
 | <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.6.0 |
 | <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.6.0 |
 
@@ -131,7 +129,7 @@ module "aws_account" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_account_settings"></a> [account\_settings](#input\_account\_settings) | Account settings | <pre>object({<br>    alias_prefix         = string<br>    create_email_address = string<br>    email                = string<br>    environment          = string<br>    organizational_unit  = string<br>    sso_email            = string<br>    sso_firstname        = string<br>    sso_lastname         = string<br>  })</pre> | n/a | yes |
+| <a name="input_account_settings"></a> [account\_settings](#input\_account\_settings) | Account settings | <pre>object({<br>    alias_prefix         = string<br>    email                = string<br>    environment          = string<br>    organizational_unit  = string<br>    sso_email            = string<br>    sso_firstname        = string<br>    sso_lastname         = string<br>  })</pre> | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the account | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to resource | `map(string)` | n/a | yes |
 | <a name="input_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#input\_additional\_tfe\_workspaces) | Additional TFE Workspaces | <pre>map(object({<br>    agent_pool_id                  = string<br>    auto_apply                     = bool<br>    branch                         = string<br>    clear_text_env_variables       = map(string)<br>    clear_text_hcl_variables       = map(string)<br>    clear_text_terraform_variables = map(string)<br>    execution_mode                 = string<br>    file_triggers_enabled          = bool<br>    global_remote_state            = bool<br>    oauth_token_id                 = string<br>    policy                         = string<br>    policy_arns                    = list(string)<br>    remote_state_consumer_ids      = set(string)<br>    repository_identifier          = string<br>    sensitive_env_variables        = map(string)<br>    sensitive_hcl_variables        = map(object({ sensitive = string }))<br>    sensitive_terraform_variables  = map(string)<br>    slack_notification_triggers    = list(string)<br>    slack_notification_url         = string<br>    ssh_key_id                     = string<br>    terraform_organization         = string<br>    terraform_version              = string<br>    trigger_prefixes               = list(string)<br>    username                       = string<br>    working_directory              = string<br>  }))</pre> | `{}` | no |

@@ -1,3 +1,7 @@
+# Upgrading to 1.1.0
+`v1.1.0` is not backwards compatible with `v1.0.0`. First follow the steps to upgrade to `v1.0.0`. The option to automatically create email address with Office 365 has been removed. This upgrade requires the following changes:
+* variable `account_settings` no longer supports a field called `create_email_address`.
+
 # Upgrading to 1.0.0
 
 `v1.0.0` is not backward compatible with `v0.4.1` because terraform-aws-mcaf-workspace changed the variables it uses to connect Terraform workspaces to a VCS. This upgrade requires the following changes:
