@@ -1,13 +1,12 @@
 variable "account_settings" {
   type = object({
-    alias_prefix         = string
-    create_email_address = string
-    email                = string
-    environment          = string
-    organizational_unit  = string
-    sso_email            = string
-    sso_firstname        = string
-    sso_lastname         = string
+    alias_prefix        = string
+    email               = string
+    environment         = string
+    organizational_unit = string
+    sso_email           = string
+    sso_firstname       = string
+    sso_lastname        = string
   })
   description = "Account settings"
 }
