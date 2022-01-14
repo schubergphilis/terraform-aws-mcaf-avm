@@ -19,7 +19,7 @@ module "account" {
 
 module "tfe_workspace" {
   count                         = var.tfe_workspace_settings != null ? 1 : 0
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.6.0"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.7.0"
   providers                     = { aws = aws.account }
   name                          = coalesce(var.tfe_workspace_name, var.name)
   agent_pool_id                 = var.tfe_workspace_agent_pool_id
@@ -62,7 +62,7 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each                      = var.additional_tfe_workspaces
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.6.0"
+  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.7.0"
   providers                     = { aws = aws.account }
   name                          = each.key
   agent_pool_id                 = each.value.agent_pool_id
