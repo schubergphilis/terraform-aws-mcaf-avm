@@ -6,13 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
+
+## 1.2.1 (2022-01-27)
+### Bug fix
+* Bumped mcaf workspace to to v0.7.1: Fix group attachment when not adding a group with the group variable ([#20](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/20))
+
 ## 1.2.0 (2022-01-14)
 ### Changed
-* Bumped mcaf workspace to to v0.7.0.
+* Bumped mcaf workspace to to v0.7.0 ([#19](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/19))
 
 ## 1.1.0 (2021-12-29)
 ### Changed
-* Bumped mcaf account to v0.5.0 and removed "create_email_address" from account settings.
+* Bumped mcaf account to v0.5.0 and removed "create_email_address" from account settings ([#18](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/18))
 
 ## 1.0.0 (2021-11-16)
 ### Added
