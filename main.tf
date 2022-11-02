@@ -18,10 +18,10 @@ module "account" {
 }
 
 module "tfe_workspace" {
-  count                         = var.tfe_workspace_settings != null ? 1 : 0
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.7.1"
-  providers                     = { aws = aws.account }
-  name                          = coalesce(var.tfe_workspace_name, var.name)
+  count     = var.tfe_workspace_settings != null ? 1 : 0
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.8.1"
+  providers = { aws = aws.account }
+
   agent_pool_id                 = var.tfe_workspace_agent_pool_id
   auto_apply                    = var.tfe_workspace_auto_apply
   branch                        = var.tfe_workspace_branch
@@ -30,6 +30,7 @@ module "tfe_workspace" {
   execution_mode                = var.tfe_workspace_execution_mode
   file_triggers_enabled         = var.tfe_workspace_file_triggers_enabled
   global_remote_state           = var.tfe_workspace_settings.global_remote_state
+  name                          = coalesce(var.tfe_workspace_name, var.name)
   oauth_token_id                = var.tfe_workspace_settings.oauth_token_id
   policy                        = var.tfe_workspace_policy
   policy_arns                   = var.tfe_workspace_policy_arns
@@ -42,11 +43,12 @@ module "tfe_workspace" {
   slack_notification_triggers   = var.tfe_workspace_slack_notification_triggers
   slack_notification_url        = var.tfe_workspace_slack_notification_url
   ssh_key_id                    = var.tfe_workspace_ssh_key_id
+  tags                          = var.tags
+  team_access                   = var.tfe_workspace_team_access
   terraform_organization        = var.tfe_workspace_settings.terraform_organization
   terraform_version             = var.tfe_workspace_settings.terraform_version
   trigger_prefixes              = var.tfe_workspace_trigger_prefixes
   username                      = "TFEPipeline"
-  tags                          = var.tags
 
   clear_text_terraform_variables = merge({
     account     = var.name
@@ -61,10 +63,10 @@ module "tfe_workspace" {
 }
 
 module "additional_tfe_workspaces" {
-  for_each                      = var.additional_tfe_workspaces
-  source                        = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.7.1"
-  providers                     = { aws = aws.account }
-  name                          = each.key
+  for_each  = var.additional_tfe_workspaces
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.8.1"
+  providers = { aws = aws.account }
+
   agent_pool_id                 = each.value.agent_pool_id
   auto_apply                    = each.value.auto_apply
   branch                        = each.value.branch
@@ -73,6 +75,7 @@ module "additional_tfe_workspaces" {
   execution_mode                = each.value.execution_mode
   file_triggers_enabled         = each.value.file_triggers_enabled
   global_remote_state           = each.value.global_remote_state
+  name                          = each.key
   oauth_token_id                = each.value.oauth_token_id
   policy                        = each.value.policy
   policy_arns                   = each.value.policy_arns
@@ -85,12 +88,13 @@ module "additional_tfe_workspaces" {
   slack_notification_triggers   = each.value.slack_notification_triggers
   slack_notification_url        = each.value.slack_notification_url
   ssh_key_id                    = each.value.ssh_key_id
+  tags                          = var.tags
+  team_access                   = each.value.team_access
   terraform_organization        = each.value.terraform_organization
   terraform_version             = each.value.terraform_version
   trigger_prefixes              = each.value.trigger_prefixes
   username                      = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory             = each.value.working_directory
-  tags                          = var.tags
 
   clear_text_terraform_variables = merge({
     account     = var.name

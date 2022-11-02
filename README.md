@@ -1,4 +1,5 @@
 # terraform-aws-mcaf-avm
+
 Terraform module providing an AWS Account Vending Machine (AVM). This module sets up an AWS account with one or more Terraform Cloud/Enterprise (TFE) workspace(s) backed by a VCS project.
 
 ## AWS SSO Configuration
@@ -10,6 +11,7 @@ You should use the details from the AWS Control Tower Admin user.
 ## How to use
 
 ### Basic configuration
+
 ```hcl
 module "aws_account" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-avm?ref=VERSION"
@@ -21,18 +23,12 @@ module "aws_account" {
     environment          = "prod"
     organizational_unit  = "Production"
     sso_email            = "control-tower-admin@schubergphilis.com"
-    sso_firstname        = "AWS Control Tower"
-    sso_lastname         = "Admin"
   }
 
   tfe_workspace_settings = {
-    global_remote_state       = false
     oauth_token_id            = var.oauth_token_id
-    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
     repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
     terraform_organization    = "schubergphilis"
-    terraform_version         = "1.0.6"
-    working_directory         = "terraform" # or null
   }
 }
 ```
@@ -50,48 +46,23 @@ module "aws_account" {
     environment          = "prod"
     organizational_unit  = "Production"
     sso_email            = "control-tower-admin@schubergphilis.com"
-    sso_firstname        = "AWS Control Tower"
-    sso_lastname         = "Admin"
   }
 
   tfe_workspace_settings = {
-    global_remote_state       = false
     oauth_token_id            = var.oauth_token_id
-    remote_state_consumer_ids = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
     repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
     terraform_organization    = "schubergphilis"
-    terraform_version         = "1.0.6"
-    working_directory         = "terraform" # or null
   }
 
   additional_tfe_workspaces = [
     {
-      agent_pool_id                  = null
       auto_apply                     = true
-      branch                         = "master"
-      clear_text_env_variables       = {}
-      clear_text_hcl_variables       = {}
-      clear_text_terraform_variables = {}
-      create_repository              = false
-      file_triggers_enabled          = true
-      global_remote_state            = false
       name                           = "my-aws-account-baseline"
       oauth_token_id                 = var.oauth_token_id
-      policy                         = null
-      policy_arns                    = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-      remote_state_consumer_ids      = toset(["ws-aaaabbbbccccdddd", "ws-eeeeffffgggghhhh"]) # or null
       repository_identifier          = "schubergphilis/terraform-aws-mcaf-avm"
-      sensitive_env_variables        = {}
-      sensitive_hcl_variables        = {}
-      sensitive_terraform_variables  = {}
-      slack_notification_triggers    = []
-      slack_notification_url         = null
-      ssh_key_id                     = null
       terraform_organization         = "schubergphilis"
       terraform_version              = "1.0.6"
-      trigger_prefixes               = null
-      username                       = null
-      working_directory              = "terraform" # or null
+      working_directory              = "terraform/additional"
     }
   ]
 }
