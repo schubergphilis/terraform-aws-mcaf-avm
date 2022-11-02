@@ -19,10 +19,12 @@ module "account" {
 
 module "tfe_workspace" {
   count     = var.tfe_workspace_settings != null ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.8.1"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.9.0"
   providers = { aws = aws.account }
 
   agent_pool_id                 = var.tfe_workspace_agent_pool_id
+  agent_role_arn                = var.tfe_workspace_agent_role_arn
+  auth_method                   = var.tfe_workspace_auth_method
   auto_apply                    = var.tfe_workspace_auto_apply
   branch                        = var.tfe_workspace_branch
   clear_text_env_variables      = var.tfe_workspace_clear_text_env_variables
@@ -37,6 +39,7 @@ module "tfe_workspace" {
   region                        = var.region
   remote_state_consumer_ids     = var.tfe_workspace_settings.remote_state_consumer_ids
   repository_identifier         = var.tfe_workspace_settings.repository_identifier
+  role_name                     = var.tfe_workspace_role_name
   sensitive_env_variables       = var.tfe_workspace_sensitive_env_variables
   sensitive_hcl_variables       = var.tfe_workspace_sensitive_hcl_variables
   sensitive_terraform_variables = var.tfe_workspace_sensitive_terraform_variables
@@ -64,10 +67,12 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.8.1"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.9.0"
   providers = { aws = aws.account }
 
   agent_pool_id                 = each.value.agent_pool_id
+  agent_role_arn                = each.value.agent_role_arn != null ? each.value.agent_role_arn : var.tfe_workspace_agent_role_arn
+  auth_method                   = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace_auth_method
   auto_apply                    = each.value.auto_apply
   branch                        = each.value.branch
   clear_text_env_variables      = each.value.clear_text_env_variables
@@ -82,6 +87,7 @@ module "additional_tfe_workspaces" {
   region                        = var.region
   remote_state_consumer_ids     = each.value.remote_state_consumer_ids
   repository_identifier         = each.value.repository_identifier
+  role_name                     = each.value.role_name
   sensitive_env_variables       = each.value.sensitive_env_variables
   sensitive_hcl_variables       = each.value.sensitive_hcl_variables
   sensitive_terraform_variables = each.value.sensitive_terraform_variables

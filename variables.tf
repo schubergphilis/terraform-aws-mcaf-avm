@@ -14,6 +14,8 @@ variable "account_settings" {
 variable "additional_tfe_workspaces" {
   type = map(object({
     agent_pool_id                  = optional(string, null)
+    agent_role_arn                 = optional(string, null)
+    auth_method                    = optional(string, null)
     auto_apply                     = optional(bool, false)
     branch                         = optional(string, "main")
     clear_text_env_variables       = optional(map(string), {})
@@ -27,6 +29,7 @@ variable "additional_tfe_workspaces" {
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     remote_state_consumer_ids      = optional(set(string))
     repository_identifier          = string
+    role_name                      = optional(string, null)
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
@@ -63,6 +66,23 @@ variable "tfe_workspace_agent_pool_id" {
   type        = string
   default     = null
   description = "Agent pool ID"
+}
+
+variable "tfe_workspace_agent_role_arn" {
+  type        = string
+  default     = null
+  description = "ARN of TFE agent role"
+}
+
+variable "tfe_workspace_auth_method" {
+  type        = string
+  default     = "iam_user"
+  description = "Configures how the workspace authenticates with the AWS account (can be iam_role or iam_user)"
+
+  validation {
+    condition     = lower(var.tfe_workspace_auth_method) == "iam_role" || lower(var.tfe_workspace_auth_method) == "iam_user"
+    error_message = "The tfe_workspace_auth_method value must be either \"iam_role\" or \"iam_user\"."
+  }
 }
 
 variable "tfe_workspace_auto_apply" {
@@ -123,6 +143,12 @@ variable "tfe_workspace_policy_arns" {
   type        = list(string)
   default     = ["arn:aws:iam::aws:policy/AdministratorAccess"]
   description = "A set of policy ARNs to attach to the pipeline user"
+}
+
+variable "tfe_workspace_role_name" {
+  type        = string
+  default     = "TFEPipeline"
+  description = "The IAM role name for a new pipeline user"
 }
 
 variable "tfe_workspace_sensitive_env_variables" {
