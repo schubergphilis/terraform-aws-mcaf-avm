@@ -37,8 +37,8 @@ variable "additional_tfe_workspaces" {
     terraform_organization         = string
     terraform_version              = optional(string, null)
     trigger_prefixes               = optional(list(string), ["modules"])
-    username                       = string
-    working_directory              = string
+    username                       = optional(string, null)
+    working_directory              = optional(string, "terraform")
   }))
   default     = {}
   description = "Additional TFE Workspaces"

@@ -4,7 +4,8 @@
 
 The following breaking changes are introduced in this version:
 
-- Minimum terraform version has been set to v1.3.0
+- Minimum terraform version has been set to v1.3.0.
+- Minimum MCAF provider version has been set to v0.4.2 to be compatible with the latest version of service catalogue.
 - Default of the variabes `tfe_workspace_branch` and `additional_tfe_workspaces.branch` have been modified from `master` to `main`.
 - The variables `additional_tfe_workspaces.global_remote_state` and `tfe_workspace_settings.global_remote_state` are now automatically set to false.
 - The variable `region` has no default anymore and is now a mandatory variable.

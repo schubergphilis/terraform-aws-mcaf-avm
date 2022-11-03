@@ -7,7 +7,8 @@ terraform {
       source = "integrations/github"
     }
     mcaf = {
-      source = "schubergphilis/mcaf"
+      source  = "schubergphilis/mcaf"
+      version = ">= 0.4.2"
     }
     tfe = {
       source  = "hashicorp/tfe"
