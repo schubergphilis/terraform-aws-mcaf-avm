@@ -5,39 +5,40 @@ variable "account_settings" {
     environment         = string
     organizational_unit = string
     sso_email           = string
-    sso_firstname       = string
-    sso_lastname        = string
+    sso_firstname       = optional(string, "AWS Control Tower")
+    sso_lastname        = optional(string, "Admin")
   })
   description = "Account settings"
 }
 
 variable "additional_tfe_workspaces" {
   type = map(object({
-    agent_pool_id                  = string
-    auto_apply                     = bool
-    branch                         = string
-    clear_text_env_variables       = map(string)
-    clear_text_hcl_variables       = map(string)
-    clear_text_terraform_variables = map(string)
-    execution_mode                 = string
-    file_triggers_enabled          = bool
-    global_remote_state            = bool
+    agent_pool_id                  = optional(string, null)
+    auto_apply                     = optional(bool, false)
+    branch                         = optional(string, "main")
+    clear_text_env_variables       = optional(map(string), {})
+    clear_text_hcl_variables       = optional(map(string), {})
+    clear_text_terraform_variables = optional(map(string), {})
+    execution_mode                 = optional(string, "remote")
+    file_triggers_enabled          = optional(bool, true)
+    global_remote_state            = optional(bool, false)
     oauth_token_id                 = string
-    policy                         = string
-    policy_arns                    = list(string)
-    remote_state_consumer_ids      = set(string)
+    policy                         = optional(string, null)
+    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    remote_state_consumer_ids      = optional(set(string))
     repository_identifier          = string
-    sensitive_env_variables        = map(string)
-    sensitive_hcl_variables        = map(object({ sensitive = string }))
-    sensitive_terraform_variables  = map(string)
-    slack_notification_triggers    = list(string)
-    slack_notification_url         = string
-    ssh_key_id                     = string
+    sensitive_env_variables        = optional(map(string), {})
+    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
+    sensitive_terraform_variables  = optional(map(string), {})
+    slack_notification_triggers    = optional(list(string), ["run:created", "run:planning", "run:needs_attention", "run:applying", "run:completed", "run:errored"])
+    slack_notification_url         = optional(string, null)
+    ssh_key_id                     = optional(string, null)
+    team_access                    = optional(map(object({ access = string, team_id = string, })), {})
     terraform_organization         = string
-    terraform_version              = string
-    trigger_prefixes               = list(string)
-    username                       = string
-    working_directory              = string
+    terraform_version              = optional(string, null)
+    trigger_prefixes               = optional(list(string), ["modules"])
+    username                       = optional(string, null)
+    working_directory              = optional(string, "terraform")
   }))
   default     = {}
   description = "Additional TFE Workspaces"
@@ -50,7 +51,6 @@ variable "name" {
 
 variable "region" {
   type        = string
-  default     = "eu-west-1"
   description = "The default region of the account"
 }
 
@@ -73,7 +73,7 @@ variable "tfe_workspace_auto_apply" {
 
 variable "tfe_workspace_branch" {
   type        = string
-  default     = "master"
+  default     = "main"
   description = "The Git branch to trigger the TFE workspace for"
 }
 
@@ -147,13 +147,13 @@ variable "tfe_workspace_sensitive_terraform_variables" {
 
 variable "tfe_workspace_settings" {
   type = object({
-    global_remote_state       = bool
+    global_remote_state       = optional(bool, false)
     oauth_token_id            = string
-    remote_state_consumer_ids = set(string)
+    remote_state_consumer_ids = optional(set(string))
     repository_identifier     = string
     terraform_organization    = string
-    terraform_version         = string
-    working_directory         = string
+    terraform_version         = optional(string, null)
+    working_directory         = optional(string, "terraform")
   })
   default     = null
   description = "TFE Workspaces settings"
@@ -182,6 +182,15 @@ variable "tfe_workspace_ssh_key_id" {
   type        = string
   default     = null
   description = "The SSH key ID to assign to the workspace"
+}
+
+variable "tfe_workspace_team_access" {
+  type = map(object({
+    access  = string,
+    team_id = string,
+  }))
+  default     = {}
+  description = "An optional map with team IDs and workspace access permissions to assign"
 }
 
 variable "tfe_workspace_trigger_prefixes" {
