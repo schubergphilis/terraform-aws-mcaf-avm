@@ -1,10 +1,34 @@
 # terraform-aws-mcaf-avm
 
-Terraform module providing an AWS Account Vending Machine (AVM). This module sets up an AWS account with one or more Terraform Cloud/Enterprise (TFE) workspace(s) backed by a VCS project.
+Terraform module providing an AWS Account Vending Machine (AVM). This module provisions an AWS account using the "AWS Control Tower Account Factory" product in Service Catalog with one or more Terraform Cloud/Enterprise (TFE) workspaces backed by a VCS project.
+
+## Workspace authentication
+
+Using the default values, this module will create an IAM user per workspace in the provisioned AWS account. If using self-hosted Terraform Cloud agents then it is recommended to rather use an IAM role to authenticate with the AWS account. This is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
+
+To use IAM roles for authentication:
+
+- Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID
+- Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`
+- Set `var.tfe_workspace.agent_role_arn` or (`agent_role_arn` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool
+
+This will create an IAM role in the provisioned AWS account with a randomly generated external ID which can only be assumed by the Terraform Cloud agent role. The created role and external ID value are stored in the new workspace as Terraform variables which can be used to configure your AWS provider. Using the default workspace the created role will be called `TPEPipelineRole`, role names for additional workspaces will be calculated for you based on the workspace name but you can always set your own via the `role_name` variable (similarly you can set your own role name in the default workspace via `var.tfe_workspace.role_name`); but please be aware that each IAM role must have a unique name.
+
+To use the created IAM role, use the following when configuring your AWS provider:
+
+```hcl
+provider "aws" {
+  assume_role {
+    role_arn     = var.aws_assume_role
+    external_id  = var.aws_assume_role_external_id
+    session_name = "tfe-agent"
+  }
+}
+```
 
 ## AWS SSO Configuration
 
-In the `account_settings` variable, the SSO attributes (`sso_email`, `sso_firstname` and `sso_lastname`) will be used by AWS Service Catalog to provide initial access to the newly created account.
+In the `account` variable, the SSO attributes (`sso_email`, `sso_firstname` and `sso_lastname`) will be used by AWS Service Catalog to provide initial access to the newly created account.
 
 You should use the details from the AWS Control Tower Admin user.
 
@@ -17,18 +41,20 @@ module "aws_account" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-avm?ref=VERSION"
 
   name = "my-aws-account"
+  tags = { Terraform = true }
 
-  account_settings = {
-    email                = "my-aws-account@email.com"
-    environment          = "prod"
-    organizational_unit  = "Production"
-    sso_email            = "control-tower-admin@schubergphilis.com"
+  account = {
+    email               = "my-aws-account@email.com"
+    environment         = "prod"
+    organizational_unit = "Production"
+    sso_email           = "control-tower-admin@company.com"
   }
 
-  tfe_workspace_settings = {
-    oauth_token_id            = var.oauth_token_id
-    repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
-    terraform_organization    = "schubergphilis"
+  tfe_workspace = {
+    default_region        = "eu-west-1"
+    repository_identifier = "schubergphilis/terraform-aws-mcaf-avm"
+    organization          = "schubergphilis"
+    vcs_oauth_token_id    = var.oauth_token_id
   }
 }
 ```
@@ -40,31 +66,63 @@ module "aws_account" {
   source = "github.com/schubergphilis/terraform-aws-mcaf-avm?ref=VERSION"
 
   name = "my-aws-account"
+  tags = { Terraform = true }
 
-  account_settings = {
-    email                = "my-aws-account@email.com"
-    environment          = "prod"
-    organizational_unit  = "Production"
-    sso_email            = "control-tower-admin@schubergphilis.com"
+  account = {
+    email               = "my-aws-account@email.com"
+    environment         = "prod"
+    organizational_unit = "Production"
+    sso_email           = "control-tower-admin@company.com"
   }
 
-  tfe_workspace_settings = {
-    oauth_token_id            = var.oauth_token_id
-    repository_identifier     = "schubergphilis/terraform-aws-mcaf-avm"
-    terraform_organization    = "schubergphilis"
+  tfe_workspace = {
+    default_region        = "eu-west-1"
+    repository_identifier = "schubergphilis/terraform-aws-mcaf-avm"
+    organization          = "schubergphilis"
+    vcs_oauth_token_id    = var.oauth_token_id
   }
 
-  additional_tfe_workspaces = [
-    {
-      auto_apply                     = true
-      name                           = "my-aws-account-baseline"
-      oauth_token_id                 = var.oauth_token_id
-      repository_identifier          = "schubergphilis/terraform-aws-mcaf-avm"
-      terraform_organization         = "schubergphilis"
-      terraform_version              = "1.0.6"
-      working_directory              = "terraform/additional"
+  additional_tfe_workspaces = {
+    baseline-my-aws-account = {
+      auto_apply            = true
+      repository_identifier = "schubergphilis/terraform-aws-mcaf-account-baseline"
     }
-  ]
+  }
+}
+```
+
+### Only deploy additional workspaces
+
+```hcl
+module "aws_account" {
+  source = "github.com/schubergphilis/terraform-aws-mcaf-avm?ref=VERSION"
+
+  create_default_workspace = false
+  name                     = "my-aws-account"
+  tags                     = { Terraform = true }
+
+  account = {
+    email               = "my-aws-account@email.com"
+    environment         = "prod"
+    organizational_unit = "Production"
+    sso_email           = "control-tower-admin@company.com"
+  }
+
+  tfe_workspace = {
+    default_region        = "eu-west-1"
+    repository_identifier = "schubergphilis/terraform-aws-mcaf-avm"
+    organization          = "schubergphilis"
+    vcs_oauth_token_id    = var.oauth_token_id
+  }
+
+  additional_tfe_workspaces = {
+    my-aws-account-subsystem1 = {
+      working_directory = "terraform/subsystem1"
+    }
+    my-aws-account-subsystem2 = {
+      working_directory = "terraform/subsystem2"
+    }
+  }
 }
 ```
 
