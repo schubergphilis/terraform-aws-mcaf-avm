@@ -65,7 +65,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@master
       - name: Terraform pr commenter
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.0.2
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
         with:
-          tfsec_args: --concise-output
           github_token: ${{ github.token }}
