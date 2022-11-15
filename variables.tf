@@ -97,7 +97,7 @@ variable "tfe_workspace" {
     trigger_prefixes               = optional(list(string), ["modules"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
-    working_directory              = optional(string, "terraform")
+    working_directory              = optional(string, null)
   })
   description = "TFE workspace settings"
 }
