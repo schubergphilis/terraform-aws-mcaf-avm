@@ -4,36 +4,37 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.3.0 (2022-11-03)
+## Unreleased
 
 ENHANCEMENTS
 
+- Bumped terraform-aws-mcaf-account module to v0.5.1: Adds support to specify an OU path to provision an account into a nested OU ([#23](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/23))
 - Modify variables to optional variables in the `additional_tfe_workspaces` and `tfe_workspace_settings` variable and add support for setting the workspace team access ([#22](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/22))
 
 ## 1.2.1 (2022-01-27)
 
 BUG FIXES
 
-- Bumped mcaf workspace to to v0.7.1: Fix group attachment when not adding a group with the group variable ([#20](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/20))
+- Bumped terraform-aws-mcaf-workspace module to v0.7.1: Fix IAM user group attachment when not specifying additional groups ([#20](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/20))
 
 ## 1.2.0 (2022-01-14)
 
 ENHANCEMENTS
 
-- Bumped mcaf workspace to to v0.7.0 ([#19](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/19))
+- Bumped terraform-aws-mcaf-workspace module to v0.7.0 ([#19](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/19))
 
 ## 1.1.0 (2021-12-29)
 
 ENHANCEMENTS
 
-- Bumped mcaf account to v0.5.0 and removed "create_email_address" from account settings ([#18](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/18))
+- Bumped terraform-aws-mcaf-avm module to v0.5.0 and removed "create_email_address" from account settings ([#18](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/18))
 
 ## 1.0.0 (2021-11-16)
 
 ENHANCEMENTS
 
 - Update tfe_workspace to support setting a Terraform working directory directly ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
-- Bump mcaf workspace to v0.6.0 to add support for managing global remote state ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
+- Bump terraform-aws-mcaf-workspace module to v0.6.0 to add support for managing global remote state ([#17](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/17))
 
 ## 0.4.1 (2021-10-13)
 
@@ -47,7 +48,7 @@ ENHANCEMENTS
 
 - Adds account_settings.create_email_address variable ([#15](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/15))
 - GH provider has been moved to intergations/ ([#12](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/12))
-- Bumps mcaf workspace to mitigate warning: does not declare a provider ([#11](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/11))
+- Bumps terraform-aws-mcaf-workspace module to mitigate warning: does not declare a provider ([#11](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/11))
 - Update terraform-aws-mcaf-workspace to v0.5.0 ([#10](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/10))
 
 BUG FIXES
@@ -70,7 +71,7 @@ ENHANCEMENTS
 
 ENHANCEMENTS
 
-- Add support for all available MCAF workspace variables ([#7](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/7))
+- Add support for all available terraform-aws-mcaf-workspace module variables ([#7](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/7))
 
 ## 0.2.3 (2021-03-26)
 
