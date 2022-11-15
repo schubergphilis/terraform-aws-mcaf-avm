@@ -5,7 +5,7 @@ locals {
       account = var.name
     }
 
-    working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : var.tfe_workspace.working_directory
+    working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
 }
 
@@ -66,7 +66,7 @@ module "tfe_workspace" {
   terraform_version              = var.tfe_workspace.terraform_version
   trigger_prefixes               = var.tfe_workspace.trigger_prefixes
   username                       = var.tfe_workspace.username
-  working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
+  working_directory              = var.tfe_workspace.working_directory != null ? var.tfe_workspace.working_directory : local.tfe_workspace.working_directory
 }
 
 module "additional_tfe_workspaces" {
