@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 2.0.0 (2022-11-15)
 
 ENHANCEMENTS
 
-- Bumped terraform-aws-mcaf-account module to v0.5.1: Adds support to specify an OU path to provision an account into a nested OU ([#23](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/23))
+- Bumped [terraform-aws-mcaf-account](https://github.com/schubergphilis/terraform-aws-mcaf-account) module to v0.5.1: Adds support to specify an OU path to provision an account into a nested OU ([#23](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/23))
+- Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) to v0.9.0 to support using IAM roles as a way for workspaces to authenticate to AWS (instead of creating an IAM user) ([#21](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/21))
 - Modify variables to optional variables in the `additional_tfe_workspaces` and `tfe_workspace_settings` variable and add support for setting the workspace team access ([#22](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/22))
+- Update existing variables to support `optional` now that Terraform 1.3 -- Please see [UPGRADING.md](./UPGRADING.md) for more information ([#24](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/24))
 
 ## 1.2.1 (2022-01-27)
 
