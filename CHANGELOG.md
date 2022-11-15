@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+ENHANCEMENTS
+
+- Bumped terraform-aws-mcaf-account module to v0.5.1: Adds support to specify an OU path to provision an account into a nested OU ([#23](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/23))
+
 ## 1.3.0 (2022-11-03)
 
 ENHANCEMENTS
