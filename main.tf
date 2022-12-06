@@ -74,8 +74,8 @@ module "additional_tfe_workspaces" {
   source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.9.0"
   providers = { aws = aws.account }
 
-  agent_pool_id                  = each.value.agent_pool_id
-  agent_role_arn                 = each.value.agent_role_arn
+  agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
+  agent_role_arn                 = each.value.agent_role_arn != null ? each.value.agent_role_arn : var.tfe_workspace.agent_role_arn
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
@@ -91,7 +91,7 @@ module "additional_tfe_workspaces" {
   policy_arns                    = each.value.policy_arns
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
   remote_state_consumer_ids      = each.value.remote_state_consumer_ids
-  repository_identifier          = try(each.value.repository_identifier, var.tfe_workspace.repository_identifier)
+  repository_identifier          = coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier)
   role_name                      = coalesce(each.value.role_name, "TFEPipeline-${each.key}")
   sensitive_env_variables        = each.value.sensitive_env_variables
   sensitive_hcl_variables        = each.value.sensitive_hcl_variables
