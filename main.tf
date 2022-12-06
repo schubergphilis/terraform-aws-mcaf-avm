@@ -92,7 +92,7 @@ module "additional_tfe_workspaces" {
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
   remote_state_consumer_ids      = each.value.remote_state_consumer_ids
   repository_identifier          = coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier)
-  role_name                      = coalesce(each.value.role_name, "TFEPipeline-${each.key}")
+  role_name                      = coalesce(each.value.role_name, "TFEPipeline${replace(title(each.key), "/[_-]/", "")}")
   sensitive_env_variables        = each.value.sensitive_env_variables
   sensitive_hcl_variables        = each.value.sensitive_hcl_variables
   sensitive_terraform_variables  = each.value.sensitive_terraform_variables
