@@ -17,6 +17,7 @@ ENHANCEMENTS
 - Modify variables to optional variables in the `additional_tfe_workspaces` and `tfe_workspace_settings` variable and add support for setting the workspace team access ([#22](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/22))
 - Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) to v0.9.0 to support using IAM roles as a way for workspaces to authenticate to AWS (instead of creating an IAM user) ([#21](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/21))
 - Inherit more from `var.tfe_workspace` ([#26](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/26))
+- Use CamelCase to compute additional workspace IAM role or usernames ([#27](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/27))
 
 ## 1.2.1 (2022-01-27)
 
