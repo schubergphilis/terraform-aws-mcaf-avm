@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 2.0.1 (2022-12-12)
 
 ENHANCEMENTS
-- The aws_assume_role_external_id will now be set to `sensitive` in Terraform Cloud workspaces in order to prevent assume_role leakage ([#26](https://github.com/schubergphilis/terraform-aws-mcaf-workspace/pull/44))
+- The aws_assume_role_external_id will now be set to `sensitive` in Terraform Cloud workspaces in order to prevent assume_role leakage ([#28](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/28))
 
 ## 2.0.0 (2022-11-15)
 
