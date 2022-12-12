@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1 (2022-12-12)
+
+ENHANCEMENTS
+- The aws_assume_role_external_id will now be set to `sensitive` in Terraform Cloud workspaces in order to prevent assume_role leakage
+
 ## 2.0.0 (2022-11-15)
 
 BUG FIXES
