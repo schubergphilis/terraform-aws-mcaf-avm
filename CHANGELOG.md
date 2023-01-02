@@ -4,16 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.0 (2023-01-03)
+
+- Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) module to v0.10.0: Adds support to use custom workspace permissions ([#29](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/29))
+
+ENHANCEMENTS
+
 ## 2.0.1 (2022-12-12)
 
 ENHANCEMENTS
-- The aws_assume_role_external_id will now be set to `sensitive` in Terraform Cloud workspaces in order to prevent assume_role leakage ([#28](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/28))
+
+- `aws_assume_role_external_id` will now be set to `sensitive` in Terraform Cloud workspaces in order to prevent `assume_role` leakage ([#28](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/28))
 
 ## 2.0.0 (2022-11-15)
 
 BUG FIXES
 
-- The working_directory defaulted to "terraform" instead of "terraform/${var.account.environment}" as is expected behaviour ([#25](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/25))
+- The `working_directory` variable defaulted to "terraform" instead of "terraform/${var.account.environment}" as is expected behaviour ([#25](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/25))
 
 ENHANCEMENTS
 

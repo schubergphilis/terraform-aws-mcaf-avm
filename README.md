@@ -26,6 +26,31 @@ provider "aws" {
 }
 ```
 
+## Workspace team access
+
+Team access can be configured per workspace using the `team_access` variable.
+
+As the state is considered sensitive, we recommend the following custom role permissions which is similar to the pre-existing "write" permission but blocks read access to the state (viewing outputs is still allowed):
+
+```hcl
+team_access = {
+  "MyTeamName" = {
+    permissions = {
+      run_tasks         = false
+      runs              = "apply"
+      sentinel_mocks    = "read"
+      state_versions    = "read-outputs"
+      variables         = "write"
+      workspace_locking = true
+    }
+  }
+}
+```
+
+More complete usage information can be found in the underlying [terraform-aws-mcaf-workspace module README](https://github.com/schubergphilis/terraform-aws-mcaf-workspace#team-access).
+
+Note: the team should already exist, this module will not create it for you.
+
 ## AWS SSO Configuration
 
 In the `account` variable, the SSO attributes (`sso_email`, `sso_firstname` and `sso_lastname`) will be used by AWS Service Catalog to provide initial access to the newly created account.
