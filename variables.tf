@@ -38,12 +38,23 @@ variable "additional_tfe_workspaces" {
     slack_notification_triggers    = optional(list(string), null)
     slack_notification_url         = optional(string, null)
     ssh_key_id                     = optional(string, null)
-    team_access                    = optional(map(object({ access = string, team_id = string, })), {})
     terraform_version              = optional(string, null)
     trigger_prefixes               = optional(list(string), null)
     username                       = optional(string, null)
     vcs_oauth_token_id             = optional(string, null)
     working_directory              = optional(string, null)
+
+    team_access = optional(map(object({
+      access = optional(string, null),
+      permissions = optional(object({
+        run_tasks         = bool
+        runs              = string
+        sentinel_mocks    = string
+        state_versions    = string
+        variables         = string
+        workspace_locking = bool
+      }), null)
+    })), {})
   }))
   default     = {}
   description = "Additional TFE workspaces"
@@ -91,13 +102,24 @@ variable "tfe_workspace" {
     slack_notification_triggers    = optional(list(string), ["run:created", "run:planning", "run:needs_attention", "run:applying", "run:completed", "run:errored"])
     slack_notification_url         = optional(string, null)
     ssh_key_id                     = optional(string, null)
-    team_access                    = optional(map(object({ access = string, team_id = string, })), {})
     organization                   = string
     terraform_version              = optional(string, null)
     trigger_prefixes               = optional(list(string), ["modules"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
     working_directory              = optional(string, null)
+
+    team_access = optional(map(object({
+      access = optional(string, null),
+      permissions = optional(object({
+        run_tasks         = bool
+        runs              = string
+        sentinel_mocks    = string
+        state_versions    = string
+        variables         = string
+        workspace_locking = bool
+      }), null)
+    })), {})
   })
   description = "TFE workspace settings"
 }
