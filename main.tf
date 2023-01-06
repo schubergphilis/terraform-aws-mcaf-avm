@@ -31,8 +31,9 @@ module "account" {
 }
 
 module "tfe_workspace" {
-  count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.10.0"
+  count = var.create_default_workspace ? 1 : 0
+  #  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.10.0"
+  source    = "github/svashisht03/terraform-aws-mcaf-workspace?ref=v0.10.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
@@ -68,7 +69,7 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.trigger_prefixes
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.working_directory != null ? var.tfe_workspace.working_directory : local.tfe_workspace.working_directory
-  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, {account_id = module.account.id })
+  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, { account_id = module.account.id })
 }
 
 module "additional_tfe_workspaces" {
@@ -109,7 +110,7 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes)
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
-  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, {account_id = module.account.id })
+  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, { account_id = module.account.id })
 }
 
 resource "aws_iam_account_alias" "alias" {
