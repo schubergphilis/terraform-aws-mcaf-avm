@@ -48,6 +48,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.vcs_oauth_token_id
+  permissions_boundary           = templatefile(var.tfe_workspace.permissions_boundary, { account_id = module.account.id })
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   region                         = var.tfe_workspace.default_region
@@ -67,6 +68,7 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.trigger_prefixes
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.working_directory != null ? var.tfe_workspace.working_directory : local.tfe_workspace.working_directory
+  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, {account_id = module.account.id })
 }
 
 module "additional_tfe_workspaces" {
@@ -87,6 +89,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
+  permissions_boundary           = templatefile(var.tfe_workspace.permissions_boundary, { account_id = module.account.id })
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
@@ -106,6 +109,7 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes)
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
+  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, {account_id = module.account.id })
 }
 
 resource "aws_iam_account_alias" "alias" {
