@@ -33,7 +33,7 @@ module "account" {
 module "tfe_workspace" {
   count = var.create_default_workspace ? 1 : 0
   #  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.10.0"
-  source    = "github/svashisht03/terraform-aws-mcaf-workspace?ref=v0.10.0"
+  source    = "github/svashisht03/terraform-aws-mcaf-workspace"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
