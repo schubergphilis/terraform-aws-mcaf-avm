@@ -82,6 +82,7 @@ module "additional_tfe_workspaces" {
   agent_role_arn                 = each.value.agent_role_arn != null ? each.value.agent_role_arn : var.tfe_workspace.agent_role_arn
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
+  boundary_auth_method           = var.additional_tfe_workspaces.boundary_auth_method
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables

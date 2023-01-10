@@ -18,6 +18,7 @@ variable "additional_tfe_workspaces" {
     agent_role_arn                 = optional(string, null)
     auth_method                    = optional(string, null)
     auto_apply                     = optional(bool, false)
+    boundary_auth_method           = optional(string, null)
     branch                         = optional(string, null)
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
