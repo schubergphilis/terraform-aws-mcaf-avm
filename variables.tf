@@ -26,7 +26,6 @@ variable "account" {
     sso_email                = string
     sso_firstname            = optional(string, "AWS Control Tower")
     sso_lastname             = optional(string, "Admin")
-
   })
   description = "AWS account settings"
 }
