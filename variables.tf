@@ -89,6 +89,7 @@ variable "permission_boundaries" {
     workload_boundary      = optional(string, null)
     workload_boundary_name = optional(string, null)
  }
+}
 
 variable "tfe_workspace" {
   type = object({
