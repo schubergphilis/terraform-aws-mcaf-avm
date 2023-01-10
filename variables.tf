@@ -95,8 +95,6 @@ variable "tfe_workspace" {
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
     name                           = optional(string, null)
-    permissions_boundary           = optional(string, null)
-    permissions_boundary_name      = optional(string,null)
     policy                         = optional(string, null)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     remote_state_consumer_ids      = optional(set(string))
@@ -114,9 +112,7 @@ variable "tfe_workspace" {
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
     working_directory              = optional(string, null)
-    workload_boundary              = optional(string, null)
-    workload_boundary_name         = optional(string, null)
-    
+
     team_access = optional(map(object({
       access = optional(string, null),
       permissions = optional(object({
