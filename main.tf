@@ -31,19 +31,18 @@ module "account" {
 }
 
 resource "aws_iam_policy" "pipeline_boundary" {
-  provider = aws.account
-  count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
+  provider   = aws.account
+  count      = var.permission_boundaries.pipeline_boundary_name != null ? 1 : 0
   name       = var.permission_boundaries.pipeline_boundary_name
   policy     = templatefile(var.permission_boundaries.pipeline_boundary, { account_id = module.account.id })
 }
 
 resource "aws_iam_policy" "workload_boundary" {
-  provider = aws.account
-  count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
+  provider   = aws.account
+  count      = var.permission_boundaries.workload_boundary_name != null ? 1 : 0
   name       = var.permission_boundaries.workload_boundary_name
   policy     = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
 }
-
 
 module "tfe_workspace" {
   count = var.create_default_workspace ? 1 : 0
@@ -96,7 +95,6 @@ module "additional_tfe_workspaces" {
   agent_role_arn                 = each.value.agent_role_arn != null ? each.value.agent_role_arn : var.tfe_workspace.agent_role_arn
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
-  # boundary_auth_method           = each.value.boundary_auth_method
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
@@ -106,8 +104,6 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
-  # permissions_boundary           = templatefile(each.value.permissions_boundary, { account_id = module.account.id })
-  # permissions_boundary_name      = each.value.permissions_boundary_name
   permissions_boundary_arn       = aws_iam_policy.pipeline_boundary[0].arn
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
@@ -128,8 +124,6 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes)
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
-  # workload_boundary              = templatefile(each.value.workload_boundary, { account_id = module.account.id })
-  # workload_boundary_name         = each.value.workload_boundary_name
 }
 
 resource "aws_iam_account_alias" "alias" {
