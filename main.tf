@@ -68,8 +68,6 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.trigger_prefixes
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.working_directory != null ? var.tfe_workspace.working_directory : local.tfe_workspace.working_directory
-  workload_boundary              = templatefile(var.tfe_workspace.workload_boundary, { account_id = module.account.id })
-  workload_boundary_name         = var.tfe_workspace.workload_boundary_name
 }
 
 module "additional_tfe_workspaces" {
