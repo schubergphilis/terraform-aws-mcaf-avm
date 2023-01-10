@@ -31,12 +31,14 @@ module "account" {
 }
 
 resource "aws_iam_policy" "pipeline_boundary" {
+  provider = aws.account
   count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
   name       = var.permission_boundaries.pipeline_boundary_name
   policy     = templatefile(var.permission_boundaries.pipeline_boundary, { account_id = module.account.id })
 }
 
 resource "aws_iam_policy" "workload_boundary" {
+  provider = aws.account
   count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
   name       = var.permissions_boundaries.workload_boundary_name
   policy     = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
@@ -62,7 +64,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.vcs_oauth_token_id
-  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary.arn
+  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary[0].arn
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   region                         = var.tfe_workspace.default_region
@@ -106,7 +108,7 @@ module "additional_tfe_workspaces" {
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
   # permissions_boundary           = templatefile(each.value.permissions_boundary, { account_id = module.account.id })
   # permissions_boundary_name      = each.value.permissions_boundary_name
-  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary.arn
+  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary[0].arn
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
