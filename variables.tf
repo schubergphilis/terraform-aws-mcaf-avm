@@ -18,7 +18,6 @@ variable "additional_tfe_workspaces" {
     agent_role_arn                 = optional(string, null)
     auth_method                    = optional(string, null)
     auto_apply                     = optional(bool, false)
-    boundary_auth_method           = optional(string, null)
     branch                         = optional(string, null)
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
@@ -28,8 +27,6 @@ variable "additional_tfe_workspaces" {
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
     name                           = optional(string, null)
-    permissions_boundary           = optional(string, null)
-    permissions_boundary_name      = optional(string,null)
     policy                         = optional(string, null)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     remote_state_consumer_ids      = optional(set(string))
@@ -46,8 +43,6 @@ variable "additional_tfe_workspaces" {
     username                       = optional(string, null)
     vcs_oauth_token_id             = optional(string, null)
     working_directory              = optional(string, null)
-    workload_boundary              = optional(string, null)
-    workload_boundary_name         = optional(string, null)
 
     team_access = optional(map(object({
       access = optional(string, null),
@@ -79,6 +74,31 @@ variable "name" {
 variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to all resources"
+}
+
+variable "permissions_boundary" {
+  type       = string
+  description = "Permissions boundary policy to be attached to the IAM role"
+}
+
+variable "permissions_boundary_name" {
+  type       = string
+  description = "Permissions boundary name to be attached to the IAM role"
+} 
+
+variable "workload_boundary" {
+  type       = string
+  description = "Workload boundary policy to be attached to Workload"
+}
+
+variable "workload_boundary_name" {
+  type       = string
+  description = "Workload boundary name"
+}
+
+variable "boundary_auth_method" {
+  type      = string
+  description = "Auth method defined for boundaries"
 }
 
 variable "tfe_workspace" {
