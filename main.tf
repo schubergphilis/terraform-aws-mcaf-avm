@@ -63,7 +63,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.vcs_oauth_token_id
-  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary[0].arn
+  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary.arn
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   region                         = var.tfe_workspace.default_region
@@ -104,7 +104,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
-  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary[0].arn
+  permissions_boundary_arn       = aws_iam_policy.pipeline_boundary.arn
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)

@@ -84,12 +84,12 @@ variable "tags" {
 
 variable "permission_boundaries" {
  type = object({ 
-    boundary_auth_method   = optional(bool, false)
     pipeline_boundary      = optional(string, null)
     pipeline_boundary_name = optional(string, null)
     workload_boundary      = optional(string, null)
     workload_boundary_name = optional(string, null)
  })
+ default = {}
 }
 
 variable "tfe_workspace" {
