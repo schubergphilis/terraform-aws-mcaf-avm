@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.3.0 (2023-01-16)
+
+- Added support for setting alternate contacts on account level.
+
 ## 2.2.0 (2023-01-12)
 
 - Adds support for permissions boundaries by adding 'workspace_boundary' and 'workload_boundary' IAM policies ([#31]https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/31#pullrequestreview-1243495193

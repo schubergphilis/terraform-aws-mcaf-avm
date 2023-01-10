@@ -129,9 +129,7 @@ resource "aws_iam_account_alias" "alias" {
   account_alias = "${var.account.alias_prefix}${var.name}"
 }
 
-<<<<<<< HEAD
-=======
-resource "aws_account_alternate_contact" "default" {
+resource "aws_account_alternate_contact" "billing" {
   count    = var.account.contact_billing == null ? 0 : 1
   provider = aws.account
 
@@ -163,4 +161,3 @@ resource "aws_account_alternate_contact" "security" {
   phone_number           = var.account.contact_security.phone_number
   title                  = var.account.contact_security.title
 }
->>>>>>> e14b506 (Add support for alternate contacts)
