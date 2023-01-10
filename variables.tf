@@ -88,7 +88,7 @@ variable "permission_boundaries" {
     pipeline_boundary_name = optional(string, null)
     workload_boundary      = optional(string, null)
     workload_boundary_name = optional(string, null)
- }
+ })
 }
 
 variable "tfe_workspace" {
