@@ -129,3 +129,38 @@ resource "aws_iam_account_alias" "alias" {
   account_alias = "${var.account.alias_prefix}${var.name}"
 }
 
+<<<<<<< HEAD
+=======
+resource "aws_account_alternate_contact" "default" {
+  count    = var.account.contact_billing == null ? 0 : 1
+  provider = aws.account
+
+  alternate_contact_type = "BILLING"
+  email_address          = var.account.contact_billing.email_address
+  name                   = var.account.contact_billing.name
+  phone_number           = var.account.contact_billing.phone_number
+  title                  = var.account.contact_billing.title
+}
+
+resource "aws_account_alternate_contact" "operations" {
+  count    = var.account.contact_operations == null ? 0 : 1
+  provider = aws.account
+
+  alternate_contact_type = "OPERATIONS"
+  email_address          = var.account.contact_operations.email_address
+  name                   = var.account.contact_operations.name
+  phone_number           = var.account.contact_operations.phone_number
+  title                  = var.account.contact_operations.title
+}
+
+resource "aws_account_alternate_contact" "security" {
+  count    = var.account.contact_security == null ? 0 : 1
+  provider = aws.account
+
+  alternate_contact_type = "SECURITY"
+  email_address          = var.account.contact_security.email_address
+  name                   = var.account.contact_security.name
+  phone_number           = var.account.contact_security.phone_number
+  title                  = var.account.contact_security.title
+}
+>>>>>>> e14b506 (Add support for alternate contacts)

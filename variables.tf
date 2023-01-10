@@ -1,6 +1,24 @@
 variable "account" {
   type = object({
-    alias_prefix             = optional(string, null)
+    alias_prefix = optional(string, null)
+    contact_billing = optional(object({
+      email_address = string
+      name          = string
+      phone_number  = string
+      title         = string
+    }), null)
+    contact_operations = optional(object({
+      email_address = string
+      name          = string
+      phone_number  = string
+      title         = string
+    }), null)
+    contact_security = optional(object({
+      email_address = string
+      name          = string
+      phone_number  = string
+      title         = string
+    }), null)
     email                    = string
     environment              = optional(string, null)
     organizational_unit      = string
@@ -8,6 +26,7 @@ variable "account" {
     sso_email                = string
     sso_firstname            = optional(string, "AWS Control Tower")
     sso_lastname             = optional(string, "Admin")
+
   })
   description = "AWS account settings"
 }
