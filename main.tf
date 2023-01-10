@@ -40,7 +40,7 @@ resource "aws_iam_policy" "pipeline_boundary" {
 resource "aws_iam_policy" "workload_boundary" {
   provider = aws.account
   count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
-  name       = var.permissions_boundaries.workload_boundary_name
+  name       = var.permission_boundaries.workload_boundary_name
   policy     = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
 }
 
