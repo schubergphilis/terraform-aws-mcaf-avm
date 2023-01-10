@@ -34,14 +34,12 @@ resource "aws_iam_policy" "pipeline_boundary" {
   count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
   name       = var.permission_boundaries.pipeline_boundary_name
   policy     = templatefile(var.permission_boundaries.pipeline_boundary, { account_id = module.account.id })
-  providers = { aws = aws.account }
 }
 
 resource "aws_iam_policy" "workload_boundary" {
   count      = var.permission_boundaries.boundary_auth_method ? 1 : 0
   name       = var.permissions_boundaries.workload_boundary_name
   policy     = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
-  providers = { aws = aws.account }
 }
 
 
