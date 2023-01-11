@@ -16,8 +16,6 @@ BUG FIXES
 
 ## 2.1.0 (2023-01-03)
 
-## 2.1.0 (2023-01-03)
-
 - Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) module to v0.10.0: Adds support to use custom workspace permissions ([#29](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/29))
 
 ENHANCEMENTS
