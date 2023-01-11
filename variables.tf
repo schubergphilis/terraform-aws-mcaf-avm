@@ -80,9 +80,9 @@ variable "tags" {
 variable "permission_boundaries" {
   type = object({
     workspace_boundary       = optional(string, null)
-    wworkspace_boundary_name = optional(string, null)
-    workspace_boundary       = optional(string, null)
-    workspace_boundary_name  = optional(string, null)
+    workspace_boundary_name = optional(string, null)
+    workload_boundary       = optional(string, null)
+    workload_boundary_name  = optional(string, null)
   })
   default = {}
 }
