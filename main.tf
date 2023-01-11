@@ -32,14 +32,14 @@ module "account" {
 
 resource "aws_iam_policy" "workspace_boundary" {
   provider = aws.account
-  count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? aws_iam_policy.workspace_boundary[0].arn : null
+  count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? 1 : 0
   name     = var.permissions_boundaries.workspace_boundary_name
   policy   = templatefile(var.permissions_boundaries.workspace_boundary, { account_id = module.account.id })
 }
 
 resource "aws_iam_policy" "workload_boundary" {
   provider = aws.account
-  count    = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? aws_iam_policy.workspace_boundary[0].arn : null
+  count    = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? 1 : 0
   name     = var.permissions_boundaries.workload_boundary_name
   policy   = templatefile(var.permissions_boundaries.workload_boundary, { account_id = module.account.id })
 }
@@ -62,7 +62,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.vcs_oauth_token_id
-  permissions_boundary_arn       = aws_iam_policy.workspace_boundary[0].arn
+  permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   region                         = var.tfe_workspace.default_region
@@ -102,7 +102,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
-  permissions_boundary_arn       = aws_iam_policy.workspace_boundary[0].arn
+  permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
