@@ -81,7 +81,7 @@ module "additional_tfe_workspaces" {
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
-  clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, var.tfe_workspace.clear_text_terraform_variables)
+  clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, each.value.clear_text_terraform_variables)
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled          = each.value.file_triggers_enabled
   global_remote_state            = each.value.global_remote_state
