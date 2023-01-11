@@ -31,21 +31,21 @@ module "account" {
 }
 
 resource "aws_iam_policy" "pipeline_boundary" {
-  provider   = aws.account
-  count      = var.permission_boundaries.pipeline_boundary_name != null ? 1 : 0
-  name       = var.permission_boundaries.pipeline_boundary_name
-  policy     = templatefile(var.permission_boundaries.pipeline_boundary, { account_id = module.account.id })
+  provider = aws.account
+  count    = var.permission_boundaries.pipeline_boundary_name != null ? 1 : 0
+  name     = var.permission_boundaries.pipeline_boundary_name
+  policy   = templatefile(var.permission_boundaries.pipeline_boundary, { account_id = module.account.id })
 }
 
 resource "aws_iam_policy" "workload_boundary" {
-  provider   = aws.account
-  count      = var.permission_boundaries.workload_boundary_name != null ? 1 : 0
-  name       = var.permission_boundaries.workload_boundary_name
-  policy     = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
+  provider = aws.account
+  count    = var.permission_boundaries.workload_boundary_name != null ? 1 : 0
+  name     = var.permission_boundaries.workload_boundary_name
+  policy   = templatefile(var.permission_boundaries.workload_boundary, { account_id = module.account.id })
 }
 
 module "tfe_workspace" {
-  count = var.create_default_workspace ? 1 : 0
+  count     = var.create_default_workspace ? 1 : 0
   source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.10.0"
   providers = { aws = aws.account }
 
@@ -85,7 +85,7 @@ module "tfe_workspace" {
 }
 
 module "additional_tfe_workspaces" {
-  for_each = var.additional_tfe_workspaces
+  for_each  = var.additional_tfe_workspaces
   source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.10.0"
   providers = { aws = aws.account }
 

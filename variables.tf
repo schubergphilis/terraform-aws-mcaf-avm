@@ -14,10 +14,10 @@ variable "account" {
 
 variable "additional_tfe_workspaces" {
   type = map(object({
-    agent_pool_id                  = optional(string, null)
-    agent_role_arn                 = optional(string, null)
-    auth_method                    = optional(string, null)
-    auto_apply                     = optional(bool, false)
+    agent_pool_id  = optional(string, null)
+    agent_role_arn = optional(string, null)
+    auth_method    = optional(string, null)
+    auto_apply     = optional(bool, false)
     # boundary_auth_method           = optional(bool, false)
     branch                         = optional(string, null)
     clear_text_env_variables       = optional(map(string), {})
@@ -30,23 +30,23 @@ variable "additional_tfe_workspaces" {
     name                           = optional(string, null)
     # permissions_boundary           = optional(string, null)
     # permissions_boundary_name      = optional(string, null)
-    permissions_boundary_arn       = optional(string, null) 
-    policy                         = optional(string, null)
-    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    remote_state_consumer_ids      = optional(set(string))
-    repository_identifier          = optional(string, null)
-    role_name                      = optional(string, null)
-    sensitive_env_variables        = optional(map(string), {})
-    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
-    sensitive_terraform_variables  = optional(map(string), {})
-    slack_notification_triggers    = optional(list(string), null)
-    slack_notification_url         = optional(string, null)
-    ssh_key_id                     = optional(string, null)
-    terraform_version              = optional(string, null)
-    trigger_prefixes               = optional(list(string), null)
-    username                       = optional(string, null)
-    vcs_oauth_token_id             = optional(string, null)
-    working_directory              = optional(string, null)
+    permissions_boundary_arn      = optional(string, null)
+    policy                        = optional(string, null)
+    policy_arns                   = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    remote_state_consumer_ids     = optional(set(string))
+    repository_identifier         = optional(string, null)
+    role_name                     = optional(string, null)
+    sensitive_env_variables       = optional(map(string), {})
+    sensitive_hcl_variables       = optional(map(object({ sensitive = string })), {})
+    sensitive_terraform_variables = optional(map(string), {})
+    slack_notification_triggers   = optional(list(string), null)
+    slack_notification_url        = optional(string, null)
+    ssh_key_id                    = optional(string, null)
+    terraform_version             = optional(string, null)
+    trigger_prefixes              = optional(list(string), null)
+    username                      = optional(string, null)
+    vcs_oauth_token_id            = optional(string, null)
+    working_directory             = optional(string, null)
     # workload_boundary              = optional(string, null)
     # workload_boundary_name         = optional(string, null)
 
@@ -83,13 +83,13 @@ variable "tags" {
 }
 
 variable "permission_boundaries" {
- type = object({ 
+  type = object({
     pipeline_boundary      = optional(string, null)
     pipeline_boundary_name = optional(string, null)
     workload_boundary      = optional(string, null)
     workload_boundary_name = optional(string, null)
- })
- default = {}
+  })
+  default = {}
 }
 
 variable "tfe_workspace" {
