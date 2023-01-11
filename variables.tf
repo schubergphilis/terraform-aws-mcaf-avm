@@ -77,7 +77,7 @@ variable "tags" {
   description = "A map of tags to assign to all resources"
 }
 
-variable "permission_boundaries" {
+variable "permissions_boundaries" {
   type = object({
     workspace_boundary      = optional(string, null)
     workspace_boundary_name = optional(string, null)
