@@ -32,7 +32,7 @@ module "account" {
 
 resource "aws_iam_policy" "workspace_boundary" {
   provider = aws.account
-  count    = var.permission_boundaries.workspace_boundary_name != null ? 1 : 0
+  count    = var.permission_boundaries.workspace_boundary_name != null && var.permission_boundaries.workspace_boundary != null ? 1 : 0
   name     = var.permission_boundaries.workspace_boundary_name
   policy   = templatefile(var.permission_boundaries.workspace_boundary, { account_id = module.account.id })
 }
