@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.1 (2023-01-11)
+
+BUG FIXES
+
+- Fix `clear_text_terraform_variables` in additional workspaces ([#32](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/32))
+
 ## 2.1.0 (2023-01-03)
 
 - Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) module to v0.10.0: Adds support to use custom workspace permissions ([#29](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/29))
