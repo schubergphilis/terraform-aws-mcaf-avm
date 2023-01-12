@@ -27,7 +27,6 @@ variable "additional_tfe_workspaces" {
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
     name                           = optional(string, null)
-    permissions_boundary_arn       = optional(string, null)
     policy                         = optional(string, null)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     remote_state_consumer_ids      = optional(set(string))
