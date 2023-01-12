@@ -149,9 +149,10 @@ module "aws_account" {
     }
   }
 }
-AVM module also supports IAM permissions_boundaries.
+## IAM Permissions Boundaries
 
-You can add the iam_policy for the workspace boundary and attach the permissions_boundary_arn to the tfe_workspace and additional_tfe_workspace.
+The module supports setting a Permission Boundary on the workspace user or role by passing down permissions_boundaries.workspace_boundary and permissions_boundaries.workspace_boundary_name. In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying permissions_boundaries.workload_boundary and permissions_boundaries.workload_boundary_name.
+
 
 ```
 
