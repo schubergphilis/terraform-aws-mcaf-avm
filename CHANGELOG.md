@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.1.2 (2023-01-11)
+## 2.2.0 (2023-01-12)
 
 - Adds support for permissions boundaries by adding 'workspace_boudary' and 'workload_boundary' IAM policies ([#31]https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/31#pullrequestreview-1243495193
 
