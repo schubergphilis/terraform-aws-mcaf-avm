@@ -1,12 +1,15 @@
 locals {
   tfe_workspace = {
     clear_text_terraform_variables = var.account.environment != null ? {
-      account = var.name, environment = var.account.environment } : {
-      account = var.name
+      account               = var.name,
+      environment           = var.account.environment,
+      workload_boundary_arn = try(aws_iam_policy.workload_boundary[0].arn, null)
+      } : {
+      account               = var.name,
+      workload_boundary_arn = try(aws_iam_policy.workload_boundary[0].arn, null)
     }
-
-    working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
+  working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
 }
 
 provider "aws" {
@@ -160,13 +163,4 @@ resource "aws_account_alternate_contact" "security" {
   name                   = var.account.contact_security.name
   phone_number           = var.account.contact_security.phone_number
   title                  = var.account.contact_security.title
-}
-
-resource "tfe_variable" "workload_boundary" {
-  count = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? 1 : 0
-
-  key          = var.permissions_boundaries.workload_boundary_name
-  value        = aws_iam_policy.workload_boundary[0].arn
-  category     = "terraform"
-  workspace_id = tfe_workspace.default.id
 }
