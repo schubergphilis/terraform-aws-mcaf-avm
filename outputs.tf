@@ -14,6 +14,6 @@ output "additional_tfe_workspace" {
 }
 
 output "workload_boundary_arn" {
-  value       = aws_iam_policy.workload_boundary.arn
+  value       = aws_iam_policy.workload_boundary[0].arn
   description = "The ARN assigned by AWS to this policy"
 }
