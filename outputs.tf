@@ -12,8 +12,3 @@ output "additional_tfe_workspace" {
   value       = { for name, workspace in var.additional_tfe_workspaces : name => module.additional_tfe_workspaces[name].workspace_id }
   description = "Map of additional TFE workspaces containing name and workspace ID"
 }
-
-output "workload_boundary_arn" {
-  value       = aws_iam_policy.workload_boundary[0].arn
-  description = "The ARN assigned by AWS to this policy"
-}

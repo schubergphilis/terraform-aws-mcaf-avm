@@ -153,28 +153,22 @@ module "aws_account" {
 
 ## IAM Permissions Boundaries
 
-The permission boundaries are created using the `aws_iam_policy` resource.  In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying permissions_boundaries.workload_boundary.
+The module `tfe_workspace` supports setting a Permission Boundary on the workspace user or role by passing down permissions_boundary workspace_boundary and workload_boundary. 
+
+The workspace permissions boundary will be attached to the workspace `iam_role`/ `iam_user`.
+In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying permissions_boundaries.workload_boundary.
+
 
 ```hcl
-resource "aws_iam_policy" "workspace_boundary" {
-  provider = aws.account
-  count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? 1 : 0
-  name     = var.permissions_boundaries.workspace_boundary_name
-  policy   = templatefile(var.permissions_boundaries.workspace_boundary, { account_id = module.account.id })
+variable "permissions_boundaries" {
+  type = object({
+    workspace_boundary      = optional(string, null)
+    workspace_boundary_name = optional(string, null)
+    workload_boundary       = optional(string, null)
+    workload_boundary_name  = optional(string, null)
+  })
+  default = {}
 }
-
-resource "aws_iam_policy" "workload_boundary" {
-  provider = aws.account
-  count    = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? 1 : 0
-  name     = var.permissions_boundaries.workload_boundary_name
-  policy   = templatefile(var.permissions_boundaries.workload_boundary, { account_id = module.account.id })
-}
-```
-
-The module `tfe_workspace` supports setting a Permission Boundary on the workspace user or role by passing down the arn of the permissions_boundary.workspace_boundary.arn
-
-```hcl
- permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
 ```
 
 <!--- BEGIN_TF_DOCS --->

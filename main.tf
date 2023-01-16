@@ -161,3 +161,12 @@ resource "aws_account_alternate_contact" "security" {
   phone_number           = var.account.contact_security.phone_number
   title                  = var.account.contact_security.title
 }
+
+resource "tfe_variable" "workload_boundary" {
+  count = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? 1 : 0
+
+  key          = var.permissions_boundaries.workload_boundary_name
+  value        = aws_iam_policy.workload_boundary[0].arn
+  category     = "terraform"
+  workspace_id = tfe_workspace.default.id
+}
