@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 2.3.1 (2023-01-17)
 
-- When setting permissions boundaries the workload boundary gets added to the workspace and outputs. ([#34](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/34))
+- Create additional Terraform Cloud workspace variable when permissions boundaries are configured. ([#34](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/34))
 
 ## 2.3.0 (2023-01-16)
 
