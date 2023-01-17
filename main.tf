@@ -1,9 +1,22 @@
 locals {
   tfe_workspace = {
-    clear_text_terraform_variables = var.account.environment != null ? {
-      account = var.name, environment = var.account.environment } : {
-      account = var.name
-    }
+    clear_text_terraform_variables = (var.account.environment != null && (var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null)) ? {
+      account               = var.name,
+      environment           = var.account.environment,
+      workload_boundary_arn = aws_iam_policy.workload_boundary[0].arn } : (
+
+      (var.account.environment == null && (var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null)) ? {
+        account               = var.name,
+        workload_boundary_arn = aws_iam_policy.workload_boundary[0].arn } : (
+
+        (var.account.environment != null && (var.permissions_boundaries.workload_boundary_name == null && var.permissions_boundaries.workload_boundary == null)) ? {
+          account     = var.name,
+          environment = var.account.environment } : {
+
+          account = var.name
+        }
+      )
+    )
 
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
