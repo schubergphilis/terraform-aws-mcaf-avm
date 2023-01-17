@@ -162,10 +162,10 @@ In case you want to reference a permission boundary that needs to be attached to
 ```hcl
 variable "permissions_boundaries" {
   type = object({
-    workspace_boundary      = optional(string, null)
-    workspace_boundary_name = optional(string, null)
-    workload_boundary       = optional(string, null)
-    workload_boundary_name  = optional(string, null)
+    workspace_boundary      = "arn:aws:iam::468953378828:policy/ep_workload_boundary"
+    workspace_boundary_name = "ep_pipeline_boundary"
+    workload_boundary       = "arn:aws:iam::468953378828:policy/ep_pipeline_boundary"
+    workload_boundary_name  = "ep_workload_boundary"
   })
   default = {}
 }
