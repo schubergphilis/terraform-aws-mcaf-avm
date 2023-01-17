@@ -179,6 +179,8 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | Name | Version |
 |------|---------|
 | terraform | >= 1.3.0 |
+| aws | >= 4.9.0 |
+| github | >= 4.0.0 |
 | mcaf | >= 0.4.2 |
 | tfe | >= 0.25.0 |
 
@@ -186,7 +188,7 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 
 | Name | Version |
 |------|---------|
-| aws.account | n/a |
+| aws.account | >= 4.9.0 |
 
 ## Inputs
 
@@ -207,5 +209,6 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | additional\_tfe\_workspace | Map of additional TFE workspaces containing name and workspace ID |
 | id | The AWS account ID |
 | tfe\_workspace\_id | The TFE workspace ID |
+| workload\_permissions\_boundary\_arn | The ARN of the workload permissions boundary |
 
 <!--- END_TF_DOCS --->
