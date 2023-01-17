@@ -149,13 +149,29 @@ module "aws_account" {
     }
   }
 }
+```
 
 ## IAM Permissions Boundaries
 
-The module supports setting a Permission Boundary on the workspace user or role by passing down permissions_boundaries.workspace_boundary and permissions_boundaries.workspace_boundary_name. In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying permissions_boundaries.workload_boundary and permissions_boundaries.workload_boundary_name.
+The module supports setting a Permission Boundary on the workspace `iam_user` or `iam_role` by passing down `permissions_boundaries.workspace_boundary`, which needs to be referencing the path where the permissions boundary is stored in git and the name: `permissions_boundaries.workspace_boundary_name`.
 
+In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying `permissions_boundaries.workload_boundary` which needs to be referencing the path where the permissions boundary is stored in git and the name: `permissions_boundaries.workload_boundary_name`.
 
+```hcl
+module "aws_account" {
+  source = "github.com/schubergphilis/terraform-aws-mcaf-avm?ref=VERSION"
+  ...
+  permissions_boundaries = {
+    workspace_boundary      = "${path.module}/workspace_boundary.json"
+    workspace_boundary_name = "workspace_boundary"
+    workload_boundary       = "${path.module}/workload_boundary.json"
+    workload_boundary_name  = "workload_boundary"
+  }
+  ...
+}
 ```
+
+Note: the `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
 
 <!--- BEGIN_TF_DOCS --->
 ## Requirements
@@ -163,6 +179,8 @@ The module supports setting a Permission Boundary on the workspace user or role 
 | Name | Version |
 |------|---------|
 | terraform | >= 1.3.0 |
+| aws | >= 4.9.0 |
+| github | >= 4.0.0 |
 | mcaf | >= 0.4.2 |
 | tfe | >= 0.25.0 |
 
@@ -170,7 +188,7 @@ The module supports setting a Permission Boundary on the workspace user or role 
 
 | Name | Version |
 |------|---------|
-| aws.account | n/a |
+| aws.account | >= 4.9.0 |
 
 ## Inputs
 
@@ -191,5 +209,6 @@ The module supports setting a Permission Boundary on the workspace user or role 
 | additional\_tfe\_workspace | Map of additional TFE workspaces containing name and workspace ID |
 | id | The AWS account ID |
 | tfe\_workspace\_id | The TFE workspace ID |
+| workload\_permissions\_boundary\_arn | The ARN of the workload permissions boundary |
 
 <!--- END_TF_DOCS --->
