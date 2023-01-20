@@ -108,7 +108,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
-  path                           = coalesce(each.value.path)
+  path                           = coalesce(each.value.path, var.tfe_workspace.path)
   permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
