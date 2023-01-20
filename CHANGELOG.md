@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+# 2.5.0 (2021-01-20)
+
+- Add path variable to the tfe_workspace and additional_tfe_workspace ([#35] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/35))
+
 ## 2.4.0 (2023-01-18)
 
 - Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) module to v0.13.0: Adds support to specify workspace project ID ([#36](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/36))
