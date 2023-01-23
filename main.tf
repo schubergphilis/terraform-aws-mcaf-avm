@@ -38,6 +38,7 @@ resource "aws_iam_policy" "workspace_boundary" {
   provider = aws.account
   count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? 1 : 0
   name     = var.permissions_boundaries.workspace_boundary_name
+  path     = var.path
   policy   = templatefile(var.permissions_boundaries.workspace_boundary, { account_id = module.account.id })
 }
 
@@ -45,6 +46,7 @@ resource "aws_iam_policy" "workload_boundary" {
   provider = aws.account
   count    = var.permissions_boundaries.workload_boundary_name != null && var.permissions_boundaries.workload_boundary != null ? 1 : 0
   name     = var.permissions_boundaries.workload_boundary_name
+  path     = var.path
   policy   = templatefile(var.permissions_boundaries.workload_boundary, { account_id = module.account.id })
 }
 
