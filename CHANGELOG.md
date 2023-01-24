@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-# 2.6.0 (2021-01-20)
+# 2.6.0 (2023-01-24)
 
 - Add path variable to the permissions_boundary (workspace_boundary and workload_boundary)  ([#37] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/37))
 
-# 2.5.0 (2021-01-20)
+# 2.5.0 (2023-01-20)
 
 - Add path variable to the tfe_workspace and additional_tfe_workspace ([#35] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/35))
 

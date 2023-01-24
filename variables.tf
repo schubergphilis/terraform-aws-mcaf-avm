@@ -45,7 +45,6 @@ variable "additional_tfe_workspaces" {
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
     name                           = optional(string, null)
-    path                           = optional(string, null)
     policy                         = optional(string, null)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     project_id                     = optional(string, null)
@@ -91,6 +90,12 @@ variable "name" {
   description = "Name of the account and default TFE workspace"
 }
 
+variable "path" {
+  type        = string
+  default     = "/"
+  description = "Path in which to create the iam_role or iam_user"
+}
+
 variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to all resources"
@@ -121,7 +126,6 @@ variable "tfe_workspace" {
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
     name                           = optional(string, null)
-    path                           = optional(string, null)
     policy                         = optional(string, null)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     project_id                     = optional(string, null)
