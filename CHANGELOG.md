@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 # 2.6.0 (2023-01-24)
 
-- Add path variable to the permissions_boundary (workspace_boundary and workload_boundary)  ([#37] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/37))
+- Add path variable which can be used to set a path for all supported IAM resources  ([#37] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/37))
 
 # 2.5.0 (2023-01-20)
 

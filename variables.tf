@@ -93,7 +93,7 @@ variable "name" {
 variable "path" {
   type        = string
   default     = "/"
-  description = "Path in which to create the iam_role or iam_user"
+  description = "Optional path for all IAM users, user groups, roles, and customer managed policies created by this module"
 }
 
 variable "tags" {
