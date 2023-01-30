@@ -33,7 +33,7 @@ variable "account" {
 variable "additional_tfe_workspaces" {
   type = map(object({
     agent_pool_id                  = optional(string, null)
-    agent_role_arns                 = optional(list(string), null)
+    agent_role_arns                = optional(list(string), null)
     auth_method                    = optional(string, null)
     auto_apply                     = optional(bool, false)
     branch                         = optional(string, null)
