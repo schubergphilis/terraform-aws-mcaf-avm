@@ -33,7 +33,7 @@ module "account" {
   sso_firstname            = var.account.sso_firstname
   sso_lastname             = var.account.sso_lastname
 }
-
+q
 resource "aws_iam_policy" "workspace_boundary" {
   provider = aws.account
   count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? 1 : 0
@@ -56,7 +56,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
-  agent_role_arn                 = var.tfe_workspace.agent_role_arn
+  agent_role_arns                = var.tfe_workspace.agent_role_arns
   auth_method                    = var.tfe_workspace.auth_method
   auto_apply                     = var.tfe_workspace.auto_apply
   branch                         = var.tfe_workspace.branch
