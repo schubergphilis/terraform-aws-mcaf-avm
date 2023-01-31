@@ -33,7 +33,7 @@ module "account" {
   sso_firstname            = var.account.sso_firstname
   sso_lastname             = var.account.sso_lastname
 }
-q
+
 resource "aws_iam_policy" "workspace_boundary" {
   provider = aws.account
   count    = var.permissions_boundaries.workspace_boundary_name != null && var.permissions_boundaries.workspace_boundary != null ? 1 : 0
