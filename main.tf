@@ -52,7 +52,7 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/stromp/terraform-aws-mcaf-workspace?ref=stromp_master"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=0.14.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
@@ -94,7 +94,7 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/stromp/terraform-aws-mcaf-workspace?ref=stromp_master"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=0.14.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
