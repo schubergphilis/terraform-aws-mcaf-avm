@@ -10,7 +10,7 @@ To use IAM roles for authentication:
 
 - Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID
 - Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`
-- Set `var.tfe_workspace.agent_role_arn` or (`agent_role_arn` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool
+- Set `var.tfe_workspace.agent_role_arns` or (`agent_role_arns` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool
 
 This will create an IAM role in the provisioned AWS account with a randomly generated external ID which can only be assumed by the Terraform Cloud agent role. The created role and external ID value are stored in the new workspace as Terraform variables which can be used to configure your AWS provider. Using the default workspace the created role will be called `TPEPipelineRole`, role names for additional workspaces will be calculated for you based on the workspace name but you can always set your own via the `role_name` variable (similarly you can set your own role name in the default workspace via `var.tfe_workspace.role_name`); but please be aware that each IAM role must have a unique name.
 

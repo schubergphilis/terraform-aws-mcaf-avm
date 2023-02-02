@@ -52,11 +52,11 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.13.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
-  agent_role_arn                 = var.tfe_workspace.agent_role_arn
+  agent_role_arns                = var.tfe_workspace.agent_role_arns
   auth_method                    = var.tfe_workspace.auth_method
   auto_apply                     = var.tfe_workspace.auto_apply
   branch                         = var.tfe_workspace.branch
@@ -94,11 +94,11 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.13.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
-  agent_role_arn                 = each.value.agent_role_arn != null ? each.value.agent_role_arn : var.tfe_workspace.agent_role_arn
+  agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
