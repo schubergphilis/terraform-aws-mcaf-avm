@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+# 2.7.0 (2023-02-02)
+
+- Changed agent_role_arn to agent_role_arns, to support multiple agent pools to assume the role. ([#38] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/38))
+
 # 2.6.0 (2023-01-24)
 
 - Add path variable which can be used to set a path for all supported IAM resources  ([#37] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/37))
