@@ -98,7 +98,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
-  agent_role_arns                 = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
+  agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
   branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
