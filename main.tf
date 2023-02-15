@@ -17,6 +17,10 @@ provider "aws" {
   alias  = "account"
   region = var.tfe_workspace.default_region
 
+  default_tags {
+    tags = var.tags
+  }
+
   assume_role {
     role_arn = "arn:aws:iam::${module.account.id}:role/AWSControlTowerExecution"
   }
