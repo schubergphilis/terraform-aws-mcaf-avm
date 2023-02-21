@@ -17,6 +17,10 @@ provider "aws" {
   alias  = "account"
   region = var.tfe_workspace.default_region
 
+  default_tags {
+    tags = var.tags
+  }
+
   assume_role {
     role_arn = "arn:aws:iam::${module.account.id}:role/AWSControlTowerExecution"
   }
@@ -52,7 +56,7 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.1"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
@@ -83,7 +87,6 @@ module "tfe_workspace" {
   slack_notification_triggers    = var.tfe_workspace.slack_notification_triggers
   slack_notification_url         = var.tfe_workspace.slack_notification_url
   ssh_key_id                     = var.tfe_workspace.ssh_key_id
-  tags                           = var.tags
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
@@ -94,7 +97,7 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.1"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
@@ -125,7 +128,6 @@ module "additional_tfe_workspaces" {
   slack_notification_triggers    = coalesce(each.value.slack_notification_triggers, var.tfe_workspace.slack_notification_triggers)
   slack_notification_url         = each.value.slack_notification_url != null ? each.value.slack_notification_url : var.tfe_workspace.slack_notification_url
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
-  tags                           = var.tags
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version

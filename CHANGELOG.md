@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+# 2.7.1 (2023-02-15)
+
+- Add default_tags to provider configuration. ([#39] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/39))
+
 # 2.7.0 (2023-02-02)
 
 - Changed agent_role_arn to agent_role_arns, to support multiple agent pools to assume the role. ([#38] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/38))
