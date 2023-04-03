@@ -228,3 +228,62 @@ Similar to how a workspace permissions boundary is set, you can also attach a pe
 | workload\_permissions\_boundary\_arn | The ARN of the workload permissions boundary |
 
 <!--- END_TF_DOCS --->
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.9.0 |
+| <a name="requirement_github"></a> [github](#requirement\_github) | >= 4.0.0 |
+| <a name="requirement_mcaf"></a> [mcaf](#requirement\_mcaf) | >= 0.4.2 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | >= 0.25.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws.account"></a> [aws.account](#provider\_aws.account) | >= 4.9.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.5.1 |
+| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.14.1 |
+| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.14.1 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_account_alternate_contact.billing](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/account_alternate_contact) | resource |
+| [aws_account_alternate_contact.operations](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/account_alternate_contact) | resource |
+| [aws_account_alternate_contact.security](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/account_alternate_contact) | resource |
+| [aws_iam_account_alias.alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_account_alias) | resource |
+| [aws_iam_policy.workload_boundary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.workspace_boundary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_account"></a> [account](#input\_account) | AWS account settings | <pre>object({<br>    alias_prefix = optional(string, null)<br>    contact_billing = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    contact_operations = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    contact_security = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    email                    = string<br>    environment              = optional(string, null)<br>    organizational_unit      = string<br>    provisioned_product_name = optional(string, null)<br>    sso_email                = string<br>    sso_firstname            = optional(string, "AWS Control Tower")<br>    sso_lastname             = optional(string, "Admin")<br>  })</pre> | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | Name of the account and default TFE workspace | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to assign to all resources | `map(string)` | n/a | yes |
+| <a name="input_tfe_workspace"></a> [tfe\_workspace](#input\_tfe\_workspace) | TFE workspace settings | <pre>object({<br>    agent_pool_id                  = optional(string, null)<br>    agent_role_arns                = optional(list(string), null)<br>    auth_method                    = optional(string, "iam_user")<br>    auto_apply                     = optional(bool, false)<br>    branch                         = optional(string, "main")<br>    clear_text_env_variables       = optional(map(string), {})<br>    clear_text_hcl_variables       = optional(map(string), {})<br>    clear_text_terraform_variables = optional(map(string), {})<br>    default_region                 = string<br>    execution_mode                 = optional(string, "remote")<br>    file_triggers_enabled          = optional(bool, true)<br>    global_remote_state            = optional(bool, false)<br>    name                           = optional(string, null)<br>    policy                         = optional(string, null)<br>    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br>    project_id                     = optional(string, null)<br>    remote_state_consumer_ids      = optional(set(string))<br>    repository_identifier          = string<br>    role_name                      = optional(string, "TFEPipeline")<br>    sensitive_env_variables        = optional(map(string), {})<br>    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})<br>    sensitive_terraform_variables  = optional(map(string), {})<br>    slack_notification_triggers    = optional(list(string), ["run:created", "run:planning", "run:needs_attention", "run:applying", "run:completed", "run:errored"])<br>    slack_notification_url         = optional(string, null)<br>    ssh_key_id                     = optional(string, null)<br>    organization                   = string<br>    terraform_version              = optional(string, null)<br>    trigger_prefixes               = optional(list(string), ["modules"])<br>    username                       = optional(string, "TFEPipeline")<br>    vcs_oauth_token_id             = string<br>    working_directory              = optional(string, null)<br><br>    team_access = optional(map(object({<br>      access = optional(string, null),<br>      permissions = optional(object({<br>        run_tasks         = bool<br>        runs              = string<br>        sentinel_mocks    = string<br>        state_versions    = string<br>        variables         = string<br>        workspace_locking = bool<br>      }), null)<br>    })), {})<br>  })</pre> | n/a | yes |
+| <a name="input_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#input\_additional\_tfe\_workspaces) | Additional TFE workspaces | <pre>map(object({<br>    agent_pool_id                  = optional(string, null)<br>    agent_role_arns                = optional(list(string), null)<br>    auth_method                    = optional(string, null)<br>    auto_apply                     = optional(bool, false)<br>    branch                         = optional(string, null)<br>    clear_text_env_variables       = optional(map(string), {})<br>    clear_text_hcl_variables       = optional(map(string), {})<br>    clear_text_terraform_variables = optional(map(string), {})<br>    default_region                 = optional(string, null)<br>    execution_mode                 = optional(string, null)<br>    file_triggers_enabled          = optional(bool, true)<br>    global_remote_state            = optional(bool, false)<br>    name                           = optional(string, null)<br>    policy                         = optional(string, null)<br>    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br>    project_id                     = optional(string, null)<br>    remote_state_consumer_ids      = optional(set(string))<br>    repository_identifier          = optional(string, null)<br>    role_name                      = optional(string, null)<br>    sensitive_env_variables        = optional(map(string), {})<br>    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})<br>    sensitive_terraform_variables  = optional(map(string), {})<br>    slack_notification_triggers    = optional(list(string), null)<br>    slack_notification_url         = optional(string, null)<br>    ssh_key_id                     = optional(string, null)<br>    terraform_version              = optional(string, null)<br>    trigger_prefixes               = optional(list(string), null)<br>    username                       = optional(string, null)<br>    vcs_oauth_token_id             = optional(string, null)<br>    working_directory              = optional(string, null)<br><br>    team_access = optional(map(object({<br>      access = optional(string, null),<br>      permissions = optional(object({<br>        run_tasks         = bool<br>        runs              = string<br>        sentinel_mocks    = string<br>        state_versions    = string<br>        variables         = string<br>        workspace_locking = bool<br>      }), null)<br>    })), {})<br>  }))</pre> | `{}` | no |
+| <a name="input_create_default_workspace"></a> [create\_default\_workspace](#input\_create\_default\_workspace) | Set to false to skip creating default workspace | `bool` | `true` | no |
+| <a name="input_path"></a> [path](#input\_path) | Optional path for all IAM users, user groups, roles, and customer managed policies created by this module | `string` | `"/"` | no |
+| <a name="input_permissions_boundaries"></a> [permissions\_boundaries](#input\_permissions\_boundaries) | n/a | <pre>object({<br>    workspace_boundary      = optional(string, null)<br>    workspace_boundary_name = optional(string, null)<br>    workload_boundary       = optional(string, null)<br>    workload_boundary_name  = optional(string, null)<br>  })</pre> | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_additional_tfe_workspace"></a> [additional\_tfe\_workspace](#output\_additional\_tfe\_workspace) | Map of additional TFE workspaces containing name and workspace ID |
+| <a name="output_id"></a> [id](#output\_id) | The AWS account ID |
+| <a name="output_tfe_workspace_id"></a> [tfe\_workspace\_id](#output\_tfe\_workspace\_id) | The TFE workspace ID |
+| <a name="output_workload_permissions_boundary_arn"></a> [workload\_permissions\_boundary\_arn](#output\_workload\_permissions\_boundary\_arn) | The ARN of the workload permissions boundary |
+<!-- END_TF_DOCS -->
