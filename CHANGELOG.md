@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+# 2.7.2 (2023-04-13)
+
+- Changed repository_identifier variable to optional and changed the corresponding coalesce into a try. This way, teams who don't need additional tfe workspaces repositories for additional workspaces can proceed with updating.
+
 # 2.7.1 (2023-02-15)
 
 - Add default_tags to provider configuration. ([#39] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/39))
