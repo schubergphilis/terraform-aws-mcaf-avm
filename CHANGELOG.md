@@ -20,6 +20,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Add path variable to the tfe_workspace and additional_tfe_workspace ([#35] https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/35))
 
+## v2.8.0 - 2023-04-24
+
+### What's Changed
+
+- Remove workflows (#40) @shoekstra
+
+#### 🚀 Features
+
+- feat: make the creation of TFE repositories optional (#44) @davealtenasbp
+
+#### 📖 Documentation
+
+- feat: make the creation of TFE repositories optional (#44) @davealtenasbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v2.7.1...v2.8.0
+
 ## 2.4.0 (2023-01-18)
 
 - Bumped [terraform-aws-mcaf-workspace](https://github.com/schubergphilis/terraform-aws-mcaf-workspace) module to v0.13.0: Adds support to specify workspace project ID ([#36](https://github.com/schubergphilis/terraform-aws-mcaf-avm/pull/36))
