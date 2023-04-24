@@ -173,7 +173,7 @@ module "aws_account" {
 
 Note: the `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
 
-<!--- BEGIN_TF_DOCS --->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -212,4 +212,4 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | tfe\_workspace\_id | The TFE workspace ID |
 | workload\_permissions\_boundary\_arn | The ARN of the workload permissions boundary |
 
-<!--- END_TF_DOCS --->
+<!-- END_TF_DOCS -->
