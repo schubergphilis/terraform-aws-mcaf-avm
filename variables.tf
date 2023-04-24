@@ -40,6 +40,7 @@ variable "additional_tfe_workspaces" {
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
     clear_text_terraform_variables = optional(map(string), {})
+    connect_vcs_repo               = optional(bool, true)
     default_region                 = optional(string, null)
     execution_mode                 = optional(string, null)
     file_triggers_enabled          = optional(bool, true)
@@ -98,6 +99,7 @@ variable "path" {
 
 variable "tags" {
   type        = map(string)
+  default     = {}
   description = "A map of tags to assign to all resources"
 }
 
@@ -121,6 +123,7 @@ variable "tfe_workspace" {
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
     clear_text_terraform_variables = optional(map(string), {})
+    connect_vcs_repo               = optional(bool, true)
     default_region                 = string
     execution_mode                 = optional(string, "remote")
     file_triggers_enabled          = optional(bool, true)
@@ -130,7 +133,7 @@ variable "tfe_workspace" {
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     project_id                     = optional(string, null)
     remote_state_consumer_ids      = optional(set(string))
-    repository_identifier          = string
+    repository_identifier          = optional(string, null)
     role_name                      = optional(string, "TFEPipeline")
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
