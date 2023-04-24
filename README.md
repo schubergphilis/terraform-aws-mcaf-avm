@@ -77,8 +77,8 @@ module "aws_account" {
 
   tfe_workspace = {
     default_region        = "eu-west-1"
-    repository_identifier = "schubergphilis/terraform-aws-mcaf-avm"
-    organization          = "schubergphilis"
+    repository_identifier = "myorg/myworkspacerepo"
+    organization          = "myorg"
     vcs_oauth_token_id    = var.oauth_token_id
   }
 }

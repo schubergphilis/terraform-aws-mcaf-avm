@@ -99,6 +99,7 @@ variable "path" {
 
 variable "tags" {
   type        = map(string)
+  default     = {}
   description = "A map of tags to assign to all resources"
 }
 
