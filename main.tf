@@ -63,7 +63,7 @@ module "tfe_workspace" {
   agent_role_arns                = var.tfe_workspace.agent_role_arns
   auth_method                    = var.tfe_workspace.auth_method
   auto_apply                     = var.tfe_workspace.auto_apply
-  branch                         = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.branch : null
+  branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
   clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
   clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, var.tfe_workspace.clear_text_terraform_variables)
@@ -79,7 +79,7 @@ module "tfe_workspace" {
   project_id                     = var.tfe_workspace.project_id
   region                         = var.tfe_workspace.default_region
   remote_state_consumer_ids      = var.tfe_workspace.remote_state_consumer_ids
-  repository_identifier          = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
+  repository_identifier          = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.connect_vcs_repo, var.tfe_workspace.repository_identifier) : null
   role_name                      = var.tfe_workspace.role_name
   sensitive_env_variables        = var.tfe_workspace.sensitive_env_variables
   sensitive_hcl_variables        = var.tfe_workspace.sensitive_hcl_variables
@@ -119,7 +119,7 @@ module "additional_tfe_workspaces" {
   policy_arns                    = each.value.policy_arns
   project_id                     = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
-  remote_state_consumer_ids      = each.value.remote_state_consumer_ids
+  remote_state_consumer_ids      = each.value.connect_vcs_repo != false ? each.value.remote_state_consumer_ids : null
   repository_identifier          = each.value.connect_vcs_repo != false ? coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier) : null
   role_name                      = coalesce(each.value.role_name, "TFEPipeline${replace(title(each.key), "/[_-]/", "")}")
   sensitive_env_variables        = each.value.sensitive_env_variables
