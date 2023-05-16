@@ -131,7 +131,7 @@ module "additional_tfe_workspaces" {
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
-  trigger_prefixes               = each.value.connect_vcs_repo != false ? each.value.trigger_prefixes : var.tfe_workspace.trigger_prefixes
+  trigger_prefixes               = each.value.connect_vcs_repo != false ? each.value.trigger_prefixes : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = each.value.connect_vcs_repo != false ? each.value.working_directory : "terraform/${coalesce(each.value.name, each.key)}"
 }
