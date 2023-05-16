@@ -90,7 +90,7 @@ module "tfe_workspace" {
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
-  trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.trigger_prefixes, ["modules"]) : null
+  trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
 }
