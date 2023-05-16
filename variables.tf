@@ -143,7 +143,7 @@ variable "tfe_workspace" {
     ssh_key_id                     = optional(string, null)
     organization                   = string
     terraform_version              = optional(string, null)
-    trigger_prefixes               = optional(list(string), ["modules"])
+    trigger_prefixes               = optional(list(string))
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
     working_directory              = optional(string, null)
