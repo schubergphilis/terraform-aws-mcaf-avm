@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.9.0 - 2023-05-26
+
+### What's Changed
+
+#### 🚀 Features
+
+- feat: do not set certain vcs related values when `connect_vcs_repo` has been set to false (#46) @davealtenasbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v2.8.0...v2.9.0
+
 ## v2.8.0 - 2023-04-24
 
 ### What's Changed
