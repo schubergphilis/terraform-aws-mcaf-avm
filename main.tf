@@ -63,15 +63,15 @@ module "tfe_workspace" {
   agent_role_arns                = var.tfe_workspace.agent_role_arns
   auth_method                    = var.tfe_workspace.auth_method
   auto_apply                     = var.tfe_workspace.auto_apply
-  branch                         = var.tfe_workspace.branch
+  branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
   clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
   clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, var.tfe_workspace.clear_text_terraform_variables)
   execution_mode                 = var.tfe_workspace.execution_mode
-  file_triggers_enabled          = var.tfe_workspace.file_triggers_enabled
+  file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
-  oauth_token_id                 = var.tfe_workspace.vcs_oauth_token_id
+  oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
   path                           = var.path
   permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
   policy                         = var.tfe_workspace.policy
@@ -90,9 +90,9 @@ module "tfe_workspace" {
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
-  trigger_prefixes               = var.tfe_workspace.trigger_prefixes
+  trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
-  working_directory              = var.tfe_workspace.working_directory != null ? var.tfe_workspace.working_directory : local.tfe_workspace.working_directory
+  working_directory              = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
 }
 
 module "additional_tfe_workspaces" {
@@ -104,15 +104,15 @@ module "additional_tfe_workspaces" {
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
-  branch                         = coalesce(each.value.branch, var.tfe_workspace.branch)
+  branch                         = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
   clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, each.value.clear_text_terraform_variables)
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
-  file_triggers_enabled          = each.value.file_triggers_enabled
+  file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
-  oauth_token_id                 = coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id)
+  oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
   path                           = var.path
   permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
   policy                         = each.value.policy
@@ -131,9 +131,9 @@ module "additional_tfe_workspaces" {
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
-  trigger_prefixes               = coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes)
+  trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
+  working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
 }
 
 resource "aws_iam_account_alias" "alias" {
