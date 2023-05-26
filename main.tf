@@ -79,7 +79,7 @@ module "tfe_workspace" {
   project_id                     = var.tfe_workspace.project_id
   region                         = var.tfe_workspace.default_region
   remote_state_consumer_ids      = var.tfe_workspace.remote_state_consumer_ids
-  repository_identifier          = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.connect_vcs_repo, var.tfe_workspace.repository_identifier) : null
+  repository_identifier          = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
   role_name                      = var.tfe_workspace.role_name
   sensitive_env_variables        = var.tfe_workspace.sensitive_env_variables
   sensitive_hcl_variables        = var.tfe_workspace.sensitive_hcl_variables
@@ -130,10 +130,10 @@ module "additional_tfe_workspaces" {
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
-  terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
-  trigger_prefixes               = each.value.connect_vcs_repo != false ? each.value.trigger_prefixes : null
+  terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.additional_tfe_workspace.terraform_version
+  trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspaces.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  working_directory              = each.value.connect_vcs_repo != false ? each.value.working_directory : "terraform/${coalesce(each.value.name, each.key)}"
+  working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
 }
 
 resource "aws_iam_account_alias" "alias" {
