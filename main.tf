@@ -73,7 +73,7 @@ module "tfe_workspace" {
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
   path                           = var.path
-  permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
+  permissions_boundary_arn       = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   project_id                     = var.tfe_workspace.project_id
@@ -114,7 +114,7 @@ module "additional_tfe_workspaces" {
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
   path                           = var.path
-  permissions_boundary_arn       = try(aws_iam_policy.workspace_boundary[0].arn, null)
+  permissions_boundary_arn       = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   project_id                     = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
