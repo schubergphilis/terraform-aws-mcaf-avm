@@ -4,16 +4,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## v2.10.0 - 2023-06-07
-
-### What's Changed
-
-#### 🚀 Features
-
-- feat: conditionally attach the IAM boundary to the workspace IAM role via the `add_permissions_boundary` flag (#47) @sbk0002
-
-**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v2.9.0...v2.10.0
-
 ## v2.9.0 - 2023-05-26
 
 ### What's Changed

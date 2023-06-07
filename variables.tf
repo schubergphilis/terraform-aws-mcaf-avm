@@ -32,7 +32,7 @@ variable "account" {
 
 variable "additional_tfe_workspaces" {
   type = map(object({
-    add_permissions_boundary       = optional(bool, true)
+    add_permissions_boundary       = optional(bool, false)
     agent_pool_id                  = optional(string, null)
     agent_role_arns                = optional(list(string), null)
     auth_method                    = optional(string, null)
@@ -116,7 +116,7 @@ variable "permissions_boundaries" {
 
 variable "tfe_workspace" {
   type = object({
-    add_permissions_boundary       = optional(bool, true)
+    add_permissions_boundary       = optional(bool, false)
     agent_pool_id                  = optional(string, null)
     agent_role_arns                = optional(list(string), null)
     auth_method                    = optional(string, "iam_user")

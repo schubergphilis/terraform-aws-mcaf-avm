@@ -153,7 +153,7 @@ module "aws_account" {
 
 ## IAM Permissions Boundaries
 
-The module supports setting a Permission Boundary on the workspace `iam_user` or `iam_role` by passing down `permissions_boundaries.workspace_boundary`, which needs to be referencing the path where the permissions boundary is stored in git and the name: `permissions_boundaries.workspace_boundary_name`. By setting `var.tfe_workspace.add_permissions_boundary` or `var.additional_tfe_workspaces.add_permissions_boundary` to `false`, the permissions boundary will not be attached to that specific workspace user/role.
+The module supports setting a Permission Boundary on the workspace `iam_user` or `iam_role` by passing down `permissions_boundaries.workspace_boundary`, which needs to be referencing the path where the permissions boundary is stored in git and the name: `permissions_boundaries.workspace_boundary_name`. By setting `var.tfe_workspace.add_permissions_boundary` or `var.additional_tfe_workspaces.add_permissions_boundary` to `true`, the permissions boundary will be attached to that specific workspace user/role.
 
 In case you want to reference a permission boundary that needs to be attached to every IAM role/user that will be created by the workspace role/user then you can create this permission boundary by specifying `permissions_boundaries.workload_boundary` which needs to be referencing the path where the permissions boundary is stored in git and the name: `permissions_boundaries.workload_boundary_name`.
 
