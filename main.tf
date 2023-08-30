@@ -15,9 +15,9 @@ locals {
   auth_methods              = concat([var.tfe_workspace.auth_method], [for ws in var.additional_tfe_workspaces : ws.auth_method])
   tfe_workspace_enable_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
   tfe_workspace_oidc_settings = local.tfe_workspace_enable_oidc ? {
-    audience     = oidc_settings.value.audience
+    audience     = var.tfe_workspace_oidc_settings.audience
     provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
-    site_address = oidc_settings.value.site_address
+    site_address = var.tfe_workspace_oidc_settings.site_address
   } : null
 }
 
