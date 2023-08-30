@@ -12,7 +12,8 @@ locals {
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
 
-  enable_tfe_workspace_oidc = var.auth_method == "iam_role_oidc" && var.tfe_workspace_oidc_settings != {}
+  auth_methods              = concat([var.tfe_workspace.auth_method], [for ws in var.additional_tfe_workspaces : ws.auth_method])
+  enable_tfe_workspace_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
 }
 
 provider "aws" {
@@ -153,7 +154,7 @@ module "additional_tfe_workspaces" {
   working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
 
   dynamic "oidc_settings" {
-    for_each = local.enable_tfe_workspace_oidc ? { "default" : var.tfe_workspace_oidc_settings } : {}
+    for_each = each.value.auth_method == "iam_role_oidc" ? { "default" : var.tfe_workspace_oidc_settings } : {}
     content {
       audience     = oidc_settings.value.audience
       provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
