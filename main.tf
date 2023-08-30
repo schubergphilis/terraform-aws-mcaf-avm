@@ -12,7 +12,7 @@ locals {
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
 
-  auth_methods              = concat([var.tfe_workspace.auth_method], [for ws in var.additional_tfe_workspaces : ws.auth_method])
+  auth_methods              = concat([var.tfe_workspace.auth_method], [for k, v in var.additional_tfe_workspaces : v.auth_method == null ? var.tfe_workspace.auth_method : v.auth_method])
   tfe_workspace_enable_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
   tfe_workspace_oidc_settings = local.tfe_workspace_enable_oidc ? {
     audience     = var.tfe_workspace_oidc_settings.audience
