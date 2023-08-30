@@ -13,7 +13,12 @@ locals {
   }
 
   auth_methods              = concat([var.tfe_workspace.auth_method], [for ws in var.additional_tfe_workspaces : ws.auth_method])
-  enable_tfe_workspace_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
+  tfe_workspace_enable_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
+  tfe_workspace_oidc_settings = local.tfe_workspace_enable_oidc ? {
+    audience     = oidc_settings.value.audience
+    provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
+    site_address = oidc_settings.value.site_address
+  } : null
 }
 
 provider "aws" {
@@ -30,7 +35,7 @@ provider "aws" {
 }
 
 data "tls_certificate" "oidc_certificate" {
-  count = local.enable_tfe_workspace_oidc ? 1 : 0
+  count = local.tfe_workspace_enable_oidc ? 1 : 0
 
   url = "https://app.terraform"
 }
@@ -81,6 +86,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
+  oidc_settings                  = var.tfe_workspace.auth_method == "iam_role_oidc" ? local.tfe_workspace_oidc_settings : null
   path                           = var.path
   permissions_boundary_arn       = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = var.tfe_workspace.policy
@@ -102,15 +108,6 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
-
-  dynamic "oidc_settings" {
-    for_each = local.enable_tfe_workspace_oidc ? { "default" : var.tfe_workspace_oidc_settings } : {}
-    content {
-      audience     = oidc_settings.value.audience
-      provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
-      site_address = oidc_settings.value.site_address
-    }
-  }
 }
 
 module "additional_tfe_workspaces" {
@@ -131,6 +128,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
+  oidc_settings                  = each.value.auth_method == "iam_role_oidc" ? local.tfe_workspace_oidc_settings : null
   path                           = var.path
   permissions_boundary_arn       = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = each.value.policy
@@ -152,15 +150,6 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
-
-  dynamic "oidc_settings" {
-    for_each = each.value.auth_method == "iam_role_oidc" ? { "default" : var.tfe_workspace_oidc_settings } : {}
-    content {
-      audience     = oidc_settings.value.audience
-      provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
-      site_address = oidc_settings.value.site_address
-    }
-  }
 }
 
 resource "aws_iam_account_alias" "alias" {
@@ -202,7 +191,7 @@ resource "aws_account_alternate_contact" "security" {
 }
 
 resource "aws_iam_openid_connect_provider" "tfc_provider" {
-  count = local.enable_tfe_workspace_oidc ? 1 : 0
+  count = local.tfe_workspace_enable_oidc ? 1 : 0
 
   url             = data.tls_certificate.oidc_certificate[0].url
   client_id_list  = [var.tfe_workspace_oidc_settings.audience]
