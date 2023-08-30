@@ -164,3 +164,15 @@ variable "tfe_workspace" {
   })
   description = "TFE workspace settings"
 }
+
+variable "tfe_workspace_oidc_settings" {
+  type = object({
+    audience     = string
+    site_address = string
+  })
+  default = {
+    audience     = "aws.workload.identity"
+    site_address = "app.terraform.io"
+  }
+  description = "OIDC settings to use if auth method is set to \"iam_role_oidc\""
+}

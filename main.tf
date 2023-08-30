@@ -11,6 +11,8 @@ locals {
 
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
+
+  enable_tfe_workspace_oidc = var.auth_method == "iam_role_oidc" && var.tfe_workspace_oidc_settings != {}
 }
 
 provider "aws" {
@@ -24,6 +26,12 @@ provider "aws" {
   assume_role {
     role_arn = "arn:aws:iam::${module.account.id}:role/AWSControlTowerExecution"
   }
+}
+
+data "tls_certificate" "oidc_certificate" {
+  count = local.enable_tfe_workspace_oidc ? 1 : 0
+
+  url = "https://app.terraform"
 }
 
 module "account" {
@@ -93,11 +101,20 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
+
+  dynamic "oidc_settings" {
+    for_each = local.enable_tfe_workspace_oidc ? { "default" : var.tfe_workspace_oidc_settings } : {}
+    content {
+      audience     = oidc_settings.value.audience
+      provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
+      site_address = oidc_settings.value.site_address
+    }
+  }
 }
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.14.1"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=add-oidc-support"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
@@ -134,6 +151,15 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
+
+  dynamic "oidc_settings" {
+    for_each = local.enable_tfe_workspace_oidc ? { "default" : var.tfe_workspace_oidc_settings } : {}
+    content {
+      audience     = oidc_settings.value.audience
+      provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn
+      site_address = oidc_settings.value.site_address
+    }
+  }
 }
 
 resource "aws_iam_account_alias" "alias" {
@@ -172,4 +198,12 @@ resource "aws_account_alternate_contact" "security" {
   name                   = var.account.contact_security.name
   phone_number           = var.account.contact_security.phone_number
   title                  = var.account.contact_security.title
+}
+
+resource "aws_iam_openid_connect_provider" "tfc_provider" {
+  count = local.enable_tfe_workspace_oidc ? 1 : 0
+
+  url             = data.tls_certificate.oidc_certificate[0].url
+  client_id_list  = [var.tfe_workspace_oidc_settings.audience]
+  thumbprint_list = [data.tls_certificate.oidc_certificate[0].certificates[0].sha1_fingerprint]
 }
