@@ -191,7 +191,8 @@ resource "aws_account_alternate_contact" "security" {
 }
 
 resource "aws_iam_openid_connect_provider" "tfc_provider" {
-  count = local.tfe_workspace_enable_oidc ? 1 : 0
+  count    = local.tfe_workspace_enable_oidc ? 1 : 0
+  provider = aws.account
 
   url             = data.tls_certificate.oidc_certificate[0].url
   client_id_list  = [var.tfe_workspace_oidc_settings.audience]
