@@ -37,7 +37,7 @@ provider "aws" {
 data "tls_certificate" "oidc_certificate" {
   count = local.tfe_workspace_enable_oidc ? 1 : 0
 
-  url = "https://app.terraform"
+  url = "https://${var.tfe_workspace_oidc_settings.site_address}"
 }
 
 module "account" {
