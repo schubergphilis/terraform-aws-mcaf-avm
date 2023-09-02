@@ -192,20 +192,22 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | <a name="requirement_github"></a> [github](#requirement\_github) | >= 4.0.0 |
 | <a name="requirement_mcaf"></a> [mcaf](#requirement\_mcaf) | >= 0.4.2 |
 | <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | >= 0.25.0 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 4.0.4 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws.account"></a> [aws.account](#provider\_aws.account) | >= 4.9.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 4.0.4 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.5.1 |
-| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.14.1 |
-| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.14.1 |
+| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | add-oidc-support |
+| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | add-oidc-support |
 
 ## Resources
 
@@ -215,8 +217,10 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | [aws_account_alternate_contact.operations](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/account_alternate_contact) | resource |
 | [aws_account_alternate_contact.security](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/account_alternate_contact) | resource |
 | [aws_iam_account_alias.alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_account_alias) | resource |
+| [aws_iam_openid_connect_provider.tfc_provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_policy.workload_boundary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.workspace_boundary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [tls_certificate.oidc_certificate](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/data-sources/certificate) | data source |
 
 ## Inputs
 
@@ -230,6 +234,7 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | <a name="input_path"></a> [path](#input\_path) | Optional path for all IAM users, user groups, roles, and customer managed policies created by this module | `string` | `"/"` | no |
 | <a name="input_permissions_boundaries"></a> [permissions\_boundaries](#input\_permissions\_boundaries) | n/a | <pre>object({<br>    workspace_boundary      = optional(string, null)<br>    workspace_boundary_name = optional(string, null)<br>    workload_boundary       = optional(string, null)<br>    workload_boundary_name  = optional(string, null)<br>  })</pre> | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to assign to all resources | `map(string)` | `{}` | no |
+| <a name="input_tfe_workspace_oidc_settings"></a> [tfe\_workspace\_oidc\_settings](#input\_tfe\_workspace\_oidc\_settings) | OIDC settings to use if auth method is set to "iam\_role\_oidc" | <pre>object({<br>    audience     = string<br>    site_address = string<br>  })</pre> | <pre>{<br>  "audience": "aws.workload.identity",<br>  "site_address": "app.terraform.io"<br>}</pre> | no |
 
 ## Outputs
 
