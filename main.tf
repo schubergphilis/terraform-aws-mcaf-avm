@@ -14,7 +14,7 @@ locals {
 
   // create a list of auth_methods, and create the oidc provider if iam_role_oidc is in it
   // this allows for a mixture of auth_methods as they could differ per workspace.
-  auth_methods              = concat([var.tfe_workspace.auth_method], values(var.additional_tfe_workspaces).*.auth_method)
+  auth_methods              = concat([var.tfe_workspace.auth_method], values(var.additional_tfe_workspaces)[*].auth_method)
   tfe_workspace_enable_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
   tfe_workspace_oidc_settings = local.tfe_workspace_enable_oidc ? {
     audience     = var.tfe_workspace_oidc_settings.audience
