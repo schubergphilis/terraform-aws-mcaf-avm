@@ -14,7 +14,7 @@ locals {
 
   // create a list of auth_methods, and create the oidc provider if iam_role_oidc is in it
   // this allows for a mixture of auth_methods as they could differ per workspace.
-  auth_methods              = concat([var.tfe_workspace.auth_method], [for k, v in var.additional_tfe_workspaces : v.auth_method == null ? var.tfe_workspace.auth_method : v.auth_method])
+  auth_methods              = concat([var.tfe_workspace.auth_method], values(var.additional_tfe_workspaces).*.auth_method)
   tfe_workspace_enable_oidc = contains(local.auth_methods, "iam_role_oidc") && var.tfe_workspace_oidc_settings != {}
   tfe_workspace_oidc_settings = local.tfe_workspace_enable_oidc ? {
     audience     = var.tfe_workspace_oidc_settings.audience
@@ -88,7 +88,7 @@ module "tfe_workspace" {
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
-  oidc_settings                  = var.tfe_workspace.auth_method == "iam_role_oidc" ? local.tfe_workspace_oidc_settings : null
+  oidc_settings                  = local.tfe_workspace_oidc_settings
   path                           = var.path
   permissions_boundary_arn       = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = var.tfe_workspace.policy
@@ -130,7 +130,7 @@ module "additional_tfe_workspaces" {
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
-  oidc_settings                  = each.value.auth_method == "iam_role_oidc" ? local.tfe_workspace_oidc_settings : null
+  oidc_settings                  = local.tfe_workspace_oidc_settings
   path                           = var.path
   permissions_boundary_arn       = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                         = each.value.policy
