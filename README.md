@@ -4,14 +4,31 @@ Terraform module providing an AWS Account Vending Machine (AVM). This module pro
 
 ## Workspace authentication
 
-Using the default values, this module will create an IAM user per workspace in the provisioned AWS account. If using self-hosted Terraform Cloud agents then it is recommended to rather use an IAM role to authenticate with the AWS account. This is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
+This module provides three modes of workspace authentication:
+
+* Using the default values, this module will create an IAM user per workspace in the provisioned AWS account.
+* An IAM role using OpenID Connect integration with the AWS account can be used. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
+* An IAM role using an external ID to authenticate with the AWS account can be used in combination with using self-hosted Terraform Cloud agents.
+
+Using one of the last 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
+
+### IAM Roles with OIDC
+
+To use [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials) for authentication:
+
+* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role_oidc`
+
+This will create an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables.
+
+> Using [multiple configurations](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration#specifying-multiple-configurations) (e.g. provider aliases), is currently not supported. Use one of the other two authentication modes if this is a requirement.
 
 ### IAM Roles
+
 To use IAM roles for authentication:
 
-- Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID
-- Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`
-- Set `var.tfe_workspace.agent_role_arns` or (`agent_role_arns` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool
+* Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID.
+* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`.
+* Set `var.tfe_workspace.agent_role_arns` or (`agent_role_arns` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool.
 
 This will create an IAM role in the provisioned AWS account with a randomly generated external ID which can only be assumed by the Terraform Cloud agent role. The created role and external ID value are stored in the new workspace as Terraform variables which can be used to configure your AWS provider. Using the default workspace the created role will be called `TPEPipelineRole`, role names for additional workspaces will be calculated for you based on the workspace name but you can always set your own via the `role_name` variable (similarly you can set your own role name in the default workspace via `var.tfe_workspace.role_name`); but please be aware that each IAM role must have a unique name.
 
@@ -26,14 +43,6 @@ provider "aws" {
   }
 }
 ```
-
-### IAM Roles with OIDC
-To use IAM roles with OIDC for authentication:
-
-- Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role_oidc`
-- Optional: configure `var.tfe_workspace_oidc_settings` by overriding the default site and audience if desired
-
-This will create an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables. This module currently does not support using multiple configurations (e.g. provider aliases), see https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration#specifying-multiple-configurations.
 
 ## Workspace team access
 
