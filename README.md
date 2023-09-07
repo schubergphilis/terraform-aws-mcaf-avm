@@ -215,8 +215,8 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.5.1 |
-| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | add-oidc-support |
-| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | add-oidc-support |
+| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.15.0 |
+| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v0.15.0 |
 
 ## Resources
 
@@ -243,7 +243,6 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | <a name="input_path"></a> [path](#input\_path) | Optional path for all IAM users, user groups, roles, and customer managed policies created by this module | `string` | `"/"` | no |
 | <a name="input_permissions_boundaries"></a> [permissions\_boundaries](#input\_permissions\_boundaries) | n/a | <pre>object({<br>    workspace_boundary      = optional(string, null)<br>    workspace_boundary_name = optional(string, null)<br>    workload_boundary       = optional(string, null)<br>    workload_boundary_name  = optional(string, null)<br>  })</pre> | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to assign to all resources | `map(string)` | `{}` | no |
-| <a name="input_tfe_workspace_oidc_settings"></a> [tfe\_workspace\_oidc\_settings](#input\_tfe\_workspace\_oidc\_settings) | OIDC settings to use if auth method is set to "iam\_role\_oidc" | <pre>object({<br>    audience     = string<br>    site_address = string<br>  })</pre> | <pre>{<br>  "audience": "aws.workload.identity",<br>  "site_address": "app.terraform.io"<br>}</pre> | no |
 
 ## Outputs
 
