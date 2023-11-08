@@ -122,7 +122,7 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.2"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
@@ -144,6 +144,7 @@ module "tfe_workspace" {
   policy                         = var.tfe_workspace.policy
   policy_arns                    = var.tfe_workspace.policy_arns
   project_id                     = var.tfe_workspace.project_id
+  queue_all_runs                 = var.tfe_workspace.queue_all_runs
   region                         = var.tfe_workspace.default_region
   remote_state_consumer_ids      = var.tfe_workspace.remote_state_consumer_ids
   repository_identifier          = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
@@ -164,7 +165,7 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.0"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.2"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
@@ -186,6 +187,7 @@ module "additional_tfe_workspaces" {
   policy                         = each.value.policy
   policy_arns                    = each.value.policy_arns
   project_id                     = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
+  queue_all_runs                 = each.value.queue_all_runs
   region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
   remote_state_consumer_ids      = each.value.remote_state_consumer_ids
   repository_identifier          = each.value.connect_vcs_repo != false ? coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier) : null
