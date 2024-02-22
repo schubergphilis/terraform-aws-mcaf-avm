@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.12.0 - 2024-02-22
+
+### What's Changed
+
+#### 🚀 Features
+
+* feature: make all runs configurable (#50) @stromp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v2.11.0...v2.12.0
+
 ## v2.11.0 - 2023-09-07
 
 ### What's Changed
