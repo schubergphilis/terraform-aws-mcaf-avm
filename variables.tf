@@ -71,7 +71,7 @@ variable "additional_tfe_workspaces" {
       enabled          = optional(bool, true)
       url              = string
       triggers         = optional(list(string))
-    })), null)
+    })), [])
 
     team_access = optional(map(object({
       access = optional(string, null),
