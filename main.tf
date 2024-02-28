@@ -160,7 +160,7 @@ module "tfe_workspace" {
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
   working_directory              = var.tfe_workspace.connect_vcs_repo != false ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
-  workspace_tags                 = var.workspace_tags
+  workspace_tags                 = var.tfe_workspace.workspace_tags
 }
 
 module "additional_tfe_workspaces" {

@@ -65,7 +65,8 @@ variable "additional_tfe_workspaces" {
     username                       = optional(string, null)
     vcs_oauth_token_id             = optional(string, null)
     working_directory              = optional(string, null)
-
+    workspace_tags                 = optional(list(string), null)
+    
     notification_configuration = optional(list(object({
       destination_type = string
       enabled          = optional(bool, true)
@@ -164,7 +165,7 @@ variable "tfe_workspace" {
       url              = string
       triggers         = optional(list(string), null)
     })), [])
-    
+
     team_access = optional(map(object({
       access = optional(string, null),
       permissions = optional(object({
