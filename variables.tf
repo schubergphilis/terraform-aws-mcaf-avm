@@ -67,10 +67,10 @@ variable "additional_tfe_workspaces" {
     working_directory              = optional(string, null)
 
     notification_configuration = optional(list(object({
-      destination_type = string
+      destination_type = optional(string, null)
       enabled          = optional(bool, true)
-      url              = string
-      triggers         = optional(list(string))
+      url              = optional(string, null)
+      triggers         = optional(list(string), null)
     })), [])
 
     team_access = optional(map(object({
