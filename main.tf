@@ -122,7 +122,7 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.2"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.1.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
@@ -137,6 +137,7 @@ module "tfe_workspace" {
   file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
+  notification_configuration     = var.tfe_workspace.notification_configuration
   oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
   oidc_settings                  = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                           = var.path
@@ -152,8 +153,6 @@ module "tfe_workspace" {
   sensitive_env_variables        = var.tfe_workspace.sensitive_env_variables
   sensitive_hcl_variables        = var.tfe_workspace.sensitive_hcl_variables
   sensitive_terraform_variables  = var.tfe_workspace.sensitive_terraform_variables
-  slack_notification_triggers    = var.tfe_workspace.slack_notification_triggers
-  slack_notification_url         = var.tfe_workspace.slack_notification_url
   ssh_key_id                     = var.tfe_workspace.ssh_key_id
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
@@ -165,7 +164,7 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v0.15.2"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.1.0"
   providers = { aws = aws.account }
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
@@ -180,6 +179,7 @@ module "additional_tfe_workspaces" {
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
+  notification_configuration     = each.value.notification_configuration
   oidc_settings                  = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
   path                           = var.path
@@ -195,8 +195,6 @@ module "additional_tfe_workspaces" {
   sensitive_env_variables        = each.value.sensitive_env_variables
   sensitive_hcl_variables        = each.value.sensitive_hcl_variables
   sensitive_terraform_variables  = each.value.sensitive_terraform_variables
-  slack_notification_triggers    = coalesce(each.value.slack_notification_triggers, var.tfe_workspace.slack_notification_triggers)
-  slack_notification_url         = each.value.slack_notification_url != null ? each.value.slack_notification_url : var.tfe_workspace.slack_notification_url
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
@@ -204,4 +202,5 @@ module "additional_tfe_workspaces" {
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = each.value.connect_vcs_repo != false ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
+  workspace_tags                 = each.value.tfe_workspace.workspace_tags
 }
