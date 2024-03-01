@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.0.0 - 2024-03-01
+
+### What's Changed
+
+#### 🚀 Features
+
+* breaking: update notification variables & add workspace tags for workspace submodule (#51) @marlonparmentier
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v2.12.0...v3.0.0
+
 ## v2.12.0 - 2024-02-22
 
 ### What's Changed
