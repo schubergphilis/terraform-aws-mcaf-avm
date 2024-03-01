@@ -4,17 +4,17 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 4.9.0"
     }
-    github = {
-      source  = "integrations/github"
-      version = ">= 4.0.0"
-    }
     mcaf = {
       source  = "schubergphilis/mcaf"
       version = ">= 0.4.2"
     }
     tfe = {
       source  = "hashicorp/tfe"
-      version = ">= 0.25.0"
+      version = ">= 0.51.0"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 4.0.4"
     }
   }
   required_version = ">= 1.3.0"

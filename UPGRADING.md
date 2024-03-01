@@ -1,5 +1,16 @@
 # UPGRADING
 
+## Upgrading to 3.0.0
+
+3.0.0 introduces new optional variables and removes existing optional variables. Upgrading requires changes if you currently use the `slack_notification_triggers` or `slack_notification_url` variables.
+
+Variable changes:
+
+In both `var.additional_tfe_workspaces` and `var.tfe_workspaces`:
+
+- Added `workspace_tags`
+- The `slack_notification_triggers` & `slack_notification_url` variables have been merged into `notification_configuration`. This allows to easily configure notifications for both slack and teams.
+
 ## Upgrading to 2.0.0
 
 2.0.0 is a major refactor to make use of `optional`. This commit also introduces breaking changes while we consolidate variables that previously were optional but could not be part of an object (because we had no way to make specific object keys optional).

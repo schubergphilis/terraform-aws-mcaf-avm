@@ -57,14 +57,27 @@ variable "additional_tfe_workspaces" {
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
-    slack_notification_triggers    = optional(list(string), null)
-    slack_notification_url         = optional(string, null)
     ssh_key_id                     = optional(string, null)
     terraform_version              = optional(string, null)
     trigger_prefixes               = optional(list(string), null)
     username                       = optional(string, null)
     vcs_oauth_token_id             = optional(string, null)
     working_directory              = optional(string, null)
+    workspace_tags                 = optional(list(string), null)
+
+    notification_configuration = optional(list(object({
+      destination_type = string
+      enabled          = optional(bool, true)
+      url              = string
+      triggers = optional(list(string), [
+        "run:created",
+        "run:planning",
+        "run:needs_attention",
+        "run:applying",
+        "run:completed",
+        "run:errored",
+      ])
+    })), [])
 
     team_access = optional(map(object({
       access = optional(string, null),
@@ -142,8 +155,6 @@ variable "tfe_workspace" {
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
-    slack_notification_triggers    = optional(list(string), ["run:created", "run:planning", "run:needs_attention", "run:applying", "run:completed", "run:errored"])
-    slack_notification_url         = optional(string, null)
     ssh_key_id                     = optional(string, null)
     organization                   = string
     terraform_version              = optional(string, null)
@@ -151,6 +162,21 @@ variable "tfe_workspace" {
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
     working_directory              = optional(string, null)
+    workspace_tags                 = optional(list(string), null)
+
+    notification_configuration = optional(list(object({
+      destination_type = string
+      enabled          = optional(bool, true)
+      url              = string
+      triggers = optional(list(string), [
+        "run:created",
+        "run:planning",
+        "run:needs_attention",
+        "run:applying",
+        "run:completed",
+        "run:errored",
+      ])
+    })), [])
 
     team_access = optional(map(object({
       access = optional(string, null),
