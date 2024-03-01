@@ -57,8 +57,6 @@ variable "additional_tfe_workspaces" {
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
-    slack_notification_triggers    = optional(list(string), null)
-    slack_notification_url         = optional(string, null)
     ssh_key_id                     = optional(string, null)
     terraform_version              = optional(string, null)
     trigger_prefixes               = optional(list(string), null)
@@ -66,12 +64,19 @@ variable "additional_tfe_workspaces" {
     vcs_oauth_token_id             = optional(string, null)
     working_directory              = optional(string, null)
     workspace_tags                 = optional(list(string), null)
-    
+
     notification_configuration = optional(list(object({
       destination_type = string
       enabled          = optional(bool, true)
       url              = string
-      triggers         = optional(list(string), null)
+      triggers = optional(list(string), [
+        "run:created",
+        "run:planning",
+        "run:needs_attention",
+        "run:applying",
+        "run:completed",
+        "run:errored",
+      ])
     })), [])
 
     team_access = optional(map(object({
@@ -163,7 +168,14 @@ variable "tfe_workspace" {
       destination_type = string
       enabled          = optional(bool, true)
       url              = string
-      triggers         = optional(list(string), null)
+      triggers = optional(list(string), [
+        "run:created",
+        "run:planning",
+        "run:needs_attention",
+        "run:applying",
+        "run:completed",
+        "run:errored",
+      ])
     })), [])
 
     team_access = optional(map(object({
