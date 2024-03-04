@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.0.1 - 2024-03-04
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix(output): Add outputs for other modules to consume (#52) @shoekstra
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v3.0.0...v3.0.1
+
 ## v3.0.0 - 2024-03-01
 
 ### What's Changed
