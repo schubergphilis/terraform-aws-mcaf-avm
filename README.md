@@ -214,8 +214,8 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_account"></a> [account](#module\_account) | github.com/schubergphilis/terraform-aws-mcaf-account | v0.5.1 |
-| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v1.1.1 |
-| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v1.1.1 |
+| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v1.1.2 |
+| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | github.com/schubergphilis/terraform-aws-mcaf-workspace | v1.1.2 |
 
 ## Resources
 
@@ -247,8 +247,12 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 
 | Name | Description |
 |------|-------------|
-| <a name="output_additional_tfe_workspace"></a> [additional\_tfe\_workspace](#output\_additional\_tfe\_workspace) | Map of additional TFE workspaces containing name and workspace ID |
+| <a name="output_additional_tfe_workspace"></a> [additional\_tfe\_workspace](#output\_additional\_tfe\_workspace) | Map of any additional Terraform Cloud workspace names and IDs |
+| <a name="output_environment"></a> [environment](#output\_environment) | The environment name |
 | <a name="output_id"></a> [id](#output\_id) | The AWS account ID |
-| <a name="output_tfe_workspace_id"></a> [tfe\_workspace\_id](#output\_tfe\_workspace\_id) | The TFE workspace ID |
+| <a name="output_name"></a> [name](#output\_name) | The AWS account name |
+| <a name="output_repository_identifier"></a> [repository\_identifier](#output\_repository\_identifier) | The repository identifier if one is specified |
+| <a name="output_tfe_workspace_id"></a> [tfe\_workspace\_id](#output\_tfe\_workspace\_id) | Workspace ID of default workspace ID when `create_default_workspace` is true |
+| <a name="output_tfe_workspaces"></a> [tfe\_workspaces](#output\_tfe\_workspaces) | List of Terraform Cloud workspaces |
 | <a name="output_workload_permissions_boundary_arn"></a> [workload\_permissions\_boundary\_arn](#output\_workload\_permissions\_boundary\_arn) | The ARN of the workload permissions boundary |
 <!-- END_TF_DOCS -->
