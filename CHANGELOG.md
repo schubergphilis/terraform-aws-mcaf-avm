@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v3.0.2 - 2024-04-30
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: Setting `working_directory` shouldn't depend on a VCS connection (#49) @borisroman
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v3.0.1...v3.0.2
+
 ## v3.0.1 - 2024-03-04
 
 ### What's Changed
