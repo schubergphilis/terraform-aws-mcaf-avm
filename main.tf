@@ -149,10 +149,12 @@ resource "tfe_variable" "avm_variable_set_variables" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
+
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=6f6c0c8"
   providers = { aws = aws.account }
 
-  source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 1.2.0"
+  # source  = "schubergphilis/mcaf-workspace/aws"
+  # version = "~> 1.2.0"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -193,17 +195,19 @@ module "tfe_workspace" {
   trigger_patterns               = var.tfe_workspace.trigger_patterns
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
-  variable_set_ids               = concat(var.create_variable_set ? [tfe_variable_set.avm_variable_set["instance"].id] : [], var.tfe_workspace.variable_set_ids)
+  variable_set_ids               = merge(var.create_variable_set ? { tfe_variable_set.avm_variable_set["instance"].name : tfe_variable_set.avm_variable_set["instance"].id } : {}, var.tfe_workspace.variable_set_ids)
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
   workspace_tags                 = var.tfe_workspace.workspace_tags
 }
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
+
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=6f6c0c8"
   providers = { aws = aws.account }
 
-  source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 1.2.0"
+  # source  = "schubergphilis/mcaf-workspace/aws"
+  # version = "~> 1.2.0"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -244,7 +248,7 @@ module "additional_tfe_workspaces" {
   trigger_patterns               = each.value.trigger_patterns != null ? each.value.trigger_patterns : var.tfe_workspace.trigger_patterns
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  variable_set_ids               = concat(var.create_variable_set ? [tfe_variable_set.avm_variable_set["instance"].id] : [], each.value.variable_set_ids)
+  variable_set_ids               = merge(var.create_variable_set ? { tfe_variable_set.avm_variable_set["instance"].name : tfe_variable_set.avm_variable_set["instance"].id } : {}, each.value.variable_set_ids)
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
   workspace_tags                 = each.value.workspace_tags
 }
