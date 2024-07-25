@@ -67,9 +67,9 @@ variable "additional_tfe_workspaces" {
     trigger_prefixes               = optional(list(string))
     username                       = optional(string)
     vcs_oauth_token_id             = optional(string)
+    variable_set_ids               = optional(list(string), [])
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
-
     notification_configuration = optional(list(object({
       destination_type = string
       enabled          = optional(bool, true)
@@ -104,6 +104,12 @@ variable "create_default_workspace" {
   type        = bool
   default     = true
   description = "Set to false to skip creating default workspace"
+}
+
+variable "create_variable_set" {
+  type        = bool
+  default     = false
+  description = "Set to true to create a variable set and attach it to all workspaces"
 }
 
 variable "name" {
@@ -171,8 +177,9 @@ variable "tfe_workspace" {
     trigger_prefixes               = optional(list(string), ["modules"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
-    working_directory              = optional(string)
-    workspace_tags                 = optional(list(string))
+    variable_set_ids               = optional(list(string), [])
+    working_directory              = optional(string, null)
+    workspace_tags                 = optional(list(string), null)
 
     notification_configuration = optional(list(object({
       destination_type = string

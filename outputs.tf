@@ -36,6 +36,13 @@ output "tfe_workspaces" {
   description = "List of Terraform Cloud workspaces"
 }
 
+
+output "variable_set_id" {
+  value       = var.create_variable_set ? tfe_variable_set.avm_variable_set.instance.id : ""
+  description = "The id of the AVM variable set, if any"
+}
+
+
 output "workload_permissions_boundary_arn" {
   value       = try(aws_iam_policy.workload_boundary[0].arn, "")
   description = "The ARN of the workload permissions boundary"
@@ -45,4 +52,3 @@ output "workspace_permissions_boundary_arn" {
   value       = try(aws_iam_policy.workspace_boundary[0].arn, "")
   description = "The ARN of the workspace permissions boundary"
 }
-
