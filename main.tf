@@ -166,7 +166,7 @@ module "tfe_workspace" {
   branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
   clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
-  clear_text_terraform_variables = merge(var.create_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {}, var.tfe_workspace.clear_text_terraform_variables)
+  clear_text_terraform_variables = merge(var.create_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, var.tfe_workspace.clear_text_terraform_variables)
   description                    = var.tfe_workspace.description
   execution_mode                 = var.tfe_workspace.execution_mode
   file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
@@ -219,7 +219,7 @@ module "additional_tfe_workspaces" {
   branch                         = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
-  clear_text_terraform_variables = merge(var.create_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {}, each.value.clear_text_terraform_variables)
+  clear_text_terraform_variables = merge(var.create_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, each.value.clear_text_terraform_variables)
   description                    = each.value.description
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
