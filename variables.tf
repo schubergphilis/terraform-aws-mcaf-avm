@@ -142,6 +142,12 @@ variable "create_default_workspace" {
   description = "Set to false to skip creating default workspace"
 }
 
+variable "create_account_variable" {
+  type        = bool
+  default     = false
+  description = "Set to true to create a variable set and attach to all workspaces linked to the created account. You do not need to set this variable if setting any of the account_variable_set_* variables."
+}
+
 variable "name" {
   type        = string
   description = "Name of the account and default TFE workspace"

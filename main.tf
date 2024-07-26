@@ -7,7 +7,8 @@ locals {
     length(var.account_variable_set_clear_text_terraform_variables) > 0,
     length(var.account_variable_set_sensitive_env_variables) > 0,
     length(var.account_variable_set_sensitive_hcl_variables) > 0,
-    length(var.account_variable_set_sensitive_terraform_variables) > 0
+    length(var.account_variable_set_sensitive_terraform_variables) > 0,
+    var.create_account_variable
   ])
 
   tfe_workspace = {
