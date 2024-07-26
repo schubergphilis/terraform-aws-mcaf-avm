@@ -106,10 +106,40 @@ variable "create_default_workspace" {
   description = "Set to false to skip creating default workspace"
 }
 
-variable "create_account_variable_set" {
-  type        = bool
-  default     = false
-  description = "Set to true to create a variable set and attach to all workspaces linked to the created account"
+variable "account_variable_set_clear_text_env_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_clear_text_hcl_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_clear_text_terraform_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_env_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_hcl_variables" {
+  type        = map(object({ sensitive = string }))
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_terraform_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
 }
 
 variable "name" {

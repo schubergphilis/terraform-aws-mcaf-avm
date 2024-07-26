@@ -1,5 +1,14 @@
 locals {
-  clear_text_terraform_account_variable_set_variables = merge({}, var.create_account_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {})
+  create_account_variable_set = anytrue([
+    length(account_variable_set_clear_text_env_variables) > 0,
+    length(account_variable_set_clear_text_hcl_variables) > 0,
+    length(account_variable_set_clear_text_terraform_variables) > 0,
+    length(account_variable_set_sensitive_env_variables) > 0,
+    length(account_variable_set_sensitive_hcl_variables) > 0,
+    length(account_variable_set_sensitive_terraform_variables) > 0
+  ])
+
+  account_variable_set_clear_text_terraform_variables = merge(var.account_variable_set_clear_text_terraform_variables, local.create_account_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {})
 
   tfe_workspace = {
     clear_text_terraform_variables = merge(
@@ -125,15 +134,66 @@ resource "aws_iam_policy" "workload_boundary" {
 ################################################################################
 
 resource "tfe_variable_set" "account" {
-  count = var.create_account_variable_set ? 1 : 0
+  count = local.create_account_variable_set ? 1 : 0
 
   name         = var.name
   description  = "Variable set for the account and all its linked workspaces"
   organization = var.tfe_workspace.organization
 }
 
-resource "tfe_variable" "account_variable_set_variables" {
-  for_each = local.clear_text_terraform_account_variable_set_variables
+resource "tfe_variable" "account_variable_set_clear_text_env_variables" {
+  for_each = var.account_variable_set_clear_text_env_variables
+
+  key             = each.key
+  value           = each.value
+  category        = "env"
+  variable_set_id = tfe_variable_set.account[0].id
+}
+
+resource "tfe_variable" "account_variable_set_sensitive_env_variables" {
+  for_each = var.account_variable_set_sensitive_env_variables
+
+  key             = each.key
+  value           = each.value
+  category        = "env"
+  sensitive       = true
+  variable_set_id = tfe_variable_set.account[0].id
+}
+
+resource "tfe_variable" "account_variable_set_clear_text_hcl_variables" {
+  for_each = var.account_variable_set_clear_text_hcl_variables
+
+  key             = each.key
+  value           = each.value
+  category        = "terraform"
+  hcl             = true
+  variable_set_id = tfe_variable_set.account[0].id
+}
+
+resource "tfe_variable" "account_variable_set_sensitive_hcl_variables" {
+  for_each = var.account_variable_set_sensitive_hcl_variables
+
+  key             = each.key
+  value           = each.value
+  category        = "terraform"
+  hcl             = true
+  sensitive       = true
+  variable_set_id = tfe_variable_set.account[0].id
+}
+
+
+resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
+  for_each = local.account_variable_set_clear_text_terraform_variables
+
+  key             = each.key
+  value           = each.value
+  category        = "terraform"
+  variable_set_id = tfe_variable_set.account[0].id
+}
+
+
+resource "tfe_variable" "account_variable_set_sensitive_terraform_variables" {
+  for_each = var.account_variable_set_sensitive_terraform_variables
 
   key             = each.key
   value           = each.value
@@ -166,7 +226,7 @@ module "tfe_workspace" {
   branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
   clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
-  clear_text_terraform_variables = merge(var.create_account_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, var.tfe_workspace.clear_text_terraform_variables)
+  clear_text_terraform_variables = merge(local.create_account_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, var.tfe_workspace.clear_text_terraform_variables)
   description                    = var.tfe_workspace.description
   execution_mode                 = var.tfe_workspace.execution_mode
   file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
@@ -195,7 +255,7 @@ module "tfe_workspace" {
   trigger_patterns               = var.tfe_workspace.trigger_patterns
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
-  variable_set_ids               = merge(var.create_account_variable_set ? { "account" : tfe_variable_set.account[0].id } : {}, var.tfe_workspace.variable_set_ids)
+  variable_set_ids               = merge(local.create_account_variable_set ? { "account" : tfe_variable_set.account[0].id } : {}, var.tfe_workspace.variable_set_ids)
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
   workspace_tags                 = var.tfe_workspace.workspace_tags
 }
@@ -219,8 +279,7 @@ module "additional_tfe_workspaces" {
   branch                         = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
-  clear_text_terraform_variables = merge(var.create_account_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, each.value.clear_text_terraform_variables)
-  description                    = each.value.description
+  clear_text_terraform_variables = merge(local.create_account_variable_set == false ? local.tfe_workspace.clear_text_terraform_variables : {}, each.value.clear_text_terraform_variables)
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
@@ -248,7 +307,7 @@ module "additional_tfe_workspaces" {
   trigger_patterns               = each.value.trigger_patterns != null ? each.value.trigger_patterns : var.tfe_workspace.trigger_patterns
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  variable_set_ids               = merge(var.create_account_variable_set ? { "account" : tfe_variable_set.account[0].id } : {}, each.value.variable_set_ids)
+  variable_set_ids               = merge(local.create_account_variable_set ? { "account" : tfe_variable_set.account[0].id } : {}, each.value.variable_set_ids)
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
   workspace_tags                 = each.value.workspace_tags
 }
