@@ -1,4 +1,6 @@
 locals {
+  account_variable_set_clear_text_terraform_variables = merge(var.account_variable_set_clear_text_terraform_variables, local.create_account_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {})
+
   create_account_variable_set = anytrue([
     length(var.account_variable_set_clear_text_env_variables) > 0,
     length(var.account_variable_set_clear_text_hcl_variables) > 0,
@@ -7,8 +9,6 @@ locals {
     length(var.account_variable_set_sensitive_hcl_variables) > 0,
     length(var.account_variable_set_sensitive_terraform_variables) > 0
   ])
-
-  account_variable_set_clear_text_terraform_variables = merge(var.account_variable_set_clear_text_terraform_variables, local.create_account_variable_set ? local.tfe_workspace.clear_text_terraform_variables : {})
 
   tfe_workspace = {
     clear_text_terraform_variables = merge(

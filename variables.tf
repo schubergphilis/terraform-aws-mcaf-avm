@@ -30,6 +30,42 @@ variable "account" {
   description = "AWS account settings"
 }
 
+variable "account_variable_set_clear_text_env_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_clear_text_hcl_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_clear_text_terraform_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_env_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_hcl_variables" {
+  type        = map(object({ sensitive = string }))
+  default     = {}
+  description = ""
+}
+
+variable "account_variable_set_sensitive_terraform_variables" {
+  type        = map(string)
+  default     = {}
+  description = ""
+}
+
 variable "additional_tfe_workspaces" {
   type = map(object({
     add_permissions_boundary       = optional(bool, false)
@@ -104,42 +140,6 @@ variable "create_default_workspace" {
   type        = bool
   default     = true
   description = "Set to false to skip creating default workspace"
-}
-
-variable "account_variable_set_clear_text_env_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_clear_text_hcl_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_clear_text_terraform_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_env_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_hcl_variables" {
-  type        = map(object({ sensitive = string }))
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_terraform_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
 }
 
 variable "name" {
