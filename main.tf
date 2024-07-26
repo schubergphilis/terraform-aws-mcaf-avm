@@ -248,7 +248,7 @@ module "additional_tfe_workspaces" {
   trigger_patterns               = each.value.trigger_patterns != null ? each.value.trigger_patterns : var.tfe_workspace.trigger_patterns
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  variable_set_ids               = merge(var.create_variable_set ? { "account" : tfe_variable_set.avm_variable_set[0].id } : {}, each.value.variable_set_ids)
+  variable_set_ids               = merge(var.create_variable_set ? { "account" : tfe_variable_set.account[0].id } : {}, each.value.variable_set_ids)
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
   workspace_tags                 = each.value.workspace_tags
 }
