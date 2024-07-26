@@ -37,9 +37,9 @@ output "tfe_workspaces" {
 }
 
 
-output "variable_set_id" {
-  value       = var.create_variable_set ? tfe_variable_set.avm_variable_set["instance"].id : ""
-  description = "The id of the AVM variable set, if any"
+output "account_variable_set_id" {
+  value       = var.create_account_variable_set ? tfe_variable_set.account[0].id : ""
+  description = "The ID of the account variable set"
 }
 
 

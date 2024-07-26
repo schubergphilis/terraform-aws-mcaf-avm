@@ -106,10 +106,10 @@ variable "create_default_workspace" {
   description = "Set to false to skip creating default workspace"
 }
 
-variable "create_variable_set" {
+variable "create_account_variable_set" {
   type        = bool
   default     = false
-  description = "Set to true to create a variable set and attach it to all workspaces"
+  description = "Set to true to create a variable set and attach to all workspaces linked to the created account"
 }
 
 variable "name" {
