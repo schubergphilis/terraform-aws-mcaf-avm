@@ -165,7 +165,7 @@ resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
 
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=6f6c0c8"
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.3.0"
   providers = { aws = aws.account }
 
   # source  = "schubergphilis/mcaf-workspace/aws"
@@ -217,8 +217,9 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=6f6c0c8"
+  
+  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.3.0"
+  
   providers = { aws = aws.account }
 
   # source  = "schubergphilis/mcaf-workspace/aws"
