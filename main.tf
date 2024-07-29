@@ -1,6 +1,6 @@
 locals {
   account_variable_set = {
-    name = var.account_variable_set.name ? var.account_variable_set.name : var.name
+    name = var.account_variable_set.name != null ? var.account_variable_set.name : var.name
 
     clear_text_terraform_variables = merge(
       // always add account = var.name
