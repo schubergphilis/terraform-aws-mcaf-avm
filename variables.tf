@@ -30,40 +30,15 @@ variable "account" {
   description = "AWS account settings"
 }
 
-variable "account_variable_set_clear_text_env_variables" {
-  type        = map(string)
+variable "account_variable_set" {
+  type = object({
+    name                           = optional(string)
+    clear_text_env_variables       = optional(map(string), {})
+    clear_text_hcl_variables       = optional(map(string), {})
+    clear_text_terraform_variables = optional(map(string), {})
+  })
   default     = {}
-  description = ""
-}
-
-variable "account_variable_set_clear_text_hcl_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_clear_text_terraform_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_env_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_hcl_variables" {
-  type        = map(object({ sensitive = string }))
-  default     = {}
-  description = ""
-}
-
-variable "account_variable_set_sensitive_terraform_variables" {
-  type        = map(string)
-  default     = {}
-  description = ""
+  description = "Settings of variable set that is attached to each workspace"
 }
 
 variable "additional_tfe_workspaces" {
@@ -140,12 +115,6 @@ variable "create_default_workspace" {
   type        = bool
   default     = true
   description = "Set to false to skip creating default workspace"
-}
-
-variable "create_account_variable" {
-  type        = bool
-  default     = false
-  description = "Set to true to create a variable set and attach to all workspaces linked to the created account. You do not need to set this variable if setting any of the account_variable_set_* variables."
 }
 
 variable "name" {
