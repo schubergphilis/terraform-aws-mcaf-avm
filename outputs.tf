@@ -38,7 +38,7 @@ output "tfe_workspaces" {
 
 
 output "account_variable_set_id" {
-  value       = local.create_account_variable_set ? tfe_variable_set.account[0].id : ""
+  value       = tfe_variable_set.account.id
   description = "The ID of the account variable set"
 }
 
