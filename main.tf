@@ -35,7 +35,8 @@ provider "aws" {
 }
 
 module "account" {
-  source = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=v0.5.1"
+  source  = "schubergphilis/mcaf-account/aws"
+  version = "~> 0.5.1"
 
   account                  = var.name
   email                    = var.account.email
@@ -122,17 +123,24 @@ resource "aws_iam_policy" "workload_boundary" {
 
 module "tfe_workspace" {
   count     = var.create_default_workspace ? 1 : 0
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.1.2"
   providers = { aws = aws.account }
+
+  source  = "schubergphilis/mcaf-workspace/aws"
+  version = "~> 1.2.0"
+
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
+  allow_destroy_plan             = var.tfe_workspace.allow_destroy_plan
+  assessments_enabled            = var.tfe_workspace.assessments_enabled
   auth_method                    = var.tfe_workspace.auth_method
   auto_apply                     = var.tfe_workspace.auto_apply
+  auto_apply_run_trigger         = var.tfe_workspace.auto_apply_run_trigger
   branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
   clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
   clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
   clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, var.tfe_workspace.clear_text_terraform_variables)
+  description                    = var.tfe_workspace.description
   execution_mode                 = var.tfe_workspace.execution_mode
   file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
   global_remote_state            = var.tfe_workspace.global_remote_state
@@ -157,6 +165,7 @@ module "tfe_workspace" {
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
+  trigger_patterns               = var.tfe_workspace.trigger_patterns
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
@@ -165,17 +174,23 @@ module "tfe_workspace" {
 
 module "additional_tfe_workspaces" {
   for_each  = var.additional_tfe_workspaces
-  source    = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=v1.1.2"
   providers = { aws = aws.account }
+
+  source  = "schubergphilis/mcaf-workspace/aws"
+  version = "~> 1.2.0"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
+  allow_destroy_plan             = each.value.allow_destroy_plan != null ? each.value.allow_destroy_plan : var.tfe_workspace.allow_destroy_plan
+  assessments_enabled            = each.value.assessments_enabled != null ? each.value.assessments_enabled : var.tfe_workspace.assessments_enabled
   auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
   auto_apply                     = each.value.auto_apply
+  auto_apply_run_trigger         = each.value.auto_apply_run_trigger
   branch                         = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
   clear_text_env_variables       = each.value.clear_text_env_variables
   clear_text_hcl_variables       = each.value.clear_text_hcl_variables
   clear_text_terraform_variables = merge(local.tfe_workspace.clear_text_terraform_variables, each.value.clear_text_terraform_variables)
+  description                    = each.value.description
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
@@ -200,6 +215,7 @@ module "additional_tfe_workspaces" {
   team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
+  trigger_patterns               = each.value.trigger_patterns != null ? each.value.trigger_patterns : var.tfe_workspace.trigger_patterns
   trigger_prefixes               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_prefixes, var.tfe_workspace.trigger_prefixes) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
