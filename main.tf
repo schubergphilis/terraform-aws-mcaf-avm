@@ -136,7 +136,7 @@ resource "tfe_variable" "account_variable_set_clear_text_env_variables" {
   key             = each.key
   value           = each.value
   category        = "env"
-  variable_set_id = tfe_variable_set.account[0].id
+  variable_set_id = tfe_variable_set.account.id
 }
 
 resource "tfe_variable" "account_variable_set_clear_text_hcl_variables" {
@@ -146,7 +146,7 @@ resource "tfe_variable" "account_variable_set_clear_text_hcl_variables" {
   value           = each.value
   category        = "terraform"
   hcl             = true
-  variable_set_id = tfe_variable_set.account[0].id
+  variable_set_id = tfe_variable_set.account.id
 }
 
 resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
@@ -155,7 +155,7 @@ resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
   key             = each.key
   value           = each.value
   category        = "terraform"
-  variable_set_id = tfe_variable_set.account[0].id
+  variable_set_id = tfe_variable_set.account.id
 }
 
 ################################################################################
