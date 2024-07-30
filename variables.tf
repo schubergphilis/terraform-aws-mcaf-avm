@@ -1,6 +1,6 @@
 variable "account" {
   type = object({
-    alias_prefix = optional(string, null)
+    alias_prefix = optional(string)
     contact_billing = optional(object({
       email_address = string
       name          = string
@@ -20,9 +20,9 @@ variable "account" {
       title         = string
     }), null)
     email                    = string
-    environment              = optional(string, null)
+    environment              = optional(string)
     organizational_unit      = string
-    provisioned_product_name = optional(string, null)
+    provisioned_product_name = optional(string)
     sso_email                = string
     sso_firstname            = optional(string, "AWS Control Tower")
     sso_lastname             = optional(string, "Admin")
@@ -33,42 +33,42 @@ variable "account" {
 variable "additional_tfe_workspaces" {
   type = map(object({
     add_permissions_boundary       = optional(bool, false)
-    agent_pool_id                  = optional(string, null)
-    agent_role_arns                = optional(list(string), null)
-    allow_destroy_plan             = optional(bool, null)
-    assessments_enabled            = optional(bool, null)
-    auth_method                    = optional(string, null)
+    agent_pool_id                  = optional(string)
+    agent_role_arns                = optional(list(string))
+    allow_destroy_plan             = optional(bool)
+    assessments_enabled            = optional(bool)
+    auth_method                    = optional(string)
     auto_apply                     = optional(bool, false)
     auto_apply_run_trigger         = optional(bool, false)
-    branch                         = optional(string, null)
+    branch                         = optional(string)
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
     clear_text_terraform_variables = optional(map(string), {})
     connect_vcs_repo               = optional(bool, true)
-    default_region                 = optional(string, null)
-    description                    = optional(string, null)
-    execution_mode                 = optional(string, null)
+    default_region                 = optional(string)
+    description                    = optional(string)
+    execution_mode                 = optional(string)
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
-    name                           = optional(string, null)
-    policy                         = optional(string, null)
+    name                           = optional(string)
+    policy                         = optional(string)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                     = optional(string, null)
-    queue_all_runs                 = optional(bool, null)
+    project_id                     = optional(string)
+    queue_all_runs                 = optional(bool)
     remote_state_consumer_ids      = optional(set(string))
-    repository_identifier          = optional(string, null)
-    role_name                      = optional(string, null)
+    repository_identifier          = optional(string)
+    role_name                      = optional(string)
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
-    ssh_key_id                     = optional(string, null)
-    terraform_version              = optional(string, null)
-    trigger_patterns               = optional(list(string), null)
-    trigger_prefixes               = optional(list(string), null)
-    username                       = optional(string, null)
-    vcs_oauth_token_id             = optional(string, null)
-    working_directory              = optional(string, null)
-    workspace_tags                 = optional(list(string), null)
+    ssh_key_id                     = optional(string)
+    terraform_version              = optional(string)
+    trigger_patterns               = optional(list(string))
+    trigger_prefixes               = optional(list(string))
+    username                       = optional(string)
+    vcs_oauth_token_id             = optional(string)
+    working_directory              = optional(string)
+    workspace_tags                 = optional(list(string))
 
     notification_configuration = optional(list(object({
       destination_type = string
@@ -125,10 +125,10 @@ variable "tags" {
 
 variable "permissions_boundaries" {
   type = object({
-    workspace_boundary      = optional(string, null)
-    workspace_boundary_name = optional(string, null)
-    workload_boundary       = optional(string, null)
-    workload_boundary_name  = optional(string, null)
+    workspace_boundary      = optional(string)
+    workspace_boundary_name = optional(string)
+    workload_boundary       = optional(string)
+    workload_boundary_name  = optional(string)
   })
   default = {}
 }
@@ -136,8 +136,8 @@ variable "permissions_boundaries" {
 variable "tfe_workspace" {
   type = object({
     add_permissions_boundary       = optional(bool, false)
-    agent_pool_id                  = optional(string, null)
-    agent_role_arns                = optional(list(string), null)
+    agent_pool_id                  = optional(string)
+    agent_role_arns                = optional(list(string))
     allow_destroy_plan             = optional(bool, true)
     assessments_enabled            = optional(bool, true)
     auth_method                    = optional(string, "iam_user")
@@ -149,30 +149,30 @@ variable "tfe_workspace" {
     clear_text_terraform_variables = optional(map(string), {})
     connect_vcs_repo               = optional(bool, true)
     default_region                 = string
-    description                    = optional(string, null)
+    description                    = optional(string)
     execution_mode                 = optional(string, "remote")
     file_triggers_enabled          = optional(bool, true)
     global_remote_state            = optional(bool, false)
-    name                           = optional(string, null)
+    name                           = optional(string)
     organization                   = string
-    policy                         = optional(string, null)
+    policy                         = optional(string)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                     = optional(string, null)
-    queue_all_runs                 = optional(bool, null)
+    project_id                     = optional(string)
+    queue_all_runs                 = optional(bool)
     remote_state_consumer_ids      = optional(set(string))
-    repository_identifier          = optional(string, null)
+    repository_identifier          = optional(string)
     role_name                      = optional(string, "TFEPipeline")
     sensitive_env_variables        = optional(map(string), {})
     sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})
     sensitive_terraform_variables  = optional(map(string), {})
-    ssh_key_id                     = optional(string, null)
-    terraform_version              = optional(string, null)
-    trigger_patterns               = optional(list(string), null)
+    ssh_key_id                     = optional(string)
+    terraform_version              = optional(string)
+    trigger_patterns               = optional(list(string))
     trigger_prefixes               = optional(list(string), ["modules"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
-    working_directory              = optional(string, null)
-    workspace_tags                 = optional(list(string), null)
+    working_directory              = optional(string)
+    workspace_tags                 = optional(list(string))
 
     notification_configuration = optional(list(object({
       destination_type = string
