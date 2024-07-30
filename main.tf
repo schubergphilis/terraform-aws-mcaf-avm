@@ -210,7 +210,7 @@ module "tfe_workspace" {
   trigger_patterns               = var.tfe_workspace.trigger_patterns
   trigger_prefixes               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_prefixes : null
   username                       = var.tfe_workspace.username
-  variable_set_ids               = merge({ "account-${local.account_variable_set.name}" : tfe_variable_set.account.id }, each.value.variable_set_ids)
+  variable_set_ids               = merge({ "account-${local.account_variable_set.name}" : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
   workspace_tags                 = var.tfe_workspace.workspace_tags
 }
