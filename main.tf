@@ -128,7 +128,6 @@ module "tfe_workspace" {
   source  = "schubergphilis/mcaf-workspace/aws"
   version = "~> 1.2.0"
 
-
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
   allow_destroy_plan             = var.tfe_workspace.allow_destroy_plan
