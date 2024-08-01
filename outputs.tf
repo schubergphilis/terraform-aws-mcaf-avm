@@ -1,4 +1,4 @@
-output "additional_tfe_workspace" {
+output "additional_tfe_workspaces" {
   value       = { for name, workspace in var.additional_tfe_workspaces : name => module.additional_tfe_workspaces[name].workspace_id }
   description = "Map of any additional Terraform Cloud workspace names and IDs"
 }

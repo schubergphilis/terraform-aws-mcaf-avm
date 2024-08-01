@@ -5,22 +5,18 @@ Terraform module providing an AWS Account Vending Machine (AVM). This module pro
 ## Workspace authentication
 
 This module provides three modes of workspace authentication:
+* (default) An IAM role using OpenID Connect integration with the AWS account. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
+* An IAM role using an external ID to authenticate with the AWS account in combination with using self-hosted Terraform Cloud agents.
+* An IAM user per workspace in the provisioned AWS account.
 
-* Using the default values, this module will create an IAM user per workspace in the provisioned AWS account.
-* An IAM role using OpenID Connect integration with the AWS account can be used. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
-* An IAM role using an external ID to authenticate with the AWS account can be used in combination with using self-hosted Terraform Cloud agents.
+Using one of the first 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
 
-Using one of the last 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
+### IAM Roles with OIDC (default)
 
-### IAM Roles with OIDC
+The [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials) feature creates an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables.
 
-To use [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials) for authentication:
-
-* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role_oidc`
-
-This will create an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables.
-
-> Using [multiple configurations](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration#specifying-multiple-configurations) (e.g. provider aliases), is currently not supported. Use one of the other two authentication modes if this is a requirement.
+> [!WARNING]
+> When using using self-hosted Terraform Cloud agents, ensure that your agents use v1.12.0+ when using [multiple configurations](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/specifying-multiple-configurations) (e.g. provider aliases).
 
 ### IAM Roles
 
@@ -43,6 +39,12 @@ provider "aws" {
   }
 }
 ```
+
+### IAM Users
+* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_user`.
+
+This will create an IAM user in the provisioned AWS account with the access key and secret access key added as environmental variables to the workspace. 
+
 
 ## Workspace team access
 
@@ -67,7 +69,8 @@ team_access = {
 
 More complete usage information can be found in the underlying [terraform-aws-mcaf-workspace module README](https://github.com/schubergphilis/terraform-aws-mcaf-workspace#team-access).
 
-Note: the team should already exist, this module will not create it for you.
+> [!WARNING]
+> The team should already exist, this module will not create it for you.
 
 ## AWS SSO Configuration
 
@@ -188,8 +191,8 @@ module "aws_account" {
   ...
 }
 ```
-
-Note: the `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
+> [!TIP]
+> The `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -236,7 +239,7 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 |------|-------------|------|---------|:--------:|
 | <a name="input_account"></a> [account](#input\_account) | AWS account settings | <pre>object({<br>    alias_prefix = optional(string)<br>    contact_billing = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    contact_operations = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    contact_security = optional(object({<br>      email_address = string<br>      name          = string<br>      phone_number  = string<br>      title         = string<br>    }), null)<br>    email                    = string<br>    environment              = optional(string)<br>    organizational_unit      = string<br>    provisioned_product_name = optional(string)<br>    sso_email                = string<br>    sso_firstname            = optional(string, "AWS Control Tower")<br>    sso_lastname             = optional(string, "Admin")<br>  })</pre> | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the account and default TFE workspace | `string` | n/a | yes |
-| <a name="input_tfe_workspace"></a> [tfe\_workspace](#input\_tfe\_workspace) | TFE workspace settings | <pre>object({<br>    add_permissions_boundary       = optional(bool, false)<br>    agent_pool_id                  = optional(string)<br>    agent_role_arns                = optional(list(string))<br>    allow_destroy_plan             = optional(bool, true)<br>    assessments_enabled            = optional(bool, true)<br>    auth_method                    = optional(string, "iam_user")<br>    auto_apply                     = optional(bool, false)<br>    auto_apply_run_trigger         = optional(bool, false)<br>    branch                         = optional(string, "main")<br>    clear_text_env_variables       = optional(map(string), {})<br>    clear_text_hcl_variables       = optional(map(string), {})<br>    clear_text_terraform_variables = optional(map(string), {})<br>    connect_vcs_repo               = optional(bool, true)<br>    default_region                 = string<br>    description                    = optional(string)<br>    execution_mode                 = optional(string, "remote")<br>    file_triggers_enabled          = optional(bool, true)<br>    global_remote_state            = optional(bool, false)<br>    name                           = optional(string)<br>    organization                   = string<br>    policy                         = optional(string)<br>    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br>    project_id                     = optional(string)<br>    queue_all_runs                 = optional(bool)<br>    remote_state_consumer_ids      = optional(set(string))<br>    repository_identifier          = optional(string)<br>    role_name                      = optional(string, "TFEPipeline")<br>    sensitive_env_variables        = optional(map(string), {})<br>    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})<br>    sensitive_terraform_variables  = optional(map(string), {})<br>    ssh_key_id                     = optional(string)<br>    terraform_version              = optional(string)<br>    trigger_patterns               = optional(list(string))<br>    trigger_prefixes               = optional(list(string), ["modules"])<br>    username                       = optional(string, "TFEPipeline")<br>    vcs_oauth_token_id             = string<br>    working_directory              = optional(string)<br>    workspace_tags                 = optional(list(string))<br><br>    notification_configuration = optional(list(object({<br>      destination_type = string<br>      enabled          = optional(bool, true)<br>      url              = string<br>      triggers = optional(list(string), [<br>        "run:created",<br>        "run:planning",<br>        "run:needs_attention",<br>        "run:applying",<br>        "run:completed",<br>        "run:errored",<br>      ])<br>    })), [])<br><br>    team_access = optional(map(object({<br>      access = optional(string, null),<br>      permissions = optional(object({<br>        run_tasks         = bool<br>        runs              = string<br>        sentinel_mocks    = string<br>        state_versions    = string<br>        variables         = string<br>        workspace_locking = bool<br>      }), null)<br>    })), {})<br>  })</pre> | n/a | yes |
+| <a name="input_tfe_workspace"></a> [tfe\_workspace](#input\_tfe\_workspace) | TFE workspace settings | <pre>object({<br>    add_permissions_boundary       = optional(bool, false)<br>    agent_pool_id                  = optional(string)<br>    agent_role_arns                = optional(list(string))<br>    allow_destroy_plan             = optional(bool, true)<br>    assessments_enabled            = optional(bool, true)<br>    auth_method                    = optional(string, "iam_role_oidc")<br>    auto_apply                     = optional(bool, false)<br>    auto_apply_run_trigger         = optional(bool, false)<br>    branch                         = optional(string, "main")<br>    clear_text_env_variables       = optional(map(string), {})<br>    clear_text_hcl_variables       = optional(map(string), {})<br>    clear_text_terraform_variables = optional(map(string), {})<br>    connect_vcs_repo               = optional(bool, true)<br>    default_region                 = string<br>    description                    = optional(string)<br>    execution_mode                 = optional(string, "remote")<br>    file_triggers_enabled          = optional(bool, true)<br>    global_remote_state            = optional(bool, false)<br>    name                           = optional(string)<br>    organization                   = string<br>    policy                         = optional(string)<br>    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br>    project_id                     = optional(string)<br>    queue_all_runs                 = optional(bool)<br>    remote_state_consumer_ids      = optional(set(string))<br>    repository_identifier          = optional(string)<br>    role_name                      = optional(string, "TFEPipeline")<br>    sensitive_env_variables        = optional(map(string), {})<br>    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})<br>    sensitive_terraform_variables  = optional(map(string), {})<br>    ssh_key_id                     = optional(string)<br>    terraform_version              = optional(string)<br>    trigger_patterns               = optional(list(string))<br>    trigger_prefixes               = optional(list(string), ["modules"])<br>    username                       = optional(string, "TFEPipeline")<br>    vcs_oauth_token_id             = string<br>    working_directory              = optional(string)<br>    workspace_tags                 = optional(list(string))<br><br>    notification_configuration = optional(list(object({<br>      destination_type = string<br>      enabled          = optional(bool, true)<br>      url              = string<br>      triggers = optional(list(string), [<br>        "run:created",<br>        "run:planning",<br>        "run:needs_attention",<br>        "run:applying",<br>        "run:completed",<br>        "run:errored",<br>      ])<br>    })), [])<br><br>    team_access = optional(map(object({<br>      access = optional(string, null),<br>      permissions = optional(object({<br>        run_tasks         = bool<br>        runs              = string<br>        sentinel_mocks    = string<br>        state_versions    = string<br>        variables         = string<br>        workspace_locking = bool<br>      }), null)<br>    })), {})<br>  })</pre> | n/a | yes |
 | <a name="input_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#input\_additional\_tfe\_workspaces) | Additional TFE workspaces | <pre>map(object({<br>    add_permissions_boundary       = optional(bool, false)<br>    agent_pool_id                  = optional(string)<br>    agent_role_arns                = optional(list(string))<br>    allow_destroy_plan             = optional(bool)<br>    assessments_enabled            = optional(bool)<br>    auth_method                    = optional(string)<br>    auto_apply                     = optional(bool, false)<br>    auto_apply_run_trigger         = optional(bool, false)<br>    branch                         = optional(string)<br>    clear_text_env_variables       = optional(map(string), {})<br>    clear_text_hcl_variables       = optional(map(string), {})<br>    clear_text_terraform_variables = optional(map(string), {})<br>    connect_vcs_repo               = optional(bool, true)<br>    default_region                 = optional(string)<br>    description                    = optional(string)<br>    execution_mode                 = optional(string)<br>    file_triggers_enabled          = optional(bool, true)<br>    global_remote_state            = optional(bool, false)<br>    name                           = optional(string)<br>    policy                         = optional(string)<br>    policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br>    project_id                     = optional(string)<br>    queue_all_runs                 = optional(bool)<br>    remote_state_consumer_ids      = optional(set(string))<br>    repository_identifier          = optional(string)<br>    role_name                      = optional(string)<br>    sensitive_env_variables        = optional(map(string), {})<br>    sensitive_hcl_variables        = optional(map(object({ sensitive = string })), {})<br>    sensitive_terraform_variables  = optional(map(string), {})<br>    ssh_key_id                     = optional(string)<br>    terraform_version              = optional(string)<br>    trigger_patterns               = optional(list(string))<br>    trigger_prefixes               = optional(list(string))<br>    username                       = optional(string)<br>    vcs_oauth_token_id             = optional(string)<br>    working_directory              = optional(string)<br>    workspace_tags                 = optional(list(string))<br><br>    notification_configuration = optional(list(object({<br>      destination_type = string<br>      enabled          = optional(bool, true)<br>      url              = string<br>      triggers = optional(list(string), [<br>        "run:created",<br>        "run:planning",<br>        "run:needs_attention",<br>        "run:applying",<br>        "run:completed",<br>        "run:errored",<br>      ])<br>    })), [])<br><br>    team_access = optional(map(object({<br>      access = optional(string, null),<br>      permissions = optional(object({<br>        run_tasks         = bool<br>        runs              = string<br>        sentinel_mocks    = string<br>        state_versions    = string<br>        variables         = string<br>        workspace_locking = bool<br>      }), null)<br>    })), {})<br>  }))</pre> | `{}` | no |
 | <a name="input_create_default_workspace"></a> [create\_default\_workspace](#input\_create\_default\_workspace) | Set to false to skip creating default workspace | `bool` | `true` | no |
 | <a name="input_path"></a> [path](#input\_path) | Optional path for all IAM users, user groups, roles, and customer managed policies created by this module | `string` | `"/"` | no |
@@ -247,7 +250,7 @@ Note: the `workspace_boundary` and `workload_boundary` can be templated files, `
 
 | Name | Description |
 |------|-------------|
-| <a name="output_additional_tfe_workspace"></a> [additional\_tfe\_workspace](#output\_additional\_tfe\_workspace) | Map of any additional Terraform Cloud workspace names and IDs |
+| <a name="output_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#output\_additional\_tfe\_workspaces) | Map of any additional Terraform Cloud workspace names and IDs |
 | <a name="output_environment"></a> [environment](#output\_environment) | The environment name |
 | <a name="output_id"></a> [id](#output\_id) | The AWS account ID |
 | <a name="output_name"></a> [name](#output\_name) | The AWS account name |
