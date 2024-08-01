@@ -140,7 +140,7 @@ variable "tfe_workspace" {
     agent_role_arns                = optional(list(string))
     allow_destroy_plan             = optional(bool, true)
     assessments_enabled            = optional(bool, true)
-    auth_method                    = optional(string, "iam_user")
+    auth_method                    = optional(string, "iam_role_oidc")
     auto_apply                     = optional(bool, false)
     auto_apply_run_trigger         = optional(bool, false)
     branch                         = optional(string, "main")

@@ -5,22 +5,18 @@ Terraform module providing an AWS Account Vending Machine (AVM). This module pro
 ## Workspace authentication
 
 This module provides three modes of workspace authentication:
+* (default) An IAM role using OpenID Connect integration with the AWS account. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
+* An IAM role using an external ID to authenticate with the AWS account in combination with using self-hosted Terraform Cloud agents.
+* An IAM user per workspace in the provisioned AWS account.
 
-* Using the default values, this module will create an IAM user per workspace in the provisioned AWS account.
-* An IAM role using OpenID Connect integration with the AWS account can be used. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
-* An IAM role using an external ID to authenticate with the AWS account can be used in combination with using self-hosted Terraform Cloud agents.
+Using one of the first 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
 
-Using one of the last 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
+### IAM Roles with OIDC (default)
 
-### IAM Roles with OIDC
+The [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials) feature creates an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables.
 
-To use [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials) for authentication:
-
-* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role_oidc`
-
-This will create an IAM role with a trust policy allowing the OIDC provider created as part of this module. The workspace will be configured to use OIDC by feeding the AWS provider with the right environment variables.
-
-> Using [multiple configurations](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration#specifying-multiple-configurations) (e.g. provider aliases), is currently not supported. Use one of the other two authentication modes if this is a requirement.
+> [!WARNING]
+> When using using self-hosted Terraform Cloud agents, ensure that your agents use v1.12.0+ when using [multiple configurations](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/specifying-multiple-configurations) (e.g. provider aliases).
 
 ### IAM Roles
 
@@ -43,6 +39,12 @@ provider "aws" {
   }
 }
 ```
+
+### IAM Users
+* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_user`.
+
+This will create an IAM user in the provisioned AWS account with the access key and secret access key added as environmental variables to the workspace. 
+
 
 ## Workspace team access
 
@@ -67,7 +69,8 @@ team_access = {
 
 More complete usage information can be found in the underlying [terraform-aws-mcaf-workspace module README](https://github.com/schubergphilis/terraform-aws-mcaf-workspace#team-access).
 
-Note: the team should already exist, this module will not create it for you.
+> [!WARNING]
+> The team should already exist, this module will not create it for you.
 
 ## AWS SSO Configuration
 
@@ -188,8 +191,8 @@ module "aws_account" {
   ...
 }
 ```
-
-Note: the `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
+> [!TIP]
+> The `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
