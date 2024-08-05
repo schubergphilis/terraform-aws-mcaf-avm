@@ -81,6 +81,7 @@ variable "additional_tfe_workspaces" {
     variable_set_ids               = optional(map(string), {})
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
+
     notification_configuration = optional(list(object({
       destination_type = string
       enabled          = optional(bool, true)
