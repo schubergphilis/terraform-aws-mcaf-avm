@@ -82,7 +82,7 @@ variable "additional_tfe_workspaces" {
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
 
-    notification_configuration = optional(list(object({
+    notification_configuration = optional(map(object({
       destination_type = string
       enabled          = optional(bool, true)
       url              = string
@@ -94,7 +94,7 @@ variable "additional_tfe_workspaces" {
         "run:completed",
         "run:errored",
       ])
-    })), [])
+    })), {})
 
     team_access = optional(map(object({
       access = optional(string, null),
@@ -187,7 +187,7 @@ variable "tfe_workspace" {
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
 
-    notification_configuration = optional(list(object({
+    notification_configuration = optional(map(object({
       destination_type = string
       enabled          = optional(bool, true)
       url              = string
@@ -199,7 +199,7 @@ variable "tfe_workspace" {
         "run:completed",
         "run:errored",
       ])
-    })), [])
+    })), {})
 
     team_access = optional(map(object({
       access = optional(string, null),
