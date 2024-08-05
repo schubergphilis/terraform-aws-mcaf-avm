@@ -5,9 +5,17 @@
 ### Variables (v4.0.0)
 - The variable `assessments_enabled` has been introduced with default set to `true`.
 - The default `auth_method` has been modified from `iam_user` to `iam_role_oidc`.
+- The variable `notification_configuration` has been modified from a `list(object)` to a `map(object)`. They key should be the name of the notification configuration as it will be displayed in Terraform Cloud.
 
 ### Outputs (v4.0.0)
 - `additional_tfe_workspace` has been renamed to `additional_tfe_workspaces`.
+
+### Behaviour (v4.0.0)
+
+The variables `account`, `environment`, and `workload_permissions_boundary_arn` are now consolidated into a single variable set per account. 
+This change reduces the total number of Terraform resources needed by allowing this set to be linked to workspaces, rather than duplicating variables for each one. 
+Upgrading to this version will recreate these variables.
+To add more account-specific variables, use the `account_variable_set` resource.
 
 ## Upgrading to v3.0.0
 
