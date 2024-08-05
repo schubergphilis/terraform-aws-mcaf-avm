@@ -183,8 +183,8 @@ variable "tfe_workspace" {
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
     variable_set_ids               = optional(map(string), {})
-    working_directory              = optional(string, null)
-    workspace_tags                 = optional(list(string), null)
+    working_directory              = optional(string)
+    workspace_tags                 = optional(list(string))
 
     notification_configuration = optional(list(object({
       destination_type = string
