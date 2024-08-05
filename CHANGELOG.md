@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.0.0 - 2024-08-05
+
+### What's Changed
+
+#### 🚀 Features
+
+* breaking: solve bug where `notification_configuration` can not contain sensitive values or values known after apply (#58) @marwinbaumannsbp
+* feat: account variable set (#55) @jorrite
+* breaking: set default auth mode from 'iam_user' to 'iam_role_oidc' and modify outputs (#57) @marwinbaumannsbp
+* feature: add support for the newest variables in mcaf-workspace, set `assessments_enabled` to true by default as is best practise, optimize optionals (#56) @marwinbaumannsbp
+
+#### 🐛 Bug Fixes
+
+* breaking: solve bug where `notification_configuration` can not contain sensitive values or values known after apply (#58) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v3.0.3...v4.0.0
+
 ## v3.0.3 - 2024-05-16
 
 ### What's Changed
