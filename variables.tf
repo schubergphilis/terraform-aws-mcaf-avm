@@ -30,6 +30,17 @@ variable "account" {
   description = "AWS account settings"
 }
 
+variable "account_variable_set" {
+  type = object({
+    name                           = optional(string)
+    clear_text_env_variables       = optional(map(string), {})
+    clear_text_hcl_variables       = optional(map(string), {})
+    clear_text_terraform_variables = optional(map(string), {})
+  })
+  default     = {}
+  description = "Settings of variable set that is attached to each workspace"
+}
+
 variable "additional_tfe_workspaces" {
   type = map(object({
     add_permissions_boundary       = optional(bool, false)
@@ -67,6 +78,7 @@ variable "additional_tfe_workspaces" {
     trigger_prefixes               = optional(list(string))
     username                       = optional(string)
     vcs_oauth_token_id             = optional(string)
+    variable_set_ids               = optional(map(string), {})
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
 
@@ -171,6 +183,7 @@ variable "tfe_workspace" {
     trigger_prefixes               = optional(list(string), ["modules"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = string
+    variable_set_ids               = optional(map(string), {})
     working_directory              = optional(string)
     workspace_tags                 = optional(list(string))
 
