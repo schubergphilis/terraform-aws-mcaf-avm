@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.0.1 - 2024-08-06
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: merge var.account_variable_set.clear_text_terraform_variables into local (#59) @jorrite
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.0.0...v4.0.1
+
 ## v4.0.0 - 2024-08-05
 
 ### What's Changed
