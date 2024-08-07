@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.0.2 - 2024-08-07
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: modify notification-settings behaviour to take "tfe_workspace"  value (#60) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.0.1...v4.0.2
+
 ## v4.0.1 - 2024-08-06
 
 ### What's Changed
