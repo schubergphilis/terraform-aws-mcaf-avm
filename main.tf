@@ -239,7 +239,7 @@ module "additional_tfe_workspaces" {
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
-  notification_configuration     = each.value.notification_configuration
+  notification_configuration     = each.value.notification_configuration != {} ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
   oidc_settings                  = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                           = var.path
