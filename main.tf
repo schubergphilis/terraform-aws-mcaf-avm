@@ -169,7 +169,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.0.0"
+  version = "~> 2.0.1"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -221,7 +221,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.0.0"
+  version = "~> 2.0.1"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -239,7 +239,7 @@ module "additional_tfe_workspaces" {
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
-  notification_configuration     = each.value.notification_configuration != {} ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
+  notification_configuration     = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
   oauth_token_id                 = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id) : null
   oidc_settings                  = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                           = var.path
@@ -256,7 +256,7 @@ module "additional_tfe_workspaces" {
   sensitive_hcl_variables        = each.value.sensitive_hcl_variables
   sensitive_terraform_variables  = each.value.sensitive_terraform_variables
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
-  team_access                    = each.value.team_access != {} ? each.value.team_access : var.tfe_workspace.team_access
+  team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
   trigger_patterns               = each.value.trigger_patterns != null ? each.value.trigger_patterns : var.tfe_workspace.trigger_patterns
