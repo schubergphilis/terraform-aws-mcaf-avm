@@ -94,7 +94,7 @@ variable "additional_tfe_workspaces" {
         "run:completed",
         "run:errored",
       ])
-    })), {})
+    })), null)
 
     team_access = optional(map(object({
       access = optional(string, null),
@@ -106,7 +106,7 @@ variable "additional_tfe_workspaces" {
         variables         = string
         workspace_locking = bool
       }), null)
-    })), {})
+    })), null)
   }))
   default     = {}
   description = "Additional TFE workspaces"
