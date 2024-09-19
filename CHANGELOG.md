@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.1.0 - 2024-09-19
+
+### What's Changed
+
+#### 🚀 Features
+
+* enhancement: bumps aws-mcaf-workspace module, note this version recreates the variable AWS_DEFAULT_REGION. (#62) @stefanwb
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.0.3...v4.1.0
+
 ## v4.0.3 - 2024-08-08
 
 ### What's Changed
