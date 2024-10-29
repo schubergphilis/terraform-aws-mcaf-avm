@@ -11,6 +11,13 @@ locals {
       // if workload_boundary_arn, add workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn
       var.permissions_boundaries.workload_boundary != null && var.permissions_boundaries.workload_boundary != null ? { workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn } : {}
     )
+
+    clear_text_env_variables = merge(
+      var.account_variable_set.clear_text_env_variables,
+      // Set the `DEFAULT_REGION` variable using the variable set. This way it is also applied to additional
+      // workspaces unless that workspace sets the `region` field.
+      { AWS_DEFAULT_REGION = var.tfe_workspace.default_region },
+    )
   }
 
   tfe_workspace = {
@@ -132,7 +139,7 @@ resource "tfe_variable_set" "account" {
 }
 
 resource "tfe_variable" "account_variable_set_clear_text_env_variables" {
-  for_each = var.account_variable_set.clear_text_env_variables
+  for_each = local.account_variable_set.clear_text_env_variables
 
   key             = each.key
   value           = each.value
@@ -169,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.0"
+  version = "~> 2.1.1"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -196,7 +203,6 @@ module "tfe_workspace" {
   policy_arns                    = var.tfe_workspace.policy_arns
   project_id                     = var.tfe_workspace.project_id
   queue_all_runs                 = var.tfe_workspace.queue_all_runs
-  region                         = var.tfe_workspace.default_region
   remote_state_consumer_ids      = var.tfe_workspace.remote_state_consumer_ids
   repository_identifier          = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
   role_name                      = var.tfe_workspace.role_name
@@ -221,7 +227,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.0"
+  version = "~> 2.1.1"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -248,7 +254,7 @@ module "additional_tfe_workspaces" {
   policy_arns                    = each.value.policy_arns
   project_id                     = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
   queue_all_runs                 = each.value.queue_all_runs
-  region                         = coalesce(each.value.default_region, var.tfe_workspace.default_region)
+  region                         = each.value.default_region
   remote_state_consumer_ids      = each.value.remote_state_consumer_ids
   repository_identifier          = each.value.connect_vcs_repo != false ? coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier) : null
   role_name                      = coalesce(each.value.role_name, "TFEPipeline${replace(title(each.key), "/[_-]/", "")}")
