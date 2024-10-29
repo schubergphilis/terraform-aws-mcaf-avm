@@ -14,7 +14,8 @@ locals {
 
     clear_text_env_variables = merge(
       var.account_variable_set.clear_text_env_variables,
-      // always add the default region
+      // Set the `DEFAULT_REGION` variable using the variable set. This way it is also applied to additional
+      // workspaces unless that workspace sets the `region` field.
       { AWS_DEFAULT_REGION = var.tfe_workspace.default_region },
     )
   }
@@ -175,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.0"
+  version = "~> 2.1.1"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -226,7 +227,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.0"
+  version = "~> 2.1.1"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
