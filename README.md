@@ -218,8 +218,8 @@ module "aws_account" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_account"></a> [account](#module\_account) | schubergphilis/mcaf-account/aws | ~> 0.5.1 |
-| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | schubergphilis/mcaf-workspace/aws | ~> 2.1.0 |
-| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | schubergphilis/mcaf-workspace/aws | ~> 2.1.0 |
+| <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | schubergphilis/mcaf-workspace/aws | ~> 2.1.1 |
+| <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | schubergphilis/mcaf-workspace/aws | ~> 2.1.1 |
 
 ## Resources
 
