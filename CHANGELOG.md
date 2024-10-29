@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.2.0 - 2024-10-29
+
+### What's Changed
+
+#### 🚀 Features
+
+* feature: add the region environmental variable to the variable set instead of to each workspace (#63) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.1.0...v4.2.0
+
 ## v4.1.0 - 2024-09-19
 
 ### What's Changed
