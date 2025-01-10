@@ -176,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.1"
+  version = "~> 2.2.0"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -192,6 +192,7 @@ module "tfe_workspace" {
   description                    = var.tfe_workspace.description
   execution_mode                 = var.tfe_workspace.execution_mode
   file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
+  github_app_installation_id     = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_github_app_installation_id : null
   global_remote_state            = var.tfe_workspace.global_remote_state
   name                           = coalesce(var.tfe_workspace.name, var.name)
   notification_configuration     = var.tfe_workspace.notification_configuration
@@ -227,7 +228,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.1.1"
+  version = "~> 2.2.0"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -243,6 +244,7 @@ module "additional_tfe_workspaces" {
   description                    = each.value.description
   execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
+  github_app_installation_id     = each.value.connect_vcs_repo != false ? coalesce(each.value.vcs_github_app_installation_id, var.tfe_workspace.vcs_github_app_installation_id) : null
   global_remote_state            = each.value.global_remote_state
   name                           = coalesce(each.value.name, each.key)
   notification_configuration     = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
