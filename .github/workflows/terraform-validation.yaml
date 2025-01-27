@@ -60,7 +60,7 @@ jobs:
           terraform init
           terraform test
 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         if: github.event_name == 'pull_request' || always()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
