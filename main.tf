@@ -176,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.2.0"
+  version = "~> 2.2.1"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -210,6 +210,7 @@ module "tfe_workspace" {
   sensitive_env_variables        = var.tfe_workspace.sensitive_env_variables
   sensitive_hcl_variables        = var.tfe_workspace.sensitive_hcl_variables
   sensitive_terraform_variables  = var.tfe_workspace.sensitive_terraform_variables
+  speculative_enabled            = var.tfe_workspace.speculative_enabled
   ssh_key_id                     = var.tfe_workspace.ssh_key_id
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
@@ -228,7 +229,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.2.0"
+  version = "~> 2.2.1"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -263,6 +264,7 @@ module "additional_tfe_workspaces" {
   sensitive_env_variables        = each.value.sensitive_env_variables
   sensitive_hcl_variables        = each.value.sensitive_hcl_variables
   sensitive_terraform_variables  = each.value.sensitive_terraform_variables
+  speculative_enabled            = each.value.speculative_enabled
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
   team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
