@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v4.4.0 - 2025-01-28
+
+### What's Changed
+
+#### 🚀 Features
+
+* feat(options): Add speculative_enabled option  (#66) @stromp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.3.1...v4.4.0
+
 ## v4.3.1 - 2025-01-10
 
 ### What's Changed
