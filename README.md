@@ -1,4 +1,4 @@
-# terraform-aws-mcaf-avm
+ terraform-aws-mcaf-avm
 
 Terraform module providing an AWS Account Vending Machine (AVM). This module provisions an AWS account using the "AWS Control Tower Account Factory" product in Service Catalog with one or more Terraform Cloud/Enterprise (TFE) workspaces backed by a VCS project.
 
