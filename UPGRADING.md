@@ -1,12 +1,23 @@
 # UPGRADING
 
+## Upgrading to v4.1.0
+
+### Variables (v4.1.0)
+- The default value for `tfe_workspace.trigger_prefixes` has been removed in favor of the new and recommended `tfe_workspace.trigger_patterns`.
+
+### Behaviour (v4.1.0)
+- The module now supports setting either `trigger_prefixes` or `trigger_patterns` for automatic run triggering in Terraform Cloud workspaces, with a preference for the latter.
+Upgrading to this version, terraform will throw an error while running the plan: `"trigger_patterns": conflicts with trigger_prefixes`. This is because `tfe_workspace.trigger_patterns` now has a default value while the old variable `tfe_workspace.trigger_prefixes` is still set.
+In order to mitigate the conflict you can either:
+   - Opt-out of using `trigger_patterns` by explicitly setting the value of `tfe_workspace.trigger_patterns` to `null` while consuming the module, or
+   - Migrate from `trigger_prefixes` to `trigger_patterns`. This is the recommended approach.
+
 ## Upgrading to v4.0.0
 
 ### Variables (v4.0.0)
 - The variable `assessments_enabled` has been introduced with default set to `true`.
 - The default `auth_method` has been modified from `iam_user` to `iam_role_oidc`.
 - The variable `notification_configuration` has been modified from a `list(object)` to a `map(object)`. They key should be the name of the notification configuration as it will be displayed in Terraform Cloud.
-- The default value for `tfe_workspace.trigger_prefixes` has been removed in favor of the new and recommended `tfe_workspace.trigger_patterns`.
 
 ### Outputs (v4.0.0)
 - `additional_tfe_workspace` has been renamed to `additional_tfe_workspaces`.
@@ -17,12 +28,6 @@
 This change reduces the total number of Terraform resources needed by allowing this set to be linked to workspaces, rather than duplicating variables for each one.
 Upgrading to this version will recreate these variables.
 To add more account-specific variables, use the `account_variable_set` resource.
-
-- The module now supports setting either `trigger_prefixes` or `trigger_patterns` for automatic run triggering in Terraform Cloud workspaces, with a preference for the latter.
-Upgrading to this version, terraform will throw an error while running the plan: `"trigger_patterns": conflicts with trigger_prefixes`. This is because `tfe_workspace.trigger_patterns` now has a default value while the old variable `tfe_workspace.trigger_prefixes` is still set.
-In order to mitigate the conflict you can either:
-   - Opt-out of using `trigger_patterns` by explicitly setting the value of `tfe_workspace.trigger_patterns` to `null` while consuming the module, or
-   - Migrate from `trigger_prefixes` to `trigger_patterns`. This is the recommended approach.
 
 ## Upgrading to v3.0.0
 
