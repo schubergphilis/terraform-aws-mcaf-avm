@@ -1,16 +1,38 @@
 # UPGRADING
 
-## Upgrading to v4.1.0
+## Upgrading to v5.0.0
 
-### Variables (v4.1.0)
-- The default value for `tfe_workspace.trigger_prefixes` has been removed in favor of the new and recommended `tfe_workspace.trigger_patterns`.
+`v5.0.0` is not backwards compatible with `v4.4.0` due to the deprecation of `tfe_workspace.trigger_prefixes`.
 
-### Behaviour (v4.1.0)
-- The module now supports setting either `trigger_prefixes` or `trigger_patterns` for automatic run triggering in Terraform Cloud workspaces, with a preference for the latter.
-Upgrading to this version, terraform will throw an error while running the plan: `"trigger_patterns": conflicts with trigger_prefixes`. This is because `tfe_workspace.trigger_patterns` now has a default value while the old variable `tfe_workspace.trigger_prefixes` is still set.
-In order to mitigate the conflict you can either:
-   - Opt-out of using `trigger_patterns` by explicitly setting the value of `tfe_workspace.trigger_patterns` to `null` while consuming the module, or
-   - Migrate from `trigger_prefixes` to `trigger_patterns`. This is the recommended approach.
+### Variables (v5.0.0)
+- Input variable removed: `tfe_workspace.trigger_prefixes`
+- Default value added: `tfe_workspace.trigger_patterns`. `null` -> `["/modules/**/*"]`.
+
+### Behaviour (v5.0.0)
+
+Terraform Cloud now defaults to **trigger patterns** instead of **trigger prefixes**. Trigger prefixes will be deprecated in the future, so migration is recommended.
+Trigger patterns provide greater flexibility, efficiency, and control over how your workspaces respond to changes in your repositories.
+
+#### What You Need to Do
+
+If you are using the module's defaults for these variables, you do not need to do anything. The workspaces will automatically be modified to use trigger patterns.
+If you have modified the defaults, you will need to take action otherwise Terraform will fail with `"trigger_patterns": conflicts with trigger_prefixes`.
+
+Migrate to `trigger_patterns`
+
+1. **Remove** the `trigger_prefixes` input
+2. **Set** equivalent values in `trigger_patterns`
+
+**Example:**
+```hcl
+# Before
+tfe_workspace.trigger_prefixes = ["envs/prod/"]
+
+# After
+tfe_workspace.trigger_patterns = ["/envs/prod/**/*"]
+```
+
+See [documentation on trigger runs when files in specified paths change](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/settings/vcs#only-trigger-runs-when-files-in-specified-paths-change).
 
 ## Upgrading to v4.0.0
 
