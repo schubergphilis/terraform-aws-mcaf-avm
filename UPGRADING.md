@@ -18,9 +18,9 @@ Trigger patterns provide greater flexibility, efficiency, and control over how y
 If you are using the module's defaults for these variables, you do not need to do anything. The workspaces will automatically be modified to use trigger patterns.
 If you have modified the defaults, you will need to take action otherwise Terraform will fail with `"trigger_patterns": conflicts with trigger_prefixes`.
 
-Migrate to `trigger_patterns`
+#### How to migrate to `trigger_patterns`:
 
-1. **Remove** the `trigger_prefixes` input
+1. **Remove** the `trigger_prefixes` input when using this module
 2. **Set** equivalent values in `trigger_patterns`
 
 **Example:**
