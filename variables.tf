@@ -181,7 +181,7 @@ variable "tfe_workspace" {
     speculative_enabled            = optional(bool, true)
     ssh_key_id                     = optional(string)
     terraform_version              = optional(string)
-    trigger_patterns               = optional(list(string), ["/modules/**/*"])
+    trigger_patterns               = optional(list(string), ["modules/**/*"])
     username                       = optional(string, "TFEPipeline")
     vcs_oauth_token_id             = optional(string)
     vcs_github_app_installation_id = optional(string)

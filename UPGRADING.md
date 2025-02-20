@@ -6,7 +6,7 @@
 
 ### Variables (v5.0.0)
 - Input variable removed: `tfe_workspace.trigger_prefixes`
-- Default value added: `tfe_workspace.trigger_patterns`. `null` -> `["/modules/**/*"]`.
+- Default value added: `tfe_workspace.trigger_patterns`. `null` -> `["modules/**/*"]`.
 
 ### Behaviour (v5.0.0)
 
@@ -29,7 +29,7 @@ If you have modified the defaults, you will need to take action otherwise Terraf
 tfe_workspace.trigger_prefixes = ["envs/prod/"]
 
 # After
-tfe_workspace.trigger_patterns = ["/envs/prod/**/*"]
+tfe_workspace.trigger_patterns = ["envs/prod/**/*"]
 ```
 
 See [documentation on trigger runs when files in specified paths change](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/settings/vcs#only-trigger-runs-when-files-in-specified-paths-change).

@@ -176,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.3.0"
+  version = "~> 2.4.0"
 
   agent_pool_id                  = var.tfe_workspace.agent_pool_id
   agent_role_arns                = var.tfe_workspace.agent_role_arns
@@ -215,7 +215,7 @@ module "tfe_workspace" {
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
-  trigger_patterns               = var.tfe_workspace.connect_vcs_repo != false ? concat(var.tfe_workspace.trigger_patterns, tolist(coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory))) : null
+  trigger_patterns               = var.tfe_workspace.connect_vcs_repo != false ? concat(var.tfe_workspace.trigger_patterns, [format("%s/**/*", coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory))]) : null
   username                       = var.tfe_workspace.username
   variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
@@ -228,7 +228,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.3.0"
+  version = "~> 2.4.0"
 
   agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -268,7 +268,7 @@ module "additional_tfe_workspaces" {
   team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
-  trigger_patterns               = each.value.connect_vcs_repo != false ? concat(coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns), tolist(coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}"))) : null
+  trigger_patterns               = each.value.connect_vcs_repo != false ? concat(coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns), [format("%s/**/*", coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}"))]) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")
