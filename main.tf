@@ -215,7 +215,7 @@ module "tfe_workspace" {
   team_access                    = var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = var.tfe_workspace.terraform_version
-  trigger_patterns               = var.tfe_workspace.connect_vcs_repo != false ? concat(var.tfe_workspace.trigger_patterns, [format("%s/**/*", coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory))]) : null
+  trigger_patterns               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_patterns : null
   username                       = var.tfe_workspace.username
   variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
   working_directory              = coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory)
@@ -268,7 +268,7 @@ module "additional_tfe_workspaces" {
   team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
   terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
-  trigger_patterns               = each.value.connect_vcs_repo != false ? concat(coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns), [format("%s/**/*", coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}"))]) : null
+  trigger_patterns               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
   working_directory              = coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}")

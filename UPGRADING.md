@@ -2,28 +2,30 @@
 
 ## Upgrading to v5.0.0
 
-`v5.0.0` is not backwards compatible with `v4.4.0` due to the deprecation of `tfe_workspace.trigger_prefixes`.
+`v5.0.0` is not backwards compatible with `v4.4.0` due to the deprecation of `tfe_workspace.trigger_prefixes` & `additional_tfe_workspaces.trigger_prefixes`.
 
 ### Variables (v5.0.0)
-- Input variable removed: `tfe_workspace.trigger_prefixes`
+
+- Variable removed: `tfe_workspace.trigger_prefixes` & `additional_tfe_workspaces.trigger_prefixes`.
 - Default value added: `tfe_workspace.trigger_patterns`. `null` -> `["modules/**/*"]`.
 
 ### Behaviour (v5.0.0)
 
 Terraform Cloud now defaults to **trigger patterns** instead of **trigger prefixes**. Trigger prefixes will be deprecated in the future, so migration is recommended.
-Trigger patterns provide greater flexibility, efficiency, and control over how your workspaces respond to changes in your repositories.
+Trigger patterns provide greater flexibility, efficiency, and control over how your workspaces respond to changes in your repositories. To simplify the module and avoid unnecessary complexity, support for `trigger_prefixes` has been removed.
 
 #### What You Need to Do
 
 If you are using the module's defaults for these variables, you do not need to do anything. The workspaces will automatically be modified to use trigger patterns.
-If you have modified the defaults, you will need to take action otherwise Terraform will fail with `"trigger_patterns": conflicts with trigger_prefixes`.
+If you have modified the defaults, you will need to take action otherwise Terraform will fail.
 
-#### How to migrate to `trigger_patterns`:
+#### How to migrate to `trigger_patterns`
 
 1. **Remove** the `trigger_prefixes` input when using this module
 2. **Set** equivalent values in `trigger_patterns`
 
 **Example:**
+
 ```hcl
 # Before
 tfe_workspace.trigger_prefixes = ["envs/prod/"]
@@ -37,11 +39,13 @@ See [documentation on trigger runs when files in specified paths change](https:/
 ## Upgrading to v4.0.0
 
 ### Variables (v4.0.0)
+
 - The variable `assessments_enabled` has been introduced with default set to `true`.
 - The default `auth_method` has been modified from `iam_user` to `iam_role_oidc`.
 - The variable `notification_configuration` has been modified from a `list(object)` to a `map(object)`. They key should be the name of the notification configuration as it will be displayed in Terraform Cloud.
 
 ### Outputs (v4.0.0)
+
 - `additional_tfe_workspace` has been renamed to `additional_tfe_workspaces`.
 
 ### Behaviour (v4.0.0)
