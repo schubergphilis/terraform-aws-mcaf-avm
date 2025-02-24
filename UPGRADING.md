@@ -1,19 +1,57 @@
 # UPGRADING
 
+## Upgrading to v5.0.0
+
+`v5.0.0` is not backwards compatible with `v4.4.0` due to the deprecation of `tfe_workspace.trigger_prefixes` & `additional_tfe_workspaces.trigger_prefixes`.
+
+### Variables (v5.0.0)
+
+- Variable removed: `tfe_workspace.trigger_prefixes` & `additional_tfe_workspaces.trigger_prefixes`.
+- Default value added: `tfe_workspace.trigger_patterns`. `null` -> `["modules/**/*"]`.
+
+### Behaviour (v5.0.0)
+
+Terraform Cloud now defaults to **trigger patterns** instead of **trigger prefixes**. Trigger prefixes will be deprecated in the future, so migration is recommended.
+Trigger patterns provide greater flexibility, efficiency, and control over how your workspaces respond to changes in your repositories. To simplify the module and avoid unnecessary complexity, support for `trigger_prefixes` has been removed.
+
+#### What You Need to Do
+
+If you are using the module's defaults for these variables, you do not need to do anything. The workspaces will automatically be modified to use trigger patterns.
+If you have modified the defaults, you will need to take action otherwise Terraform will fail.
+
+#### How to migrate to `trigger_patterns`
+
+1. **Remove** the `trigger_prefixes` input when using this module
+2. **Set** equivalent values in `trigger_patterns`
+
+**Example:**
+
+```hcl
+# Before
+tfe_workspace.trigger_prefixes = ["envs/prod/"]
+
+# After
+tfe_workspace.trigger_patterns = ["envs/prod/**/*"]
+```
+
+See [documentation on trigger runs when files in specified paths change](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/settings/vcs#only-trigger-runs-when-files-in-specified-paths-change).
+
 ## Upgrading to v4.0.0
 
 ### Variables (v4.0.0)
+
 - The variable `assessments_enabled` has been introduced with default set to `true`.
 - The default `auth_method` has been modified from `iam_user` to `iam_role_oidc`.
 - The variable `notification_configuration` has been modified from a `list(object)` to a `map(object)`. They key should be the name of the notification configuration as it will be displayed in Terraform Cloud.
 
 ### Outputs (v4.0.0)
+
 - `additional_tfe_workspace` has been renamed to `additional_tfe_workspaces`.
 
 ### Behaviour (v4.0.0)
 
-The variables `account`, `environment`, and `workload_permissions_boundary_arn` are now consolidated into a single variable set per account. 
-This change reduces the total number of Terraform resources needed by allowing this set to be linked to workspaces, rather than duplicating variables for each one. 
+- The variables `account`, `environment`, and `workload_permissions_boundary_arn` are now consolidated into a single variable set per account.
+This change reduces the total number of Terraform resources needed by allowing this set to be linked to workspaces, rather than duplicating variables for each one.
 Upgrading to this version will recreate these variables.
 To add more account-specific variables, use the `account_variable_set` resource.
 
@@ -68,7 +106,7 @@ Updated requirements:
 
 ## Upgrading to v1.1.0
 
-`v1.1.0` is not backwards compatible with `v1.0.0`. First follow the steps to upgrade to `v1.0.0`. The option to automatically create email address with Office 365 has been removed. 
+`v1.1.0` is not backwards compatible with `v1.0.0`. First follow the steps to upgrade to `v1.0.0`. The option to automatically create email address with Office 365 has been removed.
 
 ### Variables (v1.1.0)
 This upgrade requires the following changes:
@@ -77,7 +115,7 @@ This upgrade requires the following changes:
 
 ## Upgrading to v1.0.0
 
-`v1.0.0` is not backward compatible with `v0.4.1` because terraform-aws-mcaf-workspace changed the variables it uses to connect Terraform workspaces to a VCS. 
+`v1.0.0` is not backward compatible with `v0.4.1` because terraform-aws-mcaf-workspace changed the variables it uses to connect Terraform workspaces to a VCS.
 
 ### Variables (v1.0.0)
 This upgrade requires the following changes:
