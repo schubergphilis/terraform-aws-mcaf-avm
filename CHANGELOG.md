@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v5.0.0 - 2025-02-24
+
+### What's Changed
+
+#### 🚀 Features
+
+* breaking: deprecate trigger_prefixes (#67) @noobnesz
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v4.4.0...v5.0.0
+
 ## v4.4.0 - 2025-01-28
 
 ### What's Changed
