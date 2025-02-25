@@ -1,0 +1,14 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# CheckOv pre-commit external modules path
+**/.external_modules/*
+
+.terraform.lock.hcl
