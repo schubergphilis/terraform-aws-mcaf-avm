@@ -1,5 +1,9 @@
 # UPGRADING
 
+## Upgrading to v6.0.0
+
+`v6.0.0` introduces a change that is not backwards compatible when the `name` property of `var.additional_tfe_workspaces` is specified and a different key is used in the provided map. Currently, the key is utilized to generate the role name, ignoring the specified `name` property. To correctly override the name field, it should also be used to create the `role_name`. To upgrade without any issues, ensure that the key matches the name in the provided `additional_tfe_workspaces`.
+
 ## Upgrading to v5.0.0
 
 `v5.0.0` is not backwards compatible with `v4.4.0` due to the deprecation of `tfe_workspace.trigger_prefixes` & `additional_tfe_workspaces.trigger_prefixes`.
