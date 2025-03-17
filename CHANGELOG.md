@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v6.1.0 - 2025-03-17
+
+### What's Changed
+
+Note: This version bumps the Terraform required version to `>= 1.7.0`, due to dependency requirements.
+
+#### 🚀 Features
+
+* enhancement: bump aws-mcaf-workspace to 2.5.x (#70) @mlflr
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v6.0.1...v6.1.0
+
 ## v6.0.1 - 2025-02-27
 
 ### What's Changed
