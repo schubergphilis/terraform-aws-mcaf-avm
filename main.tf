@@ -267,7 +267,7 @@ module "additional_tfe_workspaces" {
   ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
   team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
   terraform_organization         = var.tfe_workspace.organization
-  terraform_version              = each.value.terraform_version != null ? each.value.terraform_version : var.tfe_workspace.terraform_version
+  terraform_version              = each.value.terraform_version != null ? (each.value.terraform_version == "" ? null : each.value.terraform_version) : var.tfe_workspace.terraform_version
   trigger_patterns               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns) : null
   username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
   variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
