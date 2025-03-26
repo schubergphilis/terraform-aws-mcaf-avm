@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v6.2.0 - 2025-03-26
+
+### What's Changed
+
+#### 🚀 Features
+
+* enhancement: Ignore terraform_version when "" is provided in var.additional_tfe_workspaces.terraform_version (#71) @sbkg0002
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v6.1.0...v6.2.0
+
 ## v6.1.0 - 2025-03-17
 
 ### What's Changed
