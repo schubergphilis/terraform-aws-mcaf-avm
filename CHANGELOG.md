@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v6.2.2 - 2025-04-29
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: output permission boundary names (#73) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v6.2.1...v6.2.2
+
 ## v6.2.1 - 2025-03-28
 
 ### What's Changed
