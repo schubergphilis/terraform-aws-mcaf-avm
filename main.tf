@@ -47,8 +47,9 @@ provider "aws" {
 }
 
 module "account" {
-  source  = "schubergphilis/mcaf-account/aws"
-  version = "~> 0.5.1"
+#  source  = "schubergphilis/mcaf-account/aws"
+#  version = "~> 0.5.1"
+  source = "github.com/schubergphilis/terraform-aws-mcaf-account?ref=test-updated-mcaf-provider"
 
   account                  = var.name
   email                    = var.account.email
