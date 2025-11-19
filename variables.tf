@@ -51,6 +51,8 @@ variable "additional_tfe_workspaces" {
     auth_method                    = optional(string)
     auto_apply                     = optional(bool, false)
     auto_apply_run_trigger         = optional(bool, false)
+    auto_destroy_activity_duration = optional(string)
+    auto_destroy_at                = optional(string)
     branch                         = optional(string)
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
@@ -60,6 +62,7 @@ variable "additional_tfe_workspaces" {
     description                    = optional(string)
     execution_mode                 = optional(string)
     file_triggers_enabled          = optional(bool, true)
+    force_delete                   = optional(bool, false)
     global_remote_state            = optional(bool, false)
     name                           = optional(string)
     policy                         = optional(string)
@@ -82,7 +85,8 @@ variable "additional_tfe_workspaces" {
     vcs_github_app_installation_id = optional(string)
     vcs_oauth_token_id             = optional(string)
     working_directory              = optional(string)
-    workspace_tags                 = optional(list(string))
+    workspace_map_tags             = optional(map(string))
+    workspace_tags                 = optional(list(string)) # (**DEPRECATED**)
 
     notification_configuration = optional(map(object({
       destination_type = string
@@ -157,6 +161,8 @@ variable "tfe_workspace" {
     auth_method                    = optional(string, "iam_role_oidc")
     auto_apply                     = optional(bool, false)
     auto_apply_run_trigger         = optional(bool, false)
+    auto_destroy_activity_duration = optional(string)
+    auto_destroy_at                = optional(string)
     branch                         = optional(string, "main")
     clear_text_env_variables       = optional(map(string), {})
     clear_text_hcl_variables       = optional(map(string), {})
@@ -166,9 +172,10 @@ variable "tfe_workspace" {
     description                    = optional(string)
     execution_mode                 = optional(string, "remote")
     file_triggers_enabled          = optional(bool, true)
+    force_delete                   = optional(bool, false)
     global_remote_state            = optional(bool, false)
     name                           = optional(string)
-    organization                   = string
+    organization                   = optional(string)
     policy                         = optional(string)
     policy_arns                    = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     project_id                     = optional(string)
@@ -189,7 +196,8 @@ variable "tfe_workspace" {
     vcs_github_app_installation_id = optional(string)
     vcs_oauth_token_id             = optional(string)
     working_directory              = optional(string)
-    workspace_tags                 = optional(list(string))
+    workspace_map_tags             = optional(map(string))
+    workspace_tags                 = optional(list(string)) # (**DEPRECATED**)
 
     notification_configuration = optional(map(object({
       destination_type = string

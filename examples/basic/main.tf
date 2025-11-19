@@ -6,7 +6,9 @@ provider "mcaf" {
   aws {}
 }
 
-provider "tfe" {}
+provider "tfe" {
+  organization = "myorg"
+}
 
 module "aws_account" {
   source = "../.."
@@ -22,7 +24,6 @@ module "aws_account" {
   tfe_workspace = {
     default_region        = "eu-west-1"
     repository_identifier = "myorg/myworkspacerepo"
-    organization          = "myorg"
     vcs_oauth_token_id    = "oauth-token-id"
   }
 }
