@@ -8,14 +8,18 @@ terraform {
       source  = "schubergphilis/mcaf"
       version = ">= 0.4.2"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.0.0"
+    }
     tfe = {
       source  = "hashicorp/tfe"
-      version = ">= 0.61.0"
+      version = ">= 0.67.1"
     }
     tls = {
       source  = "hashicorp/tls"
       version = ">= 4.0.4"
     }
   }
-  required_version = ">= 1.7.0"
+  required_version = ">= 1.9.0"
 }
