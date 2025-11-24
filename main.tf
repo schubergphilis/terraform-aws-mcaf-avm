@@ -176,54 +176,55 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.6.0"
+  version = "~> 2.7.0"
 
-  agent_pool_id                  = var.tfe_workspace.agent_pool_id
-  agent_role_arns                = var.tfe_workspace.agent_role_arns
-  allow_destroy_plan             = var.tfe_workspace.allow_destroy_plan
-  assessments_enabled            = var.tfe_workspace.assessments_enabled
-  auth_method                    = var.tfe_workspace.auth_method
-  auto_apply                     = var.tfe_workspace.auto_apply
-  auto_apply_run_trigger         = var.tfe_workspace.auto_apply_run_trigger
-  auto_destroy_activity_duration = var.tfe_workspace.auto_destroy_activity_duration
-  auto_destroy_at                = var.tfe_workspace.auto_destroy_at
-  branch                         = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
-  clear_text_env_variables       = var.tfe_workspace.clear_text_env_variables
-  clear_text_hcl_variables       = var.tfe_workspace.clear_text_hcl_variables
-  clear_text_terraform_variables = var.tfe_workspace.clear_text_terraform_variables
-  description                    = var.tfe_workspace.description
-  execution_mode                 = var.tfe_workspace.execution_mode
-  file_triggers_enabled          = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
-  force_delete                   = var.tfe_workspace.force_delete
-  github_app_installation_id     = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_github_app_installation_id : null
-  global_remote_state            = var.tfe_workspace.global_remote_state
-  name                           = coalesce(var.tfe_workspace.name, var.name)
-  notification_configuration     = var.tfe_workspace.notification_configuration
-  oauth_token_id                 = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
-  oidc_settings                  = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
-  path                           = var.path
-  permissions_boundary_arn       = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
-  policy                         = var.tfe_workspace.policy
-  policy_arns                    = var.tfe_workspace.policy_arns
-  project_id                     = var.tfe_workspace.project_id
-  queue_all_runs                 = var.tfe_workspace.queue_all_runs
-  remote_state_consumer_ids      = var.tfe_workspace.remote_state_consumer_ids
-  repository_identifier          = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
-  role_name                      = var.tfe_workspace.role_name
-  sensitive_env_variables        = var.tfe_workspace.sensitive_env_variables
-  sensitive_hcl_variables        = var.tfe_workspace.sensitive_hcl_variables
-  sensitive_terraform_variables  = var.tfe_workspace.sensitive_terraform_variables
-  speculative_enabled            = var.tfe_workspace.speculative_enabled
-  ssh_key_id                     = var.tfe_workspace.ssh_key_id
-  team_access                    = var.tfe_workspace.team_access
-  terraform_organization         = var.tfe_workspace.organization
-  terraform_version              = var.tfe_workspace.terraform_version
-  trigger_patterns               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_patterns : null
-  username                       = var.tfe_workspace.username
-  variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
-  working_directory              = var.tfe_workspace.set_working_directory ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
-  workspace_map_tags             = var.tfe_workspace.workspace_map_tags
-  workspace_tags                 = var.tfe_workspace.workspace_tags
+  agent_pool_id                                = var.tfe_workspace.agent_pool_id
+  agent_role_arns                              = var.tfe_workspace.agent_role_arns
+  allow_destroy_plan                           = var.tfe_workspace.allow_destroy_plan
+  assessments_enabled                          = var.tfe_workspace.assessments_enabled
+  auth_method                                  = var.tfe_workspace.auth_method
+  auto_apply                                   = var.tfe_workspace.auto_apply
+  auto_apply_run_trigger                       = var.tfe_workspace.auto_apply_run_trigger
+  auto_destroy_activity_duration               = var.tfe_workspace.auto_destroy_activity_duration
+  auto_destroy_at                              = var.tfe_workspace.auto_destroy_at
+  branch                                       = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.branch : null
+  clear_text_env_variables                     = var.tfe_workspace.clear_text_env_variables
+  clear_text_hcl_variables                     = var.tfe_workspace.clear_text_hcl_variables
+  clear_text_terraform_variables               = var.tfe_workspace.clear_text_terraform_variables
+  description                                  = var.tfe_workspace.description
+  execution_mode                               = var.tfe_workspace.execution_mode
+  file_triggers_enabled                        = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
+  force_delete                                 = var.tfe_workspace.force_delete
+  github_app_installation_id                   = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_github_app_installation_id : null
+  global_remote_state                          = var.tfe_workspace.global_remote_state
+  name                                         = coalesce(var.tfe_workspace.name, var.name)
+  notification_configuration                   = var.tfe_workspace.notification_configuration
+  oauth_token_id                               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
+  oidc_settings                                = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
+  path                                         = var.path
+  permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
+  policy                                       = var.tfe_workspace.policy
+  policy_arns                                  = var.tfe_workspace.policy_arns
+  project_id                                   = var.tfe_workspace.project_id
+  queue_all_runs                               = var.tfe_workspace.queue_all_runs
+  remote_state_consumer_ids                    = var.tfe_workspace.remote_state_consumer_ids
+  repository_identifier                        = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
+  role_name                                    = var.tfe_workspace.role_name
+  sensitive_env_variables                      = var.tfe_workspace.sensitive_env_variables
+  sensitive_hcl_variables                      = var.tfe_workspace.sensitive_hcl_variables
+  sensitive_terraform_variables                = var.tfe_workspace.sensitive_terraform_variables
+  speculative_enabled                          = var.tfe_workspace.speculative_enabled
+  ssh_key_id                                   = var.tfe_workspace.ssh_key_id
+  team_access                                  = var.tfe_workspace.team_access
+  terraform_organization                       = var.tfe_workspace.organization
+  terraform_version                            = var.tfe_workspace.terraform_version
+  trigger_patterns                             = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.trigger_patterns : null
+  trigger_patterns_working_directory_recursive = var.tfe_workspace.trigger_patterns_working_directory_recursive
+  username                                     = var.tfe_workspace.username
+  variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
+  working_directory                            = var.tfe_workspace.set_working_directory ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
+  workspace_map_tags                           = var.tfe_workspace.workspace_map_tags
+  workspace_tags                               = var.tfe_workspace.workspace_tags
 }
 
 module "additional_tfe_workspaces" {
@@ -232,53 +233,54 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.6.0"
+  version = "~> 2.7.0"
 
-  agent_pool_id                  = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
-  agent_role_arns                = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
-  allow_destroy_plan             = each.value.allow_destroy_plan != null ? each.value.allow_destroy_plan : var.tfe_workspace.allow_destroy_plan
-  assessments_enabled            = each.value.assessments_enabled != null ? each.value.assessments_enabled : var.tfe_workspace.assessments_enabled
-  auth_method                    = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
-  auto_apply                     = each.value.auto_apply
-  auto_apply_run_trigger         = each.value.auto_apply_run_trigger
-  auto_destroy_activity_duration = each.value.auto_destroy_activity_duration
-  auto_destroy_at                = each.value.auto_destroy_at
-  branch                         = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
-  clear_text_env_variables       = each.value.clear_text_env_variables
-  clear_text_hcl_variables       = each.value.clear_text_hcl_variables
-  clear_text_terraform_variables = each.value.clear_text_terraform_variables
-  description                    = each.value.description
-  execution_mode                 = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
-  file_triggers_enabled          = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
-  force_delete                   = each.value.force_delete
-  github_app_installation_id     = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_github_app_installation_id, var.tfe_workspace.vcs_github_app_installation_id), null) : null
-  global_remote_state            = each.value.global_remote_state
-  name                           = coalesce(each.value.name, each.key)
-  notification_configuration     = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
-  oauth_token_id                 = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id), null) : null
-  oidc_settings                  = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
-  path                           = var.path
-  permissions_boundary_arn       = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
-  policy                         = each.value.policy
-  policy_arns                    = each.value.policy_arns
-  project_id                     = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
-  queue_all_runs                 = each.value.queue_all_runs
-  region                         = each.value.default_region
-  remote_state_consumer_ids      = each.value.remote_state_consumer_ids
-  repository_identifier          = each.value.connect_vcs_repo != false ? coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier) : null
-  role_name                      = coalesce(each.value.role_name, "TFEPipeline${replace(title(coalesce(each.value.name, each.key)), "/[_-]/", "")}")
-  sensitive_env_variables        = each.value.sensitive_env_variables
-  sensitive_hcl_variables        = each.value.sensitive_hcl_variables
-  sensitive_terraform_variables  = each.value.sensitive_terraform_variables
-  speculative_enabled            = each.value.speculative_enabled
-  ssh_key_id                     = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
-  team_access                    = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
-  terraform_organization         = var.tfe_workspace.organization
-  terraform_version              = each.value.terraform_version != null ? (each.value.terraform_version == "" ? null : each.value.terraform_version) : var.tfe_workspace.terraform_version
-  trigger_patterns               = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns) : null
-  username                       = coalesce(each.value.username, "TFEPipeline-${each.key}")
-  variable_set_ids               = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
-  working_directory              = coalesce(each.value.set_working_directory, var.tfe_workspace.set_working_directory) ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
-  workspace_map_tags             = each.value.workspace_map_tags
-  workspace_tags                 = each.value.workspace_tags
+  agent_pool_id                                = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
+  agent_role_arns                              = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
+  allow_destroy_plan                           = each.value.allow_destroy_plan != null ? each.value.allow_destroy_plan : var.tfe_workspace.allow_destroy_plan
+  assessments_enabled                          = each.value.assessments_enabled != null ? each.value.assessments_enabled : var.tfe_workspace.assessments_enabled
+  auth_method                                  = each.value.auth_method != null ? each.value.auth_method : var.tfe_workspace.auth_method
+  auto_apply                                   = each.value.auto_apply
+  auto_apply_run_trigger                       = each.value.auto_apply_run_trigger
+  auto_destroy_activity_duration               = each.value.auto_destroy_activity_duration
+  auto_destroy_at                              = each.value.auto_destroy_at
+  branch                                       = each.value.connect_vcs_repo != false ? coalesce(each.value.branch, var.tfe_workspace.branch) : null
+  clear_text_env_variables                     = each.value.clear_text_env_variables
+  clear_text_hcl_variables                     = each.value.clear_text_hcl_variables
+  clear_text_terraform_variables               = each.value.clear_text_terraform_variables
+  description                                  = each.value.description
+  execution_mode                               = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
+  file_triggers_enabled                        = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
+  force_delete                                 = each.value.force_delete
+  github_app_installation_id                   = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_github_app_installation_id, var.tfe_workspace.vcs_github_app_installation_id), null) : null
+  global_remote_state                          = each.value.global_remote_state
+  name                                         = coalesce(each.value.name, each.key)
+  notification_configuration                   = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
+  oauth_token_id                               = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id), null) : null
+  oidc_settings                                = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
+  path                                         = var.path
+  permissions_boundary_arn                     = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
+  policy                                       = each.value.policy
+  policy_arns                                  = each.value.policy_arns
+  project_id                                   = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
+  queue_all_runs                               = each.value.queue_all_runs
+  region                                       = each.value.default_region
+  remote_state_consumer_ids                    = each.value.remote_state_consumer_ids
+  repository_identifier                        = each.value.connect_vcs_repo != false ? coalesce(each.value.repository_identifier, var.tfe_workspace.repository_identifier) : null
+  role_name                                    = coalesce(each.value.role_name, "TFEPipeline${replace(title(coalesce(each.value.name, each.key)), "/[_-]/", "")}")
+  sensitive_env_variables                      = each.value.sensitive_env_variables
+  sensitive_hcl_variables                      = each.value.sensitive_hcl_variables
+  sensitive_terraform_variables                = each.value.sensitive_terraform_variables
+  speculative_enabled                          = each.value.speculative_enabled
+  ssh_key_id                                   = each.value.ssh_key_id != null ? each.value.ssh_key_id : var.tfe_workspace.ssh_key_id
+  team_access                                  = each.value.team_access != null ? each.value.team_access : var.tfe_workspace.team_access
+  terraform_organization                       = var.tfe_workspace.organization
+  terraform_version                            = each.value.terraform_version != null ? (each.value.terraform_version == "" ? null : each.value.terraform_version) : var.tfe_workspace.terraform_version
+  trigger_patterns                             = each.value.connect_vcs_repo != false ? coalesce(each.value.trigger_patterns, var.tfe_workspace.trigger_patterns) : null
+  trigger_patterns_working_directory_recursive = each.value.trigger_patterns_working_directory_recursive
+  username                                     = coalesce(each.value.username, "TFEPipeline-${each.key}")
+  variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
+  working_directory                            = coalesce(each.value.set_working_directory, var.tfe_workspace.set_working_directory) ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
+  workspace_map_tags                           = each.value.workspace_map_tags
+  workspace_tags                               = each.value.workspace_tags
 }
