@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v6.4.0 - 2025-11-24
+
+### What's Changed
+
+#### 🚀 Features
+
+* feat: Improve trigger pattern flexibility (#78) @marwinbaumannsbp
+
+#### 🐛 Bug Fixes
+
+* fix: set file_triggers_enabled to false when no vcs is connected instead to null to comply with underlying module structure (#77) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v6.3.0...v6.4.0
+
 ## v6.3.0 - 2025-11-19
 
 ### What's Changed
