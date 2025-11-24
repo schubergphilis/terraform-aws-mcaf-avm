@@ -193,7 +193,7 @@ module "tfe_workspace" {
   clear_text_terraform_variables               = var.tfe_workspace.clear_text_terraform_variables
   description                                  = var.tfe_workspace.description
   execution_mode                               = var.tfe_workspace.execution_mode
-  file_triggers_enabled                        = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : null
+  file_triggers_enabled                        = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : false
   force_delete                                 = var.tfe_workspace.force_delete
   github_app_installation_id                   = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_github_app_installation_id : null
   global_remote_state                          = var.tfe_workspace.global_remote_state
@@ -250,7 +250,7 @@ module "additional_tfe_workspaces" {
   clear_text_terraform_variables               = each.value.clear_text_terraform_variables
   description                                  = each.value.description
   execution_mode                               = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
-  file_triggers_enabled                        = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : null
+  file_triggers_enabled                        = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : false
   force_delete                                 = each.value.force_delete
   github_app_installation_id                   = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_github_app_installation_id, var.tfe_workspace.vcs_github_app_installation_id), null) : null
   global_remote_state                          = each.value.global_remote_state
