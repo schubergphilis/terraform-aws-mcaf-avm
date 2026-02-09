@@ -176,7 +176,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.7.0"
+  version = "~> 3.0.0"
 
   agent_pool_id                                = var.tfe_workspace.agent_pool_id
   agent_role_arns                              = var.tfe_workspace.agent_role_arns
@@ -200,12 +200,11 @@ module "tfe_workspace" {
   name                                         = coalesce(var.tfe_workspace.name, var.name)
   notification_configuration                   = var.tfe_workspace.notification_configuration
   oauth_token_id                               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
-  oidc_settings                                = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                                         = var.path
   permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = var.tfe_workspace.policy
   policy_arns                                  = var.tfe_workspace.policy_arns
-  project_id                                   = var.tfe_workspace.project_id
+  project_name                                 = var.tfe_workspace.project_name
   queue_all_runs                               = var.tfe_workspace.queue_all_runs
   remote_state_consumer_ids                    = var.tfe_workspace.remote_state_consumer_ids
   repository_identifier                        = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
@@ -223,8 +222,12 @@ module "tfe_workspace" {
   username                                     = var.tfe_workspace.username
   variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
   working_directory                            = var.tfe_workspace.set_working_directory ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
-  workspace_map_tags                           = var.tfe_workspace.workspace_map_tags
   workspace_tags                               = var.tfe_workspace.workspace_tags
+
+  oidc_settings = var.tfe_workspace.auth_method == "iam_role_oidc" ? {
+    project_scope = var.tfe_workspace.oidc_project_scope
+    provider_arn  = aws_iam_openid_connect_provider.tfc_provider[0].arn
+  } : null
 }
 
 module "additional_tfe_workspaces" {
@@ -233,7 +236,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 2.7.0"
+  version = "~> 3.0.0"
 
   agent_pool_id                                = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                              = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -257,12 +260,11 @@ module "additional_tfe_workspaces" {
   name                                         = coalesce(each.value.name, each.key)
   notification_configuration                   = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
   oauth_token_id                               = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id), null) : null
-  oidc_settings                                = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                                         = var.path
   permissions_boundary_arn                     = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = each.value.policy
   policy_arns                                  = each.value.policy_arns
-  project_id                                   = each.value.project_id != null ? each.value.project_id : var.tfe_workspace.project_id
+  project_name                                 = each.value.project_name != null ? each.value.project_name : var.tfe_workspace.project_name
   queue_all_runs                               = each.value.queue_all_runs
   region                                       = each.value.default_region
   remote_state_consumer_ids                    = each.value.remote_state_consumer_ids
@@ -281,6 +283,10 @@ module "additional_tfe_workspaces" {
   username                                     = coalesce(each.value.username, "TFEPipeline-${each.key}")
   variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
   working_directory                            = coalesce(each.value.set_working_directory, var.tfe_workspace.set_working_directory) ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
-  workspace_map_tags                           = each.value.workspace_map_tags
   workspace_tags                               = each.value.workspace_tags
+
+  oidc_settings = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? {
+    project_scope = each.value.oidc_project_scope
+    provider_arn  = aws_iam_openid_connect_provider.tfc_provider[0].arn
+  } : null
 }

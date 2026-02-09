@@ -65,9 +65,10 @@ variable "additional_tfe_workspaces" {
     force_delete                                 = optional(bool, false)
     global_remote_state                          = optional(bool, false)
     name                                         = optional(string)
+    oidc_project_scope                           = optional(bool, false) # Apply OIDC trust to all workspaces in the project. WARNING: Only enable this setting when the project relates to a single AWS Account to avoid unintended access.
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                                   = optional(string)
+    project_name                                 = optional(string)
     queue_all_runs                               = optional(bool)
     remote_state_consumer_ids                    = optional(set(string))
     repository_identifier                        = optional(string)
@@ -86,8 +87,7 @@ variable "additional_tfe_workspaces" {
     vcs_github_app_installation_id               = optional(string)
     vcs_oauth_token_id                           = optional(string)
     working_directory                            = optional(string)
-    workspace_map_tags                           = optional(map(string))
-    workspace_tags                               = optional(list(string)) # (**DEPRECATED**)
+    workspace_tags                               = optional(map(string))
 
     notification_configuration = optional(map(object({
       destination_type = string
@@ -176,10 +176,11 @@ variable "tfe_workspace" {
     force_delete                                 = optional(bool, false)
     global_remote_state                          = optional(bool, false)
     name                                         = optional(string)
+    oidc_project_scope                           = optional(bool, false) # Apply OIDC trust to all workspaces in the project. WARNING: Only enable this setting when the project relates to a single AWS Account to avoid unintended access.
     organization                                 = optional(string)
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                                   = optional(string)
+    project_name                                 = optional(string)
     queue_all_runs                               = optional(bool)
     remote_state_consumer_ids                    = optional(set(string))
     repository_identifier                        = optional(string)
@@ -198,8 +199,7 @@ variable "tfe_workspace" {
     vcs_github_app_installation_id               = optional(string)
     vcs_oauth_token_id                           = optional(string)
     working_directory                            = optional(string)
-    workspace_map_tags                           = optional(map(string))
-    workspace_tags                               = optional(list(string)) # (**DEPRECATED**)
+    workspace_tags                               = optional(map(string))
 
     notification_configuration = optional(map(object({
       destination_type = string
