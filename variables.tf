@@ -41,6 +41,33 @@ variable "account_variable_set" {
   description = "Settings of variable set that is attached to each workspace"
 }
 
+variable "tfe_project" {
+  description = "TFE project configuration including variable sets and authentication settings"
+  type = object({
+    enabled = optional(bool, true)
+    name    = optional(string)
+
+    variable_set = optional(object({
+      clear_text_env_variables       = optional(map(string), {})
+      clear_text_hcl_variables       = optional(map(string), {})
+      clear_text_terraform_variables = optional(map(string), {})
+    }))
+
+    auth = optional(object({
+      enabled                  = optional(bool, false)
+      add_permissions_boundary = optional(bool, false)
+      agent_role_arns          = optional(list(string))
+      method                   = optional(string, "iam_role_oidc")
+      policy                   = optional(string)
+      policy_arns              = optional(set(string), [])
+      role_name                = optional(string)
+      username                 = optional(string)
+    }))
+  })
+
+  default = {}
+}
+
 variable "additional_tfe_workspaces" {
   type = map(object({
     add_permissions_boundary                     = optional(bool, false)
@@ -65,7 +92,6 @@ variable "additional_tfe_workspaces" {
     force_delete                                 = optional(bool, false)
     global_remote_state                          = optional(bool, false)
     name                                         = optional(string)
-    oidc_project_scope                           = optional(bool, false) # Apply OIDC trust to all workspaces in the project. WARNING: Only enable this setting when the project relates to a single AWS Account to avoid unintended access.
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     project_name                                 = optional(string)
@@ -176,7 +202,6 @@ variable "tfe_workspace" {
     force_delete                                 = optional(bool, false)
     global_remote_state                          = optional(bool, false)
     name                                         = optional(string)
-    oidc_project_scope                           = optional(bool, false) # Apply OIDC trust to all workspaces in the project. WARNING: Only enable this setting when the project relates to a single AWS Account to avoid unintended access.
     organization                                 = optional(string)
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])

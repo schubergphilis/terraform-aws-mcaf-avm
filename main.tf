@@ -20,6 +20,15 @@ locals {
     )
   }
 
+  project_name = coalesce(var.tfe_project.name, var.name)
+
+  project_variable_set = var.tfe_project.enabled && var.tfe_project.variable_set != null ? {
+    name                           = "${local.project_name}-variables"
+    clear_text_env_variables       = var.tfe_project.variable_set.clear_text_env_variables
+    clear_text_hcl_variables       = var.tfe_project.variable_set.clear_text_hcl_variables
+    clear_text_terraform_variables = var.tfe_project.variable_set.clear_text_terraform_variables
+  } : null
+
   tfe_workspace = {
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
   }
@@ -167,6 +176,80 @@ resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
 }
 
 ################################################################################
+# Terraform Cloud Project
+################################################################################
+
+resource "tfe_project" "this" {
+  count = var.tfe_project.enabled ? 1 : 0
+
+  name         = local.project_name
+  organization = var.tfe_workspace.organization
+}
+
+resource "tfe_variable_set" "project" {
+  count = local.project_variable_set != null ? 1 : 0
+
+  name         = local.project_variable_set.name
+  description  = "Variable set for the ${local.project_name} project"
+  organization = var.tfe_workspace.organization
+}
+
+resource "tfe_project_variable_set" "this" {
+  count = local.project_variable_set != null ? 1 : 0
+
+  project_id      = tfe_project.this[0].id
+  variable_set_id = tfe_variable_set.project[0].id
+}
+
+resource "tfe_variable" "project_variable_set_clear_text_env_variables" {
+  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_env_variables : {}
+
+  key             = each.key
+  value           = each.value
+  category        = "env"
+  variable_set_id = tfe_variable_set.project[0].id
+}
+
+resource "tfe_variable" "project_variable_set_clear_text_hcl_variables" {
+  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_hcl_variables : {}
+
+  key             = each.key
+  value           = each.value
+  category        = "terraform"
+  hcl             = true
+  variable_set_id = tfe_variable_set.project[0].id
+}
+
+resource "tfe_variable" "project_variable_set_clear_text_terraform_variables" {
+  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_terraform_variables : {}
+
+  key             = each.key
+  value           = each.value
+  category        = "terraform"
+  variable_set_id = tfe_variable_set.project[0].id
+}
+
+module "tfe_project_auth" {
+  count = var.tfe_project.enabled && var.tfe_project.auth != null && var.tfe_project.auth.enabled ? 1 : 0
+
+  providers = { aws = aws.account }
+
+  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule//modules/auth"
+
+  agent_role_arns          = var.tfe_project.auth.agent_role_arns
+  auth_method              = var.tfe_project.auth.method
+  oidc_settings            = var.tfe_project.auth.method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
+  path                     = var.path
+  permissions_boundary_arn = var.tfe_project.auth.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
+  policy                   = var.tfe_project.auth.policy
+  policy_arns              = var.tfe_project.auth.policy_arns
+  role_name                = var.tfe_project.auth.role_name
+  terraform_organization   = var.tfe_workspace.organization
+  username                 = var.tfe_project.auth.username
+  variable_set_id          = try(tfe_variable_set.project[0].id, null)
+}
+
+################################################################################
 # Terraform Cloud Workspace(s)
 ################################################################################
 
@@ -175,8 +258,7 @@ module "tfe_workspace" {
 
   providers = { aws = aws.account }
 
-  source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 3.0.0"
+  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule"
 
   agent_pool_id                                = var.tfe_workspace.agent_pool_id
   agent_role_arns                              = var.tfe_workspace.agent_role_arns
@@ -200,6 +282,7 @@ module "tfe_workspace" {
   name                                         = coalesce(var.tfe_workspace.name, var.name)
   notification_configuration                   = var.tfe_workspace.notification_configuration
   oauth_token_id                               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
+  oidc_settings                                = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                                         = var.path
   permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = var.tfe_workspace.policy
@@ -223,11 +306,6 @@ module "tfe_workspace" {
   variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, var.tfe_workspace.variable_set_ids)
   working_directory                            = var.tfe_workspace.set_working_directory ? coalesce(var.tfe_workspace.working_directory, local.tfe_workspace.working_directory) : null
   workspace_tags                               = var.tfe_workspace.workspace_tags
-
-  oidc_settings = var.tfe_workspace.auth_method == "iam_role_oidc" ? {
-    project_scope = var.tfe_workspace.oidc_project_scope
-    provider_arn  = aws_iam_openid_connect_provider.tfc_provider[0].arn
-  } : null
 }
 
 module "additional_tfe_workspaces" {
@@ -235,8 +313,7 @@ module "additional_tfe_workspaces" {
 
   providers = { aws = aws.account }
 
-  source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 3.0.0"
+  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule"
 
   agent_pool_id                                = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                              = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -260,6 +337,7 @@ module "additional_tfe_workspaces" {
   name                                         = coalesce(each.value.name, each.key)
   notification_configuration                   = each.value.notification_configuration != null ? each.value.notification_configuration : var.tfe_workspace.notification_configuration
   oauth_token_id                               = each.value.connect_vcs_repo != false ? try(coalesce(each.value.vcs_oauth_token_id, var.tfe_workspace.vcs_oauth_token_id), null) : null
+  oidc_settings                                = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                                         = var.path
   permissions_boundary_arn                     = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = each.value.policy
@@ -284,9 +362,4 @@ module "additional_tfe_workspaces" {
   variable_set_ids                             = merge({ (local.account_variable_set.name) : tfe_variable_set.account.id }, each.value.variable_set_ids)
   working_directory                            = coalesce(each.value.set_working_directory, var.tfe_workspace.set_working_directory) ? coalesce(each.value.working_directory, "terraform/${coalesce(each.value.name, each.key)}") : null
   workspace_tags                               = each.value.workspace_tags
-
-  oidc_settings = coalesce(each.value.auth_method, var.tfe_workspace.auth_method) == "iam_role_oidc" ? {
-    project_scope = each.value.oidc_project_scope
-    provider_arn  = aws_iam_openid_connect_provider.tfc_provider[0].arn
-  } : null
 }
