@@ -60,8 +60,8 @@ The module supports both IAM roles and IAM users as authentication methods.
 
 By default, each workspace gets its own IAM role or user. To disable workspace-level authentication and rely solely on project-level authentication:
 
-- Set `var.tfe_workspace.auth_method` explicitly to `null`
-- Set `var.additional_tfe_workspaces[*].auth_method` to `null` (note: `var.additional_tfe_workspaces` defaults to `null`)
+- Set `var.tfe_workspace.enable_workspace_authentication` to `false`
+- Set `var.additional_tfe_workspaces[*].enable_workspace_authentication` to `false` (note: `var.additional_tfe_workspaces.enable_workspace_authentication` defaults to `null`, if `var.tfe_workspace.enable_workspace_authentication` is set to `false` then all `var.additional_tfe_workspaces[*].enable_workspace_authentication` will also be automatically set to `false` unless explicitly provided )
 
 ### Overriding project authentication
 
