@@ -42,9 +42,8 @@ variable "account_variable_set" {
 }
 
 variable "tfe_project" {
-  description = "TFE project configuration including variable sets and authentication settings"
   type = object({
-    enabled = optional(bool, true)
+    enabled = optional(bool, false)
     name    = optional(string)
 
     variable_set = optional(object({
@@ -59,13 +58,13 @@ variable "tfe_project" {
       agent_role_arns          = optional(list(string))
       method                   = optional(string, "iam_role_oidc")
       policy                   = optional(string)
-      policy_arns              = optional(set(string), [])
-      role_name                = optional(string)
-      username                 = optional(string)
-    }))
+      policy_arns              = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+      role_name                = optional(string, "TFEPipeline")
+      username                 = optional(string, "TFEPipeline")
+    }), {})
   })
-
-  default = {}
+  default     = {}
+  description = "TFE project configuration including variable sets and authentication settings. If no name is provided, var.name will be used for the project name & variable set name."
 }
 
 variable "additional_tfe_workspaces" {

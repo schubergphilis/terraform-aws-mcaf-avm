@@ -20,14 +20,7 @@ locals {
     )
   }
 
-  project_name = coalesce(var.tfe_project.name, var.name)
-
-  project_variable_set = var.tfe_project.enabled && var.tfe_project.variable_set != null ? {
-    name                           = "${local.project_name}-variables"
-    clear_text_env_variables       = var.tfe_project.variable_set.clear_text_env_variables
-    clear_text_hcl_variables       = var.tfe_project.variable_set.clear_text_hcl_variables
-    clear_text_terraform_variables = var.tfe_project.variable_set.clear_text_terraform_variables
-  } : null
+  tfe_project_name = coalesce(var.tfe_project.name, var.name)
 
   tfe_workspace = {
     working_directory = var.account.environment != null ? "terraform/${var.account.environment}" : "terraform"
@@ -35,7 +28,8 @@ locals {
 
   // create a list of auth_methods, and create the oidc provider if iam_role_oidc is in it
   // this allows for a mixture of auth_methods as they could differ per workspace.
-  tfe_workspace_enable_oidc = contains(concat([var.tfe_workspace.auth_method], values(var.additional_tfe_workspaces)[*].auth_method), "iam_role_oidc")
+  tfe_workspace_enable_oidc = contains(compact(concat([var.tfe_workspace.auth_method], var.tfe_project.auth.enabled ? [var.tfe_project.auth.method] : [], values(var.additional_tfe_workspaces)[*].auth_method)), "iam_role_oidc")
+
 }
 
 ################################################################################
@@ -138,7 +132,7 @@ resource "aws_iam_policy" "workload_boundary" {
 }
 
 ################################################################################
-# Terraform Cloud Variable Set
+# Terraform Cloud Account Variable Set
 ################################################################################
 
 resource "tfe_variable_set" "account" {
@@ -176,69 +170,70 @@ resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
 }
 
 ################################################################################
-# Terraform Cloud Project
+# Terraform Cloud Project & Project Variable Set
 ################################################################################
 
-resource "tfe_project" "this" {
+resource "tfe_project" "default" {
   count = var.tfe_project.enabled ? 1 : 0
 
-  name         = local.project_name
+  name         = local.tfe_project_name
   organization = var.tfe_workspace.organization
 }
 
-resource "tfe_variable_set" "project" {
-  count = local.project_variable_set != null ? 1 : 0
+module "tfe_project_variable_set" {
+  count = var.tfe_project.enabled && (var.tfe_project.variable_set != null || try(var.tfe_project.auth.enabled, false)) ? 1 : 0
 
-  name         = local.project_variable_set.name
-  description  = "Variable set for the ${local.project_name} project"
-  organization = var.tfe_workspace.organization
-}
+  source  = "schubergphilis/mcaf-variable-set/tfe"
+  version = "~> 0.1.0"
 
-resource "tfe_project_variable_set" "this" {
-  count = local.project_variable_set != null ? 1 : 0
+  name              = "project-${local.tfe_project_name}"
+  description       = "Variable set for the ${local.tfe_project_name} project"
+  organization      = var.tfe_workspace.organization
+  parent_project_id = tfe_project.default[0].id
 
-  project_id      = tfe_project.this[0].id
-  variable_set_id = tfe_variable_set.project[0].id
-}
-
-resource "tfe_variable" "project_variable_set_clear_text_env_variables" {
-  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_env_variables : {}
-
-  key             = each.key
-  value           = each.value
-  category        = "env"
-  variable_set_id = tfe_variable_set.project[0].id
-}
-
-resource "tfe_variable" "project_variable_set_clear_text_hcl_variables" {
-  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_hcl_variables : {}
-
-  key             = each.key
-  value           = each.value
-  category        = "terraform"
-  hcl             = true
-  variable_set_id = tfe_variable_set.project[0].id
-}
-
-resource "tfe_variable" "project_variable_set_clear_text_terraform_variables" {
-  for_each = local.project_variable_set != null ? local.project_variable_set.clear_text_terraform_variables : {}
-
-  key             = each.key
-  value           = each.value
-  category        = "terraform"
-  variable_set_id = tfe_variable_set.project[0].id
+  variables = merge(
+    # Environment variables
+    {
+      for k, v in var.tfe_project.variable_set.clear_text_env_variables : k => {
+        category    = "env"
+        value       = v
+        hcl         = false
+        sensitive   = false
+        description = null
+      }
+    },
+    # HCL Terraform variables
+    {
+      for k, v in var.tfe_project.variable_set.clear_text_hcl_variables : k => {
+        category    = "terraform"
+        value       = v
+        hcl         = true
+        sensitive   = false
+        description = null
+      }
+    },
+    # Regular Terraform variables
+    {
+      for k, v in var.tfe_project.variable_set.clear_text_terraform_variables : k => {
+        category    = "terraform"
+        value       = v
+        hcl         = false
+        sensitive   = false
+        description = null
+      }
+    }
+  )
 }
 
 module "tfe_project_auth" {
-  count = var.tfe_project.enabled && var.tfe_project.auth != null && var.tfe_project.auth.enabled ? 1 : 0
+  count = var.tfe_project.enabled && try(var.tfe_project.auth.enabled, false) ? 1 : 0
 
   providers = { aws = aws.account }
 
-  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule//modules/auth"
+  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace//modules/auth?ref=move-auth-to-submodule"
 
   agent_role_arns          = var.tfe_project.auth.agent_role_arns
   auth_method              = var.tfe_project.auth.method
-  oidc_settings            = var.tfe_project.auth.method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                     = var.path
   permissions_boundary_arn = var.tfe_project.auth.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                   = var.tfe_project.auth.policy
@@ -246,7 +241,13 @@ module "tfe_project_auth" {
   role_name                = var.tfe_project.auth.role_name
   terraform_organization   = var.tfe_workspace.organization
   username                 = var.tfe_project.auth.username
-  variable_set_id          = try(tfe_variable_set.project[0].id, null)
+  variable_set_id          = module.tfe_project_variable_set[0].id
+
+  oidc_settings = var.tfe_project.auth.method == "iam_role_oidc" ? {
+    oidc_project_filter   = local.tfe_project_name
+    oidc_workspace_filter = "*"
+    provider_arn          = aws_iam_openid_connect_provider.tfc_provider[0].arn,
+  } : null
 }
 
 ################################################################################
@@ -287,7 +288,7 @@ module "tfe_workspace" {
   permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = var.tfe_workspace.policy
   policy_arns                                  = var.tfe_workspace.policy_arns
-  project_name                                 = var.tfe_workspace.project_name
+  project_name                                 = var.tfe_project.enabled ? coalesce(var.tfe_workspace.project_name, local.tfe_project_name) : var.tfe_workspace.project_name
   queue_all_runs                               = var.tfe_workspace.queue_all_runs
   remote_state_consumer_ids                    = var.tfe_workspace.remote_state_consumer_ids
   repository_identifier                        = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
@@ -342,7 +343,7 @@ module "additional_tfe_workspaces" {
   permissions_boundary_arn                     = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = each.value.policy
   policy_arns                                  = each.value.policy_arns
-  project_name                                 = each.value.project_name != null ? each.value.project_name : var.tfe_workspace.project_name
+  project_name                                 = var.tfe_project.enabled ? coalesce(each.value.project_name, var.tfe_workspace.project_name, local.tfe_project_name) : coalesce(each.value.project_name, var.tfe_workspace.project_name)
   queue_all_runs                               = each.value.queue_all_runs
   region                                       = each.value.default_region
   remote_state_consumer_ids                    = each.value.remote_state_consumer_ids
