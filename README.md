@@ -5,9 +5,10 @@ Terraform module providing an AWS Account Vending Machine (AVM). This module pro
 ## Workspace authentication
 
 This module provides three modes of workspace authentication:
-* (default) An IAM role using OpenID Connect integration with the AWS account. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
-* An IAM role using an external ID to authenticate with the AWS account in combination with using self-hosted Terraform Cloud agents.
-* An IAM user per workspace in the provisioned AWS account.
+
+- (default) An IAM role using OpenID Connect integration with the AWS account. This works for remote runners or with using self-hosted Terraform Cloud agents (agent version v1.7.0+).
+- An IAM role using an external ID to authenticate with the AWS account in combination with using self-hosted Terraform Cloud agents.
+- An IAM user per workspace in the provisioned AWS account.
 
 Using one of the first 2 authentication methods is in line with authentication best practices to use IAM roles over IAM users with long-lived tokens.
 
@@ -22,9 +23,9 @@ The [IAM roles with OIDC](https://developer.hashicorp.com/terraform/cloud-docs/w
 
 To use IAM roles for authentication:
 
-* Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID.
-* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`.
-* Set `var.tfe_workspace.agent_role_arns` or (`agent_role_arns` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool.
+- Set `var.tfe_workspace.agent_pool_id` or (`agent_pool_id` if specifying additional workspaces) to the Terraform Cloud agent pool ID.
+- Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_role`.
+- Set `var.tfe_workspace.agent_role_arns` or (`agent_role_arns` if specifying additional workspaces) to the IAM role assumed by the Terraform Cloud agents in the specified agent pool.
 
 This will create an IAM role in the provisioned AWS account with a randomly generated external ID which can only be assumed by the Terraform Cloud agent role. The created role and external ID value are stored in the new workspace as Terraform variables which can be used to configure your AWS provider. Using the default workspace the created role will be called `TPEPipelineRole`, role names for additional workspaces will be calculated for you based on the workspace name but you can always set your own via the `role_name` variable (similarly you can set your own role name in the default workspace via `var.tfe_workspace.role_name`); but please be aware that each IAM role must have a unique name.
 
@@ -41,10 +42,35 @@ provider "aws" {
 ```
 
 ### IAM Users
-* Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_user`.
+
+- Set `var.tfe_workspace.auth_method` or (`auth_method` if specifying additional workspaces) to `iam_user`.
 
 This will create an IAM user in the provisioned AWS account with the access key and secret access key added as environmental variables to the workspace.
 
+## Project authentication
+
+This module supports TFE project-level authentication by setting `var.tfe_project.enabled` to `true` and `var.tfe_project.auth.enabled` to `true`. By default, this creates an IAM Role with OIDC and sets the required environment variables on the project. All workspaces within the project will then use this role to authenticate, which is useful for example:
+
+- Workspace creation outside of AVM
+- Ephemeral workspaces
+
+The module supports both IAM roles and IAM users as authentication methods.
+
+### Workspace-level authentication
+
+By default, each workspace gets its own IAM role or user. To disable workspace-level authentication and rely solely on project-level authentication:
+
+- Set `var.tfe_workspace.auth_method` to `null`
+- Set `var.additional_tfe_workspaces[*].auth_method` to `null` (note: `var.additional_tfe_workspaces` defaults to `null`)
+
+### Overriding project authentication
+
+You can override project-level authentication for specific workspaces when stricter or different permissions are required. For example, to use a stricter policy for a particular workspace:
+
+1. Set `auth_method` to a valid value (e.g., `iam_role_oidc`)
+2. Provide the required additional variables (e.g., `policy_arn`)
+
+This creates workspace-specific environment variables that take precedence over project-level variables.
 
 ## Workspace team access
 
@@ -191,6 +217,7 @@ module "aws_account" {
   ...
 }
 ```
+
 > [!TIP]
 > The `workspace_boundary` and `workload_boundary` can be templated files, `account_id` will be replaced by AVM by the account ID of the AWS account created.
 
