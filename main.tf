@@ -275,6 +275,7 @@ module "tfe_workspace" {
   clear_text_hcl_variables                     = var.tfe_workspace.clear_text_hcl_variables
   clear_text_terraform_variables               = var.tfe_workspace.clear_text_terraform_variables
   description                                  = var.tfe_workspace.description
+  enable_authentication                        = var.tfe_workspace.enable_workspace_authentication
   execution_mode                               = var.tfe_workspace.execution_mode
   file_triggers_enabled                        = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.file_triggers_enabled : false
   force_delete                                 = var.tfe_workspace.force_delete
@@ -283,7 +284,7 @@ module "tfe_workspace" {
   name                                         = coalesce(var.tfe_workspace.name, var.name)
   notification_configuration                   = var.tfe_workspace.notification_configuration
   oauth_token_id                               = var.tfe_workspace.connect_vcs_repo != false ? var.tfe_workspace.vcs_oauth_token_id : null
-  oidc_settings                                = var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
+  oidc_settings                                = var.tfe_workspace.workspace_auth && var.tfe_workspace.auth_method == "iam_role_oidc" ? { provider_arn = aws_iam_openid_connect_provider.tfc_provider[0].arn } : null
   path                                         = var.path
   permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = var.tfe_workspace.policy
@@ -330,6 +331,7 @@ module "additional_tfe_workspaces" {
   clear_text_hcl_variables                     = each.value.clear_text_hcl_variables
   clear_text_terraform_variables               = each.value.clear_text_terraform_variables
   description                                  = each.value.description
+  enable_authentication                        = coalesce(each.value.enable_workspace_authentication, var.tfe_workspace.enable_workspace_authentication)
   execution_mode                               = coalesce(each.value.execution_mode, var.tfe_workspace.execution_mode)
   file_triggers_enabled                        = each.value.connect_vcs_repo != false ? each.value.file_triggers_enabled : false
   force_delete                                 = each.value.force_delete
