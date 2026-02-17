@@ -50,7 +50,7 @@ variable "tfe_project" {
       clear_text_env_variables       = optional(map(string), {})
       clear_text_hcl_variables       = optional(map(string), {})
       clear_text_terraform_variables = optional(map(string), {})
-    }))
+    }), {})
 
     auth = optional(object({
       enabled                  = optional(bool, false)
@@ -86,7 +86,7 @@ variable "additional_tfe_workspaces" {
     connect_vcs_repo                             = optional(bool, true)
     default_region                               = optional(string)
     description                                  = optional(string)
-    enable_workspace_authentication              = optional(bool, true)
+    enable_workspace_authentication              = optional(bool)
     execution_mode                               = optional(string)
     file_triggers_enabled                        = optional(bool, true)
     force_delete                                 = optional(bool, false)
@@ -197,7 +197,7 @@ variable "tfe_workspace" {
     connect_vcs_repo                             = optional(bool, true)
     default_region                               = string
     description                                  = optional(string)
-    enable_workspace_authentication              = optional(bool)
+    enable_workspace_authentication              = optional(bool, true)
     execution_mode                               = optional(string, "remote")
     file_triggers_enabled                        = optional(bool, true)
     force_delete                                 = optional(bool, false)
