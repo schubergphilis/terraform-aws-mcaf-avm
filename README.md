@@ -58,10 +58,10 @@ The module supports both IAM roles and IAM users as authentication methods.
 
 ### Workspace-level authentication
 
-By default, each workspace gets its own IAM role or user. To disable workspace-level authentication and rely solely on project-level authentication:
+By default, each workspace gets its own IAM role or user. If you want to rely exclusively on project-level authentication, disable workspace-level authentication:
 
 - Set `var.tfe_workspace.enable_workspace_authentication` to `false`
-- Set `var.additional_tfe_workspaces[*].enable_workspace_authentication` to `false` (note: `var.additional_tfe_workspaces.enable_workspace_authentication` defaults to `null`, if `var.tfe_workspace.enable_workspace_authentication` is set to `false` then all `var.additional_tfe_workspaces[*].enable_workspace_authentication` will also be automatically set to `false` unless explicitly provided )
+- Set `var.additional_tfe_workspaces[*].enable_workspace_authentication` to `false` (note: `var.additional_tfe_workspaces[*].enable_workspace_authentication` defaults to `null`. If `var.tfe_workspace.enable_workspace_authentication` is set to `false`, all additional workspaces will automatically inherit `false` unless explicitly overridden)
 
 ### Overriding project authentication
 
@@ -69,8 +69,9 @@ You can override project-level authentication for specific workspaces when stric
 
 1. Set `auth_method` to a valid value (e.g., `iam_role_oidc`)
 2. Provide the required additional variables (e.g., `policy_arn`)
+3. Ensure `enable_workspace_authentication` is set to `true`.
 
-This creates workspace-specific environment variables that take precedence over project-level variables.
+This creates an workspace-specific IAM role / user and workspace-specific environment variables that take precedence over project-level variables.
 
 ## Workspace team access
 
