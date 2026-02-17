@@ -1,23 +1,18 @@
 locals {
-  account_variable_set = {
-    name = var.account_variable_set.name != null ? var.account_variable_set.name : "account-${var.name}"
+  # Common variables to be added to either project or account variable set
+  common_terraform_variables = merge(
+    // always add account = var.name
+    { account = var.name },
+    // if environment, add environment = var.account.environment
+    var.account.environment != null ? { environment = var.account.environment } : {},
+    // if workload_boundary_arn, add workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn
+    var.permissions_boundaries.workload_boundary != null && var.permissions_boundaries.workload_boundary != null ? { workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn } : {}
+  )
 
-    clear_text_terraform_variables = merge(
-      var.account_variable_set.clear_text_terraform_variables,
-      // always add account = var.name
-      { account = var.name },
-      // if environment, add environment = var.account.environment
-      var.account.environment != null ? { environment = var.account.environment } : {},
-      // if workload_boundary_arn, add workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn
-      var.permissions_boundaries.workload_boundary != null && var.permissions_boundaries.workload_boundary != null ? { workload_permissions_boundary_arn = aws_iam_policy.workload_boundary[0].arn } : {}
-    )
-
-    clear_text_env_variables = merge(
-      var.account_variable_set.clear_text_env_variables,
-      // Set the `DEFAULT_REGION` variable using the variable set. This way it is also applied to additional
-      // workspaces unless that workspace sets the `region` field.
-      { AWS_DEFAULT_REGION = var.tfe_workspace.default_region },
-    )
+  common_env_variables = {
+    // Set the `DEFAULT_REGION` variable using the variable set. This way it is also applied to additional
+    // workspaces unless that workspace sets the `region` field.
+    AWS_DEFAULT_REGION = var.tfe_workspace.default_region
   }
 
   tfe_project_name = coalesce(var.tfe_project.name, var.name)
@@ -29,7 +24,6 @@ locals {
   // create a list of auth_methods, and create the oidc provider if iam_role_oidc is in it
   // this allows for a mixture of auth_methods as they could differ per workspace.
   tfe_workspace_enable_oidc = contains(compact(concat([var.tfe_workspace.auth_method], var.tfe_project.auth.enabled ? [var.tfe_project.auth.method] : [], values(var.additional_tfe_workspaces)[*].auth_method)), "iam_role_oidc")
-
 }
 
 ################################################################################
@@ -136,13 +130,13 @@ resource "aws_iam_policy" "workload_boundary" {
 ################################################################################
 
 resource "tfe_variable_set" "account" {
-  name         = local.account_variable_set.name
+  name         = var.account_variable_set.name != null ? var.account_variable_set.name : "account-${var.name}"
   description  = "Variable set for the account and all its linked workspaces"
   organization = var.tfe_workspace.organization
 }
 
 resource "tfe_variable" "account_variable_set_clear_text_env_variables" {
-  for_each = local.account_variable_set.clear_text_env_variables
+  for_each = var.tfe_project.enabled ? var.account_variable_set.clear_text_terraform_variables : merge(var.account_variable_set.clear_text_terraform_variables, local.common_terraform_variables)
 
   key             = each.key
   value           = each.value
@@ -161,7 +155,7 @@ resource "tfe_variable" "account_variable_set_clear_text_hcl_variables" {
 }
 
 resource "tfe_variable" "account_variable_set_clear_text_terraform_variables" {
-  for_each = local.account_variable_set.clear_text_terraform_variables
+  for_each = var.tfe_project.enabled ? var.account_variable_set.clear_text_env_variables : merge(var.account_variable_set.clear_text_env_variables, local.common_env_variables)
 
   key             = each.key
   value           = each.value
@@ -192,9 +186,9 @@ module "tfe_project_variable_set" {
   parent_project_id = tfe_project.default[0].id
 
   variables = merge(
-    # Environment variables
+    # Environment variables (including common env variables)
     {
-      for k, v in var.tfe_project.variable_set.clear_text_env_variables : k => {
+      for k, v in merge(var.tfe_project.variable_set.clear_text_env_variables, local.common_env_variables) : k => {
         category    = "env"
         value       = v
         hcl         = false
@@ -212,9 +206,9 @@ module "tfe_project_variable_set" {
         description = null
       }
     },
-    # Regular Terraform variables
+    # Regular Terraform variables (including common terraform variables)
     {
-      for k, v in var.tfe_project.variable_set.clear_text_terraform_variables : k => {
+      for k, v in merge(var.tfe_project.variable_set.clear_text_terraform_variables, local.common_terraform_variables) : k => {
         category    = "terraform"
         value       = v
         hcl         = false
