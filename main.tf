@@ -226,7 +226,8 @@ module "tfe_project_auth" {
 
   providers = { aws = aws.account }
 
-  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace//modules/auth?ref=move-auth-to-submodule"
+  source  = "schubergphilis/mcaf-workspace/aws//modules/auth"
+  version = "~> 3.1.0"
 
   agent_role_arns          = var.tfe_project.auth.agent_role_arns
   auth_method              = var.tfe_project.auth.method
@@ -255,7 +256,8 @@ module "tfe_workspace" {
 
   providers = { aws = aws.account }
 
-  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule"
+  source  = "schubergphilis/mcaf-workspace/aws"
+  version = "~> 3.1.0"
 
   agent_pool_id                                = var.tfe_workspace.agent_pool_id
   agent_role_arns                              = var.tfe_workspace.agent_role_arns
@@ -311,7 +313,8 @@ module "additional_tfe_workspaces" {
 
   providers = { aws = aws.account }
 
-  source = "github.com/schubergphilis/terraform-aws-mcaf-workspace?ref=move-auth-to-submodule"
+  source  = "schubergphilis/mcaf-workspace/aws"
+  version = "~> 3.1.0"
 
   agent_pool_id                                = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                              = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
