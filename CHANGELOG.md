@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v7.0.0 - 2026-03-19
+
+### What's Changed
+
+#### 🚀 Features
+
+* feat!: remove deprecated var `workspace_tags`, rename `project_id` to `project_name`, add support for TFE Project scoped AWS access (#79) @marwinbaumannsbp
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v6.4.0...v7.0.0
+
 ## v6.4.0 - 2025-11-24
 
 ### What's Changed
