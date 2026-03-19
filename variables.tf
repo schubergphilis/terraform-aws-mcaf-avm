@@ -41,6 +41,32 @@ variable "account_variable_set" {
   description = "Settings of variable set that is attached to each workspace"
 }
 
+variable "tfe_project" {
+  type = object({
+    enabled = optional(bool, false)
+    name    = optional(string)
+
+    variable_set = optional(object({
+      clear_text_env_variables       = optional(map(string), {})
+      clear_text_hcl_variables       = optional(map(string), {})
+      clear_text_terraform_variables = optional(map(string), {})
+    }), {})
+
+    auth = optional(object({
+      enabled                  = optional(bool, false)
+      add_permissions_boundary = optional(bool, false)
+      agent_role_arns          = optional(list(string))
+      method                   = optional(string, "iam_role_oidc")
+      policy                   = optional(string)
+      policy_arns              = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+      role_name                = optional(string, "TFEPipeline")
+      username                 = optional(string, "TFEPipeline")
+    }), {})
+  })
+  default     = {}
+  description = "TFE project configuration including variable sets and authentication settings. If no name is provided, var.name will be used for the project name & variable set name."
+}
+
 variable "additional_tfe_workspaces" {
   type = map(object({
     add_permissions_boundary                     = optional(bool, false)
@@ -60,6 +86,7 @@ variable "additional_tfe_workspaces" {
     connect_vcs_repo                             = optional(bool, true)
     default_region                               = optional(string)
     description                                  = optional(string)
+    enable_workspace_authentication              = optional(bool)
     execution_mode                               = optional(string)
     file_triggers_enabled                        = optional(bool, true)
     force_delete                                 = optional(bool, false)
@@ -67,7 +94,7 @@ variable "additional_tfe_workspaces" {
     name                                         = optional(string)
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                                   = optional(string)
+    project_name                                 = optional(string)
     queue_all_runs                               = optional(bool)
     remote_state_consumer_ids                    = optional(set(string))
     repository_identifier                        = optional(string)
@@ -86,8 +113,7 @@ variable "additional_tfe_workspaces" {
     vcs_github_app_installation_id               = optional(string)
     vcs_oauth_token_id                           = optional(string)
     working_directory                            = optional(string)
-    workspace_map_tags                           = optional(map(string))
-    workspace_tags                               = optional(list(string)) # (**DEPRECATED**)
+    workspace_tags                               = optional(map(string))
 
     notification_configuration = optional(map(object({
       destination_type = string
@@ -171,6 +197,7 @@ variable "tfe_workspace" {
     connect_vcs_repo                             = optional(bool, true)
     default_region                               = string
     description                                  = optional(string)
+    enable_workspace_authentication              = optional(bool, true)
     execution_mode                               = optional(string, "remote")
     file_triggers_enabled                        = optional(bool, true)
     force_delete                                 = optional(bool, false)
@@ -179,7 +206,7 @@ variable "tfe_workspace" {
     organization                                 = optional(string)
     policy                                       = optional(string)
     policy_arns                                  = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    project_id                                   = optional(string)
+    project_name                                 = optional(string)
     queue_all_runs                               = optional(bool)
     remote_state_consumer_ids                    = optional(set(string))
     repository_identifier                        = optional(string)
@@ -198,8 +225,7 @@ variable "tfe_workspace" {
     vcs_github_app_installation_id               = optional(string)
     vcs_oauth_token_id                           = optional(string)
     working_directory                            = optional(string)
-    workspace_map_tags                           = optional(map(string))
-    workspace_tags                               = optional(list(string)) # (**DEPRECATED**)
+    workspace_tags                               = optional(map(string))
 
     notification_configuration = optional(map(object({
       destination_type = string

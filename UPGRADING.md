@@ -1,5 +1,13 @@
 # UPGRADING
 
+## Upgrading to v7.0.0
+
+### Variables (v7.0.0)
+
+- Variable removed `tfe_workspace.workspace_tags` & `additional_tfe_workspaces.workspace_tags`.
+- Variable renamed `tfe_workspace.workspace_map_tags` & `additional_tfe_workspaces.workspace_map_tags` -> `tfe_workspace.workspace_tags` & `additional_tfe_workspaces.workspace_tags`.
+- Variable renamed `tfe_workspace.project_id` & `additional_tfe_workspaces.project_id` -> `tfe_workspace.project_name` & `additional_tfe_workspaces.project_name`.
+
 ## Upgrading to v6.0.0
 
 `v6.0.0` introduces a change that is not backwards compatible when the `name` property of `var.additional_tfe_workspaces` is specified and a different key is used in the provided map. Currently, the key is utilized to generate the role name, ignoring the specified `name` property. To correctly override the name field, it should also be used to create the `role_name`. To upgrade without any issues, ensure that the key matches the name in the provided `additional_tfe_workspaces`.
