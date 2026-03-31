@@ -1,5 +1,11 @@
 # UPGRADING
 
+## Upgrading to v8.0.0
+
+### Variables (v8.0.0)
+
+- Variable renamed `tfe_workspace.project_name` & `additional_tfe_workspaces.project_name` -> `tfe_workspace.project_id` & `additional_tfe_workspaces.project_id`.
+
 ## Upgrading to v7.0.0
 
 ### Variables (v7.0.0)
