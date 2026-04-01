@@ -241,7 +241,7 @@ module "tfe_project_auth" {
   variable_set_id          = module.tfe_project_variable_set[0].id
 
   oidc_settings = var.tfe_project.auth.method == "iam_role_oidc" ? {
-    oidc_project_filter   = local.tfe_project_name
+    oidc_project_filter   = tfe_project.default[0].name
     oidc_workspace_filter = "*"
     provider_arn          = aws_iam_openid_connect_provider.tfc_provider[0].arn,
   } : null
@@ -257,7 +257,7 @@ module "tfe_workspace" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 3.1.0"
+  version = "~> 4.0.0"
 
   agent_pool_id                                = var.tfe_workspace.agent_pool_id
   agent_role_arns                              = var.tfe_workspace.agent_role_arns
@@ -287,7 +287,7 @@ module "tfe_workspace" {
   permissions_boundary_arn                     = var.tfe_workspace.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = var.tfe_workspace.policy
   policy_arns                                  = var.tfe_workspace.policy_arns
-  project_name                                 = var.tfe_project.enabled ? coalesce(var.tfe_workspace.project_name, local.tfe_project_name) : var.tfe_workspace.project_name
+  project_id                                   = var.tfe_project.enabled ? coalesce(var.tfe_workspace.project_id, try(tfe_project.default[0].id, null)) : var.tfe_workspace.project_id
   queue_all_runs                               = var.tfe_workspace.queue_all_runs
   remote_state_consumer_ids                    = var.tfe_workspace.remote_state_consumer_ids
   repository_identifier                        = var.tfe_workspace.connect_vcs_repo ? var.tfe_workspace.repository_identifier : null
@@ -314,7 +314,7 @@ module "additional_tfe_workspaces" {
   providers = { aws = aws.account }
 
   source  = "schubergphilis/mcaf-workspace/aws"
-  version = "~> 3.1.0"
+  version = "~> 4.0.0"
 
   agent_pool_id                                = each.value.agent_pool_id != null ? each.value.agent_pool_id : var.tfe_workspace.agent_pool_id
   agent_role_arns                              = each.value.agent_role_arns != null ? each.value.agent_role_arns : var.tfe_workspace.agent_role_arns
@@ -344,7 +344,7 @@ module "additional_tfe_workspaces" {
   permissions_boundary_arn                     = each.value.add_permissions_boundary == true ? aws_iam_policy.workspace_boundary[0].arn : null
   policy                                       = each.value.policy
   policy_arns                                  = each.value.policy_arns
-  project_name                                 = var.tfe_project.enabled ? coalesce(each.value.project_name, var.tfe_workspace.project_name, local.tfe_project_name) : coalesce(each.value.project_name, var.tfe_workspace.project_name)
+  project_id                                   = var.tfe_project.enabled ? coalesce(each.value.project_id, var.tfe_workspace.project_id, try(tfe_project.default[0].id, null)) : coalesce(each.value.project_id, var.tfe_workspace.project_id)
   queue_all_runs                               = each.value.queue_all_runs
   region                                       = each.value.default_region
   remote_state_consumer_ids                    = each.value.remote_state_consumer_ids
