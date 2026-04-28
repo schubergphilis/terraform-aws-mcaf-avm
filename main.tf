@@ -60,7 +60,7 @@ module "account" {
 
 resource "aws_iam_account_alias" "alias" {
   provider      = aws.account
-  account_alias = "${var.account.alias_prefix}${var.name}"
+  account_alias = var.account.alias_prefix != null ? "${var.account.alias_prefix}${var.name}" : var.name
 }
 
 resource "aws_account_alternate_contact" "billing" {
