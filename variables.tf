@@ -46,6 +46,9 @@ variable "tfe_project" {
     enabled = optional(bool, false)
     name    = optional(string)
 
+    default_execution_mode = optional(string)
+    default_agent_pool_id  = optional(string)
+
     variable_set = optional(object({
       clear_text_env_variables       = optional(map(string), {})
       clear_text_hcl_variables       = optional(map(string), {})
@@ -65,6 +68,16 @@ variable "tfe_project" {
   })
   default     = {}
   description = "TFE project configuration including variable sets and authentication settings. If no name is provided, var.name will be used for the project name & variable set name."
+
+  validation {
+    condition     = var.tfe_project.default_execution_mode == null || contains(["remote", "agent", "local"], var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "")
+    error_message = "Default execution mode must be one of 'remote', 'agent', or 'local'"
+  }
+
+  validation {
+    condition     = var.tfe_project.default_agent_pool_id == null || (var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "") == "agent"
+    error_message = "Default agent pool ID can only be set if default execution mode is 'agent'"
+  }
 }
 
 variable "additional_tfe_workspaces" {

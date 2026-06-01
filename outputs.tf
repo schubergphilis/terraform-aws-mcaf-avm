@@ -23,6 +23,11 @@ output "repository_identifier" {
   description = "The repository identifier if one is specified"
 }
 
+output "tfe_project_id" {
+  value       = try(tfe_project.default[0].id, "")
+  description = "Project ID of default project when `tfe_project.enabled` is true"
+}
+
 output "tfe_workspace_id" {
   value       = try(module.tfe_workspace[0].workspace_id, "")
   description = "Workspace ID of default workspace ID when `create_default_workspace` is true"

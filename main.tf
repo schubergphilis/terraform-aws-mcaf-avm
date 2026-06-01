@@ -176,6 +176,14 @@ resource "tfe_project" "default" {
   organization = var.tfe_workspace.organization
 }
 
+resource "tfe_project_settings" "default" {
+  count = var.tfe_project.enabled && (var.tfe_project.default_execution_mode != null || var.tfe_project.default_agent_pool_id != null) ? 1 : 0
+
+  project_id             = tfe_project.default[0].id
+  default_execution_mode = var.tfe_project.default_execution_mode
+  default_agent_pool_id  = var.tfe_project.default_agent_pool_id
+}
+
 module "tfe_project_variable_set" {
   count = var.tfe_project.enabled && (var.tfe_project.variable_set != null || try(var.tfe_project.auth.enabled, false)) ? 1 : 0
 
