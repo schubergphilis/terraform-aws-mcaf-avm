@@ -231,7 +231,7 @@ module "aws_account" {
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.9.0 |
 | <a name="requirement_mcaf"></a> [mcaf](#requirement\_mcaf) | >= 0.4.2 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.0.0 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | >= 0.67.1 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | >= 0.70.0 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 4.0.4 |
 
 ## Providers
@@ -239,7 +239,7 @@ module "aws_account" {
 | Name | Version |
 |------|---------|
 | <a name="provider_aws.account"></a> [aws.account](#provider\_aws.account) | >= 4.9.0 |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | >= 0.67.1 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | >= 0.70.0 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | >= 4.0.4 |
 
 ## Modules
