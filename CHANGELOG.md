@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v8.1.1 - 2026-06-02
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: project variable set is not attached to workspaces (#83) @mlflr
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v8.1.0...v8.1.1
+
 ## v8.1.0 - 2026-06-02
 
 ### What's Changed
