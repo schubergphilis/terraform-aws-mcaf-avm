@@ -188,7 +188,7 @@ module "tfe_project_variable_set" {
   count = var.tfe_project.enabled && (var.tfe_project.variable_set != null || try(var.tfe_project.auth.enabled, false)) ? 1 : 0
 
   source  = "schubergphilis/mcaf-variable-set/tfe"
-  version = "~> 0.1.0"
+  version = "~> 0.2.0"
 
   name              = "project-${local.tfe_project_name}"
   description       = "Variable set for the ${local.tfe_project_name} project"

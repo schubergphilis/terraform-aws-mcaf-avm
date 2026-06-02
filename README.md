@@ -249,7 +249,7 @@ module "aws_account" {
 | <a name="module_account"></a> [account](#module\_account) | schubergphilis/mcaf-account/aws | ~> 0.5.1 |
 | <a name="module_additional_tfe_workspaces"></a> [additional\_tfe\_workspaces](#module\_additional\_tfe\_workspaces) | schubergphilis/mcaf-workspace/aws | ~> 4.0.0 |
 | <a name="module_tfe_project_auth"></a> [tfe\_project\_auth](#module\_tfe\_project\_auth) | schubergphilis/mcaf-workspace/aws//modules/auth | ~> 3.1.0 |
-| <a name="module_tfe_project_variable_set"></a> [tfe\_project\_variable\_set](#module\_tfe\_project\_variable\_set) | schubergphilis/mcaf-variable-set/tfe | ~> 0.1.0 |
+| <a name="module_tfe_project_variable_set"></a> [tfe\_project\_variable\_set](#module\_tfe\_project\_variable\_set) | schubergphilis/mcaf-variable-set/tfe | ~> 0.2.0 |
 | <a name="module_tfe_workspace"></a> [tfe\_workspace](#module\_tfe\_workspace) | schubergphilis/mcaf-workspace/aws | ~> 4.0.0 |
 
 ## Resources
