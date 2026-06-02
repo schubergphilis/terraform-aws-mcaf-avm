@@ -14,12 +14,12 @@ terraform {
     }
     tfe = {
       source  = "hashicorp/tfe"
-      version = ">= 0.67.1"
+      version = ">= 0.70.0"
     }
     tls = {
       source  = "hashicorp/tls"
       version = ">= 4.0.4"
     }
   }
-  required_version = ">= 1.9.0"
+  required_version = ">= 1.12.0"
 }
