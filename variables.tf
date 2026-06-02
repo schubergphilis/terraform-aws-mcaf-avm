@@ -72,7 +72,7 @@ variable "tfe_project" {
   validation {
     condition = (
       var.tfe_project.default_execution_mode == null ||
-      contains(["remote", "agent", "local"], var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "")
+      contains(["remote", "agent", "local"], var.tfe_project.default_execution_mode)
     )
     error_message = "Default execution mode must be one of 'remote', 'agent', or 'local'"
   }
