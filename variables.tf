@@ -75,7 +75,7 @@ variable "tfe_project" {
   }
 
   validation {
-    condition     = var.tfe_project.default_agent_pool_id == null || (var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "") == "agent"
+    condition     = var.tfe_project.default_agent_pool_id == null || var.tfe_project.default_execution_mode == "agent"
     error_message = "Default agent pool ID can only be set if default execution mode is 'agent'"
   }
 }
