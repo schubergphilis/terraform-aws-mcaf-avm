@@ -70,12 +70,18 @@ variable "tfe_project" {
   description = "TFE project configuration including variable sets and authentication settings. If no name is provided, var.name will be used for the project name & variable set name."
 
   validation {
-    condition     = var.tfe_project.default_execution_mode == null || contains(["remote", "agent", "local"], var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "")
+    condition = (
+      var.tfe_project.default_execution_mode == null ||
+      contains(["remote", "agent", "local"], var.tfe_project.default_execution_mode != null ? var.tfe_project.default_execution_mode : "")
+    )
     error_message = "Default execution mode must be one of 'remote', 'agent', or 'local'"
   }
 
   validation {
-    condition     = var.tfe_project.default_agent_pool_id == null || var.tfe_project.default_execution_mode == "agent"
+    condition = (
+      var.tfe_project.default_agent_pool_id == null ||
+      var.tfe_project.default_execution_mode == "agent"
+    )
     error_message = "Default agent pool ID can only be set if default execution mode is 'agent'"
   }
 }
