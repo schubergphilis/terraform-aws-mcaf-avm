@@ -229,6 +229,13 @@ module "tfe_project_variable_set" {
   )
 }
 
+resource "tfe_project_variable_set" "default" {
+  count = var.tfe_project.enabled && (var.tfe_project.variable_set != null || try(var.tfe_project.auth.enabled, false)) ? 1 : 0
+
+  variable_set_id = module.tfe_project_variable_set[0].id
+  project_id      = tfe_project.default[0].id
+}
+
 module "tfe_project_auth" {
   count = var.tfe_project.enabled && try(var.tfe_project.auth.enabled, false) ? 1 : 0
 
