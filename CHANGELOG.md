@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v8.1.0 - 2026-06-02
+
+### What's Changed
+
+Note: This release requires Terraform version 1.12 or newer
+
+#### 🚀 Features
+
+* feat: support for tfe_project settings (#82) @mlflr
+
+#### 🐛 Bug Fixes
+
+* fix: Correct optional alias variable (#81) @fatbasstard
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v8.0.0...v8.1.0
+
 ## v8.0.0 - 2026-04-01
 
 ### What's Changed
