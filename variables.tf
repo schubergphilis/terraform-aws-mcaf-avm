@@ -55,6 +55,8 @@ variable "tfe_project" {
       clear_text_terraform_variables = optional(map(string), {})
     }), {})
 
+    variable_set_ids = optional(map(string), {})
+
     auth = optional(object({
       enabled                  = optional(bool, false)
       add_permissions_boundary = optional(bool, false)
