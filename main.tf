@@ -229,6 +229,13 @@ module "tfe_project_variable_set" {
   )
 }
 
+resource "tfe_project_variable_set" "default" {
+  for_each = (var.tfe_project.enabled && (length(var.tfe_project.variable_set_ids) > 0)) ? var.tfe_project.variable_set_ids : {}
+
+  project_id      = tfe_project.default[0].id
+  variable_set_id = each.value
+}
+
 module "tfe_project_auth" {
   count = var.tfe_project.enabled && try(var.tfe_project.auth.enabled, false) ? 1 : 0
 
