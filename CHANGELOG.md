@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v8.2.0 - 2026-06-08
+
+### What's Changed
+
+#### 🚀 Features
+
+* feat: support for attaching additional variable sets to a project (#84) @mlflr
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-avm/compare/v8.1.1...v8.2.0
+
 ## v8.1.1 - 2026-06-02
 
 ### What's Changed
